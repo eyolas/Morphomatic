@@ -16,7 +16,8 @@ function MM.RecreateMacro()
   -- Ensure the secure button exists
   if not MM_SecureUse and MM.EnsureSecureButton then MM.EnsureSecureButton() end
 
-  local name, icon = "MM", "INV_MISC_QUESTIONMARK"
+  local name = "MM"
+  local icon = GetItemIcon(1973) or "INV_Misc_QuestionMark"
   -- /click syntax: /click <frame> [button] [down]
   local needsDown = (GetCVar("ActionButtonUseKeyDown") == "1")
   local body = "#showtooltip\n/click MM_SecureUse LeftButton" .. (needsDown and " 1" or "")

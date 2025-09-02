@@ -51,7 +51,7 @@ function MM.CreateFloatingButton()
 
   local tex = floatBtn:CreateTexture(nil, "ARTWORK")
   tex:SetAllPoints()
-  tex:SetTexture(134414) -- generic "toy-like" icon
+  tex:SetTexture(GetItemIcon(1973) or 134414) -- Orb of Deception or fallback generic "toy-like" icon
   floatBtn.icon = tex
 
   -- Position & scale from saved settings
