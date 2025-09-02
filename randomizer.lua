@@ -25,7 +25,9 @@ function MM.PrepareSecureUse()
   local db = MM.DB()
   local candidates = {}
   for _, id in ipairs(MM.BuildEligibleIDs()) do
-    if db.enabledToys[id] ~= false then table.insert(candidates, id) end
+    if db.enabledToys[id] ~= false then
+      table.insert(candidates, id)
+    end
   end
   if #candidates == 0 then
     print("Morphomatic: no eligible toys. Use /mm to configure.")
@@ -34,35 +36,33 @@ function MM.PrepareSecureUse()
 
   local pick = candidates[math.random(#candidates)]
 
-  -- Resolve names (best-effort; we’ll still fall back to item:id)
+  -- 1) Try to resolve the localized ToyBox name (most reliable for /use item by name)
+  local toyName
+  if C_ToyBox and C_ToyBox.GetToyInfo then
+    -- API signature differs across versions; one returns (name,...), another (itemID, name,...)
+    local n1, _, _, _, n2 = C_ToyBox.GetToyInfo(pick)
+    toyName = n1 or n2
+  end
+
+  -- 2) Fallback: regular item name (if the toy still exists as an item in bags)
   local itemName = GetItemInfo(pick)
-  if not itemName and C_Item and C_Item.RequestLoadItemDataByID then
+  if (not itemName) and C_Item and C_Item.RequestLoadItemDataByID then
     C_Item.RequestLoadItemDataByID(pick)
     itemName = GetItemInfo(pick)
   end
-  local spellName = GetItemSpell and GetItemSpell(pick)
 
-  -- Build a robust macrotext: try several ways in order.
-  -- Order chosen because some clients resolve toys better via /use name,
-  -- others via /cast name, and older items via /use item:id.
-  local lines = {}
-
-  if itemName and #itemName > 0 then
-    table.insert(lines, "/use " .. itemName)
-    table.insert(lines, "/cast " .. itemName)
-  end
-  if spellName and #spellName > 0 then
-    table.insert(lines, "/cast " .. spellName)
-  end
-  table.insert(lines, string.format("/use item:%d", pick)) -- always keep a hard fallback
-
-  local macrotext = table.concat(lines, "\n")
-
+  -- 3) Configure the secure button: type="item", and provide the most reliable identifier
   local btn = MM.EnsureSecureButton()
-  btn:SetAttribute("type", "macro")
-  btn:SetAttribute("macrotext", macrotext)
+  btn:SetAttribute("type", "item")
+  if toyName and #toyName > 0 then
+    btn:SetAttribute("item", toyName)          -- preferred: ToyBox name
+  elseif itemName and #itemName > 0 then
+    btn:SetAttribute("item", itemName)         -- fallback: item name
+  else
+    btn:SetAttribute("item", "item:" .. pick)  -- last resort: itemID
+  end
 
-  print(("Morphomatic: prepared %s (%d)"):format(itemName or ("Toy "..pick), pick))
+  print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy "..pick), pick))
 end
 
 -- Debug (counts + sample pick)
