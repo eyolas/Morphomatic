@@ -102,12 +102,59 @@ function MM.BuildPool()
   return pool
 end
 
--- Hidden secure button for the macro (/click)
+-- Creates (once) the secure button that will both PREPARE and EXECUTE the toy on click.
+-- Preparation happens in PreClick (same hardware event), so no /run is needed anywhere.
 local secureBtn
 function MM.EnsureSecureButton()
   if secureBtn and secureBtn:IsObjectType("Button") then return secureBtn end
+
   secureBtn = CreateFrame("Button", "MM_SecureUse", UIParent, "SecureActionButtonTemplate")
-  secureBtn:Hide() -- macro or floating button will /click it
+
+  -- PreClick: compute the random eligible toy and set secure attributes
+  secureBtn:SetScript("PreClick", function(self)
+    -- Do not attempt to change attributes in combat
+    if InCombatLockdown() then return end
+
+    local db = MM.DB()
+
+    -- Build eligible candidates (ownership + optional cooldown), then apply user filters
+    local eligible = {}
+    for _, id in ipairs(MM.BuildEligibleIDs()) do
+      if db.enabledToys[id] ~= false then table.insert(eligible, id) end
+    end
+    if #eligible == 0 then
+      -- Feedback via UIErrors is often hidden by UIs; print for reliability
+      print("Morphomatic: no eligible toys. Use /mm to configure.")
+      return
+    end
+
+    local pick = eligible[math.random(#eligible)]
+
+    -- Resolve the most reliable name for /use by item name (ToyBox localized name first)
+    local toyName = MM.ResolveToyNameFromToyBox and MM.ResolveToyNameFromToyBox(pick) or nil
+
+    local itemName = GetItemInfo(pick)
+    if type(itemName) ~= "string" and C_Item and C_Item.RequestLoadItemDataByID then
+      C_Item.RequestLoadItemDataByID(pick)
+      itemName = GetItemInfo(pick)
+    end
+
+    -- Configure this secure button to use the toy by name (best), or fallback to item:ID
+    self:SetAttribute("type", "item")
+    if type(toyName) == "string" and toyName ~= "" then
+      self:SetAttribute("item", toyName)
+    elseif type(itemName) == "string" and itemName ~= "" then
+      self:SetAttribute("item", itemName)
+    else
+      self:SetAttribute("item", "item:" .. pick)
+    end
+
+    -- Optional debug
+    -- print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy "..pick), pick))
+  end)
+
+  -- Hidden by default; we only /click it from macro or the floating button proxy
+  secureBtn:Hide()
   return secureBtn
 end
 

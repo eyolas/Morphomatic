@@ -31,11 +31,8 @@ function MM.CreateFloatingButton()
     saveAnchor(s)
   end)
 
-  -- Secure macrotext: prepare then click the hidden secure button.
-  local macrotext =
-    "/run if MM and MM.PrepareSecureUse then MM.PrepareSecureUse() end\n/click MM_SecureUse"
-  floatBtn:SetAttribute("type", "macro")
-  floatBtn:SetAttribute("macrotext", macrotext)
+  floatBtn:SetAttribute("type", "click")
+  floatBtn:SetAttribute("clickbutton", MM.EnsureSecureButton())
 
   -- Visuals
   floatBtn:SetBackdrop({

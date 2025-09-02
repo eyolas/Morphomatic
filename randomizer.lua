@@ -17,54 +17,6 @@ function MM.BuildEligibleIDs()
   return out
 end
 
--- Prepare the hidden secure button with a random eligible toy.
--- The macro or the floating button will then /click MM_SecureUse.
--- Resolve a localized toy name from ToyBox in a signature-safe way
-function MM.PrepareSecureUse()
-  if InCombatLockdown() then
-    print("Morphomatic: cannot change toy during combat.")
-    return
-  end
-
-  local db = MM.DB()
-  local candidates = {}
-  for _, id in ipairs(MM.BuildEligibleIDs()) do
-    if db.enabledToys[id] ~= false then table.insert(candidates, id) end
-  end
-  if #candidates == 0 then
-    print("Morphomatic: no eligible toys. Use /mm to configure.")
-    return
-  end
-
-  local pick = candidates[math.random(#candidates)]
-
-  -- 1) Try ToyBox-localized name (signature-safe)
-  local toyName = MM.ResolveToyNameFromToyBox(pick)
-
-  -- 2) Fallback to item name if needed
-  local itemName = GetItemInfo(pick)
-  if type(itemName) ~= "string" and C_Item and C_Item.RequestLoadItemDataByID then
-    C_Item.RequestLoadItemDataByID(pick)
-    itemName = GetItemInfo(pick)
-  end
-
-  -- 3) Configure secure button: type="item" + best available identifier
-  local btn = MM.EnsureSecureButton()
-  btn:SetAttribute("type", "item")
-  if type(toyName) == "string" and toyName ~= "" then
-    btn:SetAttribute("item", toyName) -- preferred: ToyBox name
-  elseif type(itemName) == "string" and itemName ~= "" then
-    btn:SetAttribute("item", itemName) -- fallback: item name
-  else
-    btn:SetAttribute("item", "item:" .. pick) -- last resort: raw itemID
-  end
-
-  local label = (type(toyName) == "string" and toyName)
-    or (type(itemName) == "string" and itemName)
-    or ("Toy " .. tostring(pick))
-  print(("Morphomatic: prepared %s (%d)"):format(label, pick))
-end
-
 -- Debug (counts + sample pick)
 function MM.DebugDump()
   local all = MM.BuildEligibleIDs()

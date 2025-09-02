@@ -5,24 +5,38 @@ MM = MM or {}
 ----------------------------------------------------------------------
 -- Macro helper
 ----------------------------------------------------------------------
-function MM.EnsureMacro()
-  local idx = GetMacroIndexByName("MM")
+-- Create or refresh the "MM" macro to always be exactly what we want.
+function MM.RecreateMacro()
+  if InCombatLockdown() then
+    print("Morphomatic: cannot (re)create macro in combat. It will be retried after combat.")
+    MM._macroNeedsRecreate = true
+    return
+  end
+
+  -- Make sure the secure button exists before wiring the macro
+  if not MM_SecureUse and MM.EnsureSecureButton then MM.EnsureSecureButton() end
+
+  local name = "MM"
+  local icon = "INV_MISC_QUESTIONMARK"
   local body = [[
 #showtooltip
-/run if MM and MM.PrepareSecureUse then MM.PrepareSecureUse() end
 /click MM_SecureUse
 ]]
-  if idx == 0 then
-    local id = CreateMacro("MM", "INV_MISC_QUESTIONMARK", body, true) -- global macro
+
+  local idx = GetMacroIndexByName(name)
+  if idx > 0 then
+    -- Update in place (no need to delete)
+    EditMacro(idx, name, icon, body)
+    print("Morphomatic: macro 'MM' updated.")
+  else
+    -- Prefer global; fallback to per-character if global is full
+    local id = CreateMacro(name, icon, body, true)
+    if not id then id = CreateMacro(name, icon, body, false) end
     if id then
       print("Morphomatic: macro 'MM' created.")
     else
-      print("Morphomatic: failed to create macro (quota?).")
+      print("Morphomatic: failed to create macro (is your macro list full?).")
     end
-  else
-    print("Morphomatic: macro 'MM' already exists.")
-    -- If you want to force-update body, you could:
-    -- DeleteMacro("MM"); CreateMacro("MM", "INV_MISC_QUESTIONMARK", body, true)
   end
 end
 
@@ -169,7 +183,7 @@ local function buildCanvas()
   make:SetSize(180, 22)
   make:SetPoint("TOPLEFT", auto, "BOTTOMLEFT", 0, -8) -- below
   make:SetText("Create macro now")
-  make:SetScript("OnClick", MM.EnsureMacro)
+  make:SetScript("OnClick", MM.RecreateMacro)
 
   -- Reset selection button: clears all explicit exclusions (enabledToys)
   local resetSel = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")

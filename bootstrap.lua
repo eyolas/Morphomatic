@@ -30,6 +30,7 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("PLAYER_LOGIN")
 f:RegisterEvent("TOYS_UPDATED")
+f:RegisterEvent("PLAYER_REGEN_ENABLED") -- we may retry after combat
 
 f:SetScript("OnEvent", function(_, evt, arg1)
   if evt == "ADDON_LOADED" and arg1 == "Morphomatic" then
@@ -39,12 +40,17 @@ f:SetScript("OnEvent", function(_, evt, arg1)
   elseif evt == "PLAYER_LOGIN" then
     MM.SeedRNG()
     if MM.EnsureSecureButton then MM.EnsureSecureButton() end
-    if MM.DB().autoCreateMacro ~= false and MM.EnsureMacro then MM.EnsureMacro() end
-    -- Floating button visibility on login
+    if MM.DB().autoCreateMacro ~= false and MM.RecreateMacro then MM.RecreateMacro() end
     if MM.DB().showButton ~= false then
       MM.ShowButton()
     else
       MM.HideButton()
+    end
+  elseif evt == "PLAYER_REGEN_ENABLED" then
+    -- Retry pending macro creation after combat
+    if MM._macroNeedsRecreate and MM.RecreateMacro then
+      MM._macroNeedsRecreate = nil
+      MM.RecreateMacro()
     end
   elseif evt == "TOYS_UPDATED" then
     MM.OptionsRefresh()
