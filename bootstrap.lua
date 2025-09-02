@@ -36,7 +36,6 @@ f:SetScript("OnEvent", function(_, evt, arg1)
     if MM.DB then MM.DB() end
     if MM.OptionsRegister then MM.OptionsRegister() end
     if MM.OptionsRefresh then MM.OptionsRefresh() end
-
   elseif evt == "PLAYER_LOGIN" then
     if MM.SeedRNG then MM.SeedRNG() end
     if MM.EnsureSecureButton then MM.EnsureSecureButton() end
@@ -50,17 +49,13 @@ f:SetScript("OnEvent", function(_, evt, arg1)
     if MM.RefreshButtonLockVisual then MM.RefreshButtonLockVisual() end
 
     -- Auto (re)create macro at login
-    if MM.DB().autoCreateMacro ~= false and MM.RecreateMacro then
-      MM.RecreateMacro()
-    end
-
+    if MM.DB().autoCreateMacro ~= false and MM.RecreateMacro then MM.RecreateMacro() end
   elseif evt == "PLAYER_REGEN_ENABLED" then
     -- Retry deferred macro creation after combat
     if MM._macroNeedsRecreate and MM.RecreateMacro then
       MM._macroNeedsRecreate = nil
       MM.RecreateMacro()
     end
-
   elseif evt == "TOYS_UPDATED" then
     if MM.OptionsRefresh then MM.OptionsRefresh() end
   end
@@ -270,7 +265,11 @@ SlashCmdList.MORPHOMATIC = function(msg)
   if cmd == "listhidecd" or cmd == "hidecd" then
     local v = parseBool(args[2])
     if v == nil then
-      print("Usage: /mm listhidecd on|off  (current:", tostring(MM.DB().listHideCooldown == true), ")")
+      print(
+        "Usage: /mm listhidecd on|off  (current:",
+        tostring(MM.DB().listHideCooldown == true),
+        ")"
+      )
       return
     end
     MM.DB().listHideCooldown = v and true or false
