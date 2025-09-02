@@ -57,12 +57,12 @@ end
 
 function MM.SelectAllToys()
   bulkSelectCurrentView(true)
-  print("Morphomatic: all toys in the current view selected.")
+  print("Morphomatic: all favorites in the current view selected.")
 end
 
 function MM.UnselectAllToys()
   bulkSelectCurrentView(false)
-  print("Morphomatic: all toys in the current view unselected.")
+  print("Morphomatic: all favorites in the current view unselected.")
 end
 
 function MM.ResetSelection()
@@ -70,7 +70,7 @@ function MM.ResetSelection()
   db.enabledToys = db.enabledToys or {}
   wipe(db.enabledToys) -- clear ALL explicit exclusions
   MM.OptionsRefresh()
-  print("Morphomatic: selection reset (all toys back to included-by-default).")
+  print("Morphomatic: favorites reset (all toys included by default).")
 end
 
 ----------------------------------------------------------------------
@@ -142,7 +142,7 @@ local function buildCanvas()
   desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
   desc:SetWidth(560)
   desc:SetText(
-    "Use the 'MM' macro or the floating button to trigger a random cosmetic toy from your curated list."
+    "Use the 'MM' macro or the floating button to trigger a random cosmetic toy from your Favorites."
   )
 
   --------------------------------------------------------------------
@@ -174,7 +174,6 @@ local function buildCanvas()
   end
   lockBtn:SetScript("OnClick", function()
     MM.DB().button.locked = not MM.DB().button.locked
-    -- NEW:
     if MM.RefreshButtonLockVisual then MM.RefreshButtonLockVisual() end
     refreshLockText()
   end)
@@ -257,27 +256,27 @@ local function buildCanvas()
   row:SetPoint("TOPLEFT", hidecd, "BOTTOMLEFT", 0, -10)
 
   local selectAll = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
-  selectAll:SetSize(120, 22)
+  selectAll:SetSize(160, 22)
   selectAll:SetPoint("TOPLEFT", 0, 0)
-  selectAll:SetText("Select all")
+  selectAll:SetText("Select all favorites")
   selectAll:SetScript("OnClick", MM.SelectAllToys)
 
   local unselectAll = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
-  unselectAll:SetSize(120, 22)
+  unselectAll:SetSize(170, 22)
   unselectAll:SetPoint("LEFT", selectAll, "RIGHT", 10, 0)
-  unselectAll:SetText("Unselect all")
+  unselectAll:SetText("Unselect all favorites")
   unselectAll:SetScript("OnClick", MM.UnselectAllToys)
 
   local resetSel = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
   resetSel:SetSize(140, 22)
   resetSel:SetPoint("LEFT", unselectAll, "RIGHT", 10, 0)
-  resetSel:SetText("Reset selection")
+  resetSel:SetText("Reset favorites")
   resetSel:SetScript("OnClick", MM.ResetSelection)
 
   -- Row 4: Label + scroll checklist
   local label = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
   label:SetPoint("TOPLEFT", row, "BOTTOMLEFT", 0, -14)
-  label:SetText("Owned cosmetic toys (from your DB):")
+  label:SetText("Favorites (from your curated toys):")
 
   local scroll = CreateFrame("ScrollFrame", "MM_OptionsScroll", f, "UIPanelScrollFrameTemplate")
   scroll:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 0, -6)
