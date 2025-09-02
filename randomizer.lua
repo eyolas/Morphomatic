@@ -25,11 +25,8 @@ function MM.PrepareSecureUse()
   local db = MM.DB()
   local candidates = {}
   for _, id in ipairs(MM.BuildEligibleIDs()) do
-    if db.enabledToys[id] ~= false then
-      table.insert(candidates, id)
-    end
+    if db.enabledToys[id] ~= false then table.insert(candidates, id) end
   end
-
   if #candidates == 0 then
     print("Morphomatic: no eligible toys. Use /mm to configure.")
     return
@@ -37,45 +34,35 @@ function MM.PrepareSecureUse()
 
   local pick = candidates[math.random(#candidates)]
 
-  -- Try to resolve both the item name and its spell name
+  -- Resolve names (best-effort; we’ll still fall back to item:id)
   local itemName = GetItemInfo(pick)
   if not itemName and C_Item and C_Item.RequestLoadItemDataByID then
     C_Item.RequestLoadItemDataByID(pick)
     itemName = GetItemInfo(pick)
   end
+  local spellName = GetItemSpell and GetItemSpell(pick)
 
-  local spellName = nil
-  if GetItemSpell then
-    spellName = GetItemSpell(pick) -- returns the spell name triggered by the item/toy
+  -- Build a robust macrotext: try several ways in order.
+  -- Order chosen because some clients resolve toys better via /use name,
+  -- others via /cast name, and older items via /use item:id.
+  local lines = {}
+
+  if itemName and #itemName > 0 then
+    table.insert(lines, "/use " .. itemName)
+    table.insert(lines, "/cast " .. itemName)
   end
+  if spellName and #spellName > 0 then
+    table.insert(lines, "/cast " .. spellName)
+  end
+  table.insert(lines, string.format("/use item:%d", pick)) -- always keep a hard fallback
+
+  local macrotext = table.concat(lines, "\n")
 
   local btn = MM.EnsureSecureButton()
-
-  -- Preferred: cast the toy's spell directly (some installs are stricter with items)
-  if spellName and #spellName > 0 then
-    -- Try secure spell cast first
-    btn:SetAttribute("type", "spell")
-    btn:SetAttribute("spell", spellName)
-    print(("Morphomatic: prepared spell '%s' from %s (%d)"):format(
-      spellName, itemName or ("Toy "..pick), pick))
-    return
-  end
-
-  -- Fallbacks via macrotext
-  local macrotext
-  if itemName and #itemName > 0 then
-    -- try spell-cast by name first (if spellName was nil but itemName exists, some UIs still resolve /cast <name>)
-    macrotext = "/cast " .. itemName .. "\n"
-    macrotext = macrotext .. "/use " .. itemName .. "\n"
-  else
-    macrotext = string.format("/use item:%d\n", pick)
-  end
-
   btn:SetAttribute("type", "macro")
   btn:SetAttribute("macrotext", macrotext)
 
-  print(("Morphomatic: prepared %s (%d) [macro fallback]"):format(
-    itemName or ("Toy "..pick), pick))
+  print(("Morphomatic: prepared %s (%d)"):format(itemName or ("Toy "..pick), pick))
 end
 
 -- Debug (counts + sample pick)
