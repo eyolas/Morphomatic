@@ -49,3 +49,20 @@ function MM.DebugDump()
     print("MM debug — final list empty (DB empty? all unchecked? cooldown? area restricted?)")
   end
 end
+
+-- randomizer.lua
+function MM.DebugWhy()
+  local db = MM.DB()
+  local pool = MM.BuildPool()
+  print("MM why — analyzing toys in pool:")
+  for id in pairs(pool) do
+    local owned  = MM.PlayerHasToy(id)
+    local s,d    = MM.GetCooldown(id)
+    local oncd   = (s>0 and d>0)
+    local kept   = (db.enabledToys[id] ~= false)
+    local name   = GetItemInfo(id) or ("Toy "..id)
+    print(("%d | %s | owned=%s | cd=%s | checked=%s"):format(
+      id, name, tostring(owned), tostring(oncd), tostring(kept)
+    ))
+  end
+end

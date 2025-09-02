@@ -17,6 +17,10 @@ end
 SLASH_MMDEBUG1 = "/mmdebug"
 SlashCmdList.MMDEBUG = function() if MM.DebugDump then MM.DebugDump() end end
 
+-- Slash: why
+SLASH_MMWHY1 = "/mmwhy"
+SlashCmdList.MMWHY = function() if MM.DebugWhy then MM.DebugWhy() end end
+
 -- Events
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
