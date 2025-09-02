@@ -11,6 +11,7 @@ local DEFAULTS = {
   skipOnCooldown = true, -- skip toys on cooldown
   autoCreateMacro = true, -- auto-create the macro at login
   showButton = true, -- show the floating button
+  debug = false, -- debug MM.dprints
   button = { point = "CENTER", x = 0, y = 0, scale = 1, locked = false },
 }
 
@@ -140,7 +141,7 @@ function MM.PrepareButtonForRandomToy(btn)
     if db.enabledToys[id] ~= false then table.insert(eligible, id) end
   end
   if #eligible == 0 then
-    print("Morphomatic: no eligible toys. Use /mm to configure.")
+    MM.dprint("Morphomatic: no eligible toys. Use /mm to configure.")
     -- clear stale attrs
     btn:SetAttribute("type", nil)
     btn:SetAttribute("item", nil)
@@ -163,7 +164,7 @@ function MM.PrepareButtonForRandomToy(btn)
     btn:SetAttribute("item", "item:" .. pick)
   end
 
-  print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy " .. pick), pick))
+  MM.dprint(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy " .. pick), pick))
   return true
 end
 
@@ -183,10 +184,22 @@ function MM.EnsureSecureButton()
     if InCombatLockdown() then return end
     -- Debug: confirm we actually run
     -- Debug to confirm firing
-    print("MM PreClick: running (MM_SecureUse)")
+    MM.dprint("MM PreClick: running (MM_SecureUse)")
     MM.PrepareButtonForRandomToy(self)
   end)
 
   secureBtn:Hide()
   return secureBtn
+end
+
+-- Debug helpers
+function MM.IsDebug() return MM.DB().debug == true end
+
+function MM.SetDebug(on)
+  MM.DB().debug = (on and true) or false
+  return MM.DB().debug
+end
+
+function MM.dMM.dprint(...)
+  if MM.DB().debug then print(...) end
 end

@@ -61,7 +61,7 @@ function MM.CreateFloatingButton()
       self:SetAttribute("type", nil)
       self:SetAttribute("item", nil)
       self:SetAttribute("macrotext", nil)
-      -- Debug (comment if noisy): print("MM Float: unlocked, click ignored")
+      -- Debug (comment if noisy): MM.dprint("MM Float: unlocked, click ignored")
       return
     end
     -- Locked -> prepare this very button to use a random toy

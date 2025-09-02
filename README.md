@@ -16,7 +16,7 @@ Morphomatic is a World of Warcraft addon that randomly uses a **cosmetic toy** f
 /click MM_SecureUse
 ```
 3. Drag the macro to your action bar, or enable the floating button in settings.
-4. `/mm` opens the configuration panel, `/mmdebug` prints diagnostics.
+4. `/mm` opens the configuration panel, `/mmdebug` MM.dprints diagnostics.
 
 ## File structure
 - `toys_db.lua` – curated toy IDs.

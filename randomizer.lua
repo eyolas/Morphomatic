@@ -20,17 +20,17 @@ end
 -- Debug (counts + sample pick)
 function MM.DebugDump()
   local all = MM.BuildEligibleIDs()
-  print("MM debug — eligible:", #all)
+  MM.dprint("MM debug — eligible:", #all)
   local db, final = MM.DB(), {}
   for _, id in ipairs(all) do
     if db.enabledToys[id] ~= false then table.insert(final, id) end
   end
-  print("MM debug — after filters:", #final)
+  MM.dprint("MM debug — after filters:", #final)
   if #final > 0 then
     local pick = final[math.random(#final)]
     local name = GetItemInfo(pick) or ("Toy " .. pick)
     local s, d = MM.GetCooldown(pick)
-    print(
+    MM.dprint(
       ("MM debug — pick=%d (%s), cd=%s, usable=%s"):format(
         pick,
         name,
@@ -39,9 +39,11 @@ function MM.DebugDump()
       )
     )
     local spell = GetItemSpell(pick)
-    print(("MM debug — item=%s, spell=%s"):format(tostring(GetItemInfo(pick)), tostring(spell)))
+    MM.dprint(
+      ("MM debug — item=%s, spell=%s"):format(tostring(GetItemInfo(pick)), tostring(spell))
+    )
   else
-    print("MM debug — final list empty (DB empty? all unchecked? cooldown? area restricted?)")
+    MM.dprint("MM debug — final list empty (DB empty? all unchecked? cooldown? area restricted?)")
   end
 end
 
@@ -49,14 +51,14 @@ end
 function MM.DebugWhy()
   local db = MM.DB()
   local pool = MM.BuildPool()
-  print("MM why — analyzing toys in pool:")
+  MM.dprint("MM why — analyzing toys in pool:")
   for id in pairs(pool) do
     local owned = MM.PlayerHasToy(id)
     local s, d = MM.GetCooldown(id)
     local oncd = (s > 0 and d > 0)
     local kept = (db.enabledToys[id] ~= false)
     local name = GetItemInfo(id) or ("Toy " .. id)
-    print(
+    MM.dprint(
       ("%d | %s | owned=%s | cd=%s | checked=%s"):format(
         id,
         name,

@@ -6,7 +6,7 @@ MM = MM or {}
 --- Create or refresh the "MM" macro with Orb of Deception icon
 function MM.RecreateMacro()
   if InCombatLockdown() then
-    print("Morphomatic: cannot (re)create macro in combat. Will retry after combat.")
+    MM.dprint("Morphomatic: cannot (re)create macro in combat. Will retry after combat.")
     MM._macroNeedsRecreate = true
     return
   end
@@ -22,13 +22,13 @@ function MM.RecreateMacro()
   local idx = GetMacroIndexByName(name)
   if idx > 0 then
     EditMacro(idx, name, icon, body)
-    print("Morphomatic: macro 'MM' updated.")
+    MM.dprint("Morphomatic: macro 'MM' updated.")
   else
     local id = CreateMacro(name, icon, body, true) or CreateMacro(name, icon, body, false)
     if id then
-      print("Morphomatic: macro 'MM' created.")
+      MM.dprint("Morphomatic: macro 'MM' created.")
     else
-      print("Morphomatic: failed to create macro.")
+      MM.dprint("Morphomatic: failed to create macro.")
     end
   end
 end

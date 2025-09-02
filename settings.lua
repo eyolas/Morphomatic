@@ -57,12 +57,12 @@ end
 
 function MM.SelectAllToys()
   bulkSelectCurrentView(true)
-  print("Morphomatic: all favorites in the current view selected.")
+  MM.dprint("Morphomatic: all favorites in the current view selected.")
 end
 
 function MM.UnselectAllToys()
   bulkSelectCurrentView(false)
-  print("Morphomatic: all favorites in the current view unselected.")
+  MM.dprint("Morphomatic: all favorites in the current view unselected.")
 end
 
 function MM.ResetSelection()
@@ -70,7 +70,7 @@ function MM.ResetSelection()
   db.enabledToys = db.enabledToys or {}
   wipe(db.enabledToys) -- clear ALL explicit exclusions
   MM.OptionsRefresh()
-  print("Morphomatic: favorites reset (all toys included by default).")
+  MM.dprint("Morphomatic: favorites reset (all toys included by default).")
 end
 
 ----------------------------------------------------------------------
