@@ -200,6 +200,6 @@ function MM.SetDebug(on)
   return MM.DB().debug
 end
 
-function MM.dMM.dprint(...)
+function MM.dprint(...)
   if MM.DB().debug then print(...) end
 end
