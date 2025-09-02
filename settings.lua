@@ -47,7 +47,7 @@ local function bulkSelectCurrentView(selectAll)
   local list = buildListForUI()
   for _, id in ipairs(list) do
     if selectAll then
-      db.enabledToys[id] = nil -- included-by-default
+      db.enabledToys[id] = true -- included-by-default
     else
       db.enabledToys[id] = false -- explicitly excluded
     end
@@ -115,7 +115,7 @@ local function refreshChecklist(container)
     cb:SetChecked(db.enabledToys[id] ~= false)
     cb:SetScript(
       "OnClick",
-      function(self) db.enabledToys[id] = self:GetChecked() and nil or false end
+      function(self) db.enabledToys[id] = self:GetChecked() and true or false end
     )
 
     cb:Show()
