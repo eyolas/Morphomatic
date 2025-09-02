@@ -102,18 +102,51 @@ function MM.BuildPool()
   return pool
 end
 
--- Creates (once) the secure button that will both PREPARE and EXECUTE the toy on click.
--- Preparation happens in PreClick (same hardware event), so no /run is needed anywhere.
+-- Returns a reliable localized toy name suitable for "/use <name>"
+function MM.ResolveToyName(itemID)
+  -- Best: resolve from ToyBox link
+  if C_ToyBox and C_ToyBox.GetToyLink then
+    local link = C_ToyBox.GetToyLink(itemID)
+    if type(link) == "string" then
+      local name = GetItemInfo(link)
+      if type(name) == "string" and name ~= "" then return name end
+    end
+  end
+  -- Fallback: direct item info (warm cache if needed)
+  local name = GetItemInfo(itemID)
+  if type(name) ~= "string" and C_Item and C_Item.RequestLoadItemDataByID then
+    C_Item.RequestLoadItemDataByID(itemID)
+    name = GetItemInfo(itemID)
+  end
+  if type(name) == "string" and name ~= "" then return name end
+  -- Last resort: pick any string from GetToyInfo variants
+  if C_ToyBox and C_ToyBox.GetToyInfo then
+    local a,b,_,_,e = C_ToyBox.GetToyInfo(itemID)
+    if type(a) == "string" and a ~= "" then return a end
+    if type(b) == "string" and b ~= "" then return b end
+    if type(e) == "string" and e ~= "" then return e end
+  end
+  return nil
+end
+
+-- Secure button that PREPARES (PreClick) and then EXECUTES in the same hardware click
 local secureBtn
 function MM.EnsureSecureButton()
   if secureBtn and secureBtn:IsObjectType("Button") then return secureBtn end
 
   secureBtn = CreateFrame("Button", "MM_SecureUse", UIParent, "SecureActionButtonTemplate")
+  -- Accept both down/up; macro may simulate key-down depending on CVar
+  secureBtn:RegisterForClicks("AnyDown", "AnyUp")
+  -- Avoid self/focus cast paths interfering with items
+  secureBtn:SetAttribute("checkselfcast", false)
+  secureBtn:SetAttribute("checkfocuscast", false)
 
-  -- Prepare attributes right before the protected click (same hardware event)
   secureBtn:SetScript("PreClick", function(self)
     if InCombatLockdown() then return end
+    -- Debug: confirm we actually run
     print("MM PreClick: running")
+
+    -- Build eligible list then apply user "checked" filter
     local db = MM.DB()
     local eligible = {}
     for _, id in ipairs(MM.BuildEligibleIDs()) do
@@ -121,18 +154,17 @@ function MM.EnsureSecureButton()
     end
     if #eligible == 0 then
       print("Morphomatic: no eligible toys. Use /mm to configure.")
+      -- Clear attributes so stale values aren't reused
+      self:SetAttribute("type", nil)
+      self:SetAttribute("item", nil)
       return
     end
 
     local pick = eligible[math.random(#eligible)]
-
-    local toyName = MM.ResolveToyNameFromToyBox and MM.ResolveToyNameFromToyBox(pick) or nil
+    local toyName = MM.ResolveToyName(pick)
     local itemName = GetItemInfo(pick)
-    if type(itemName) ~= "string" and C_Item and C_Item.RequestLoadItemDataByID then
-      C_Item.RequestLoadItemDataByID(pick)
-      itemName = GetItemInfo(pick)
-    end
 
+    -- Set secure action to use the item by NAME (preferred), else itemID
     self:SetAttribute("type", "item")
     if type(toyName) == "string" and toyName ~= "" then
       self:SetAttribute("item", toyName)
@@ -143,26 +175,9 @@ function MM.EnsureSecureButton()
     end
 
     -- Optional debug:
-    -- print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy "..pick), pick))
+    print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy "..pick), pick))
   end)
 
   secureBtn:Hide()
   return secureBtn
-end
-
---- Safely resolve a localized toy name from the ToyBox API.
---- Different builds of WoW return different argument orders, so we pick
---- whichever slot actually contains a string.
----@param itemID number
----@return string|nil
-function MM.ResolveToyNameFromToyBox(itemID)
-  if not (C_ToyBox and C_ToyBox.GetToyInfo) then return nil end
-
-  local a, b, c, d, e = C_ToyBox.GetToyInfo(itemID)
-  -- Look through known slots and return the first string
-  if type(a) == "string" then return a end
-  if type(b) == "string" then return b end
-  if type(e) == "string" then return e end
-
-  return nil
 end

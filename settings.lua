@@ -5,38 +5,29 @@ MM = MM or {}
 ----------------------------------------------------------------------
 -- Macro helper
 ----------------------------------------------------------------------
--- Create or refresh the "MM" macro to always be exactly what we want.
+-- Create or refresh the "MM" macro body to click our secure button.
 function MM.RecreateMacro()
   if InCombatLockdown() then
-    print("Morphomatic: cannot (re)create macro in combat. It will be retried after combat.")
+    print("Morphomatic: cannot (re)create macro in combat. Will retry after combat.")
     MM._macroNeedsRecreate = true
     return
   end
 
-  -- Make sure the secure button exists before wiring the macro
+  -- Ensure the secure button exists
   if not MM_SecureUse and MM.EnsureSecureButton then MM.EnsureSecureButton() end
 
-  local name = "MM"
-  local icon = "INV_MISC_QUESTIONMARK"
-  local body = [[
-#showtooltip
-/click MM_SecureUse
-]]
+  local name, icon = "MM", "INV_MISC_QUESTIONMARK"
+  -- /click syntax: /click <frame> [button] [down]
+  local needsDown = (GetCVar("ActionButtonUseKeyDown") == "1")
+  local body = "#showtooltip\n/click MM_SecureUse LeftButton" .. (needsDown and " 1" or "")
 
   local idx = GetMacroIndexByName(name)
   if idx > 0 then
-    -- Update in place (no need to delete)
     EditMacro(idx, name, icon, body)
     print("Morphomatic: macro 'MM' updated.")
   else
-    -- Prefer global; fallback to per-character if global is full
-    local id = CreateMacro(name, icon, body, true)
-    if not id then id = CreateMacro(name, icon, body, false) end
-    if id then
-      print("Morphomatic: macro 'MM' created.")
-    else
-      print("Morphomatic: failed to create macro (is your macro list full?).")
-    end
+    local id = CreateMacro(name, icon, body, true) or CreateMacro(name, icon, body, false)
+    if id then print("Morphomatic: macro 'MM' created.") else print("Morphomatic: failed to create macro.") end
   end
 end
 
