@@ -1,19 +1,38 @@
 -- Morphomatic — floating_button.lua
--- Optional floating button that triggers the same secure flow as the "MM" macro.
+-- Floating button that can be locked (click to use) or unlocked (drag only).
 
 MM = MM or {}
 
 local floatBtn
-
 local function saveAnchor(self)
   local p, _, _, x, y = self:GetPoint()
   local b = MM.DB().button
   b.point, b.x, b.y = p, x, y
 end
 
---- Create the floating button (SecureActionButtonTemplate) that runs:
---- 1) MM.PrepareSecureUse() to set up the secure button with a random toy
---- 2) /click MM_SecureUse to perform the protected action
+--- Internal: (re)apply visuals & behavior based on locked state.
+function MM.RefreshButtonLockVisual()
+  if not MM_Float then return end
+  local locked = MM.DB().button.locked and true or false
+
+  -- Border & overlay
+  if locked then
+    MM_Float:SetBackdropBorderColor(0.8, 0.8, 0.8, 1)
+    if MM_Float.dragOverlay then MM_Float.dragOverlay:Hide() end
+    if MM_Float.grip then MM_Float.grip:Hide() end
+    MM_Float:SetAlpha(1)
+  else
+    -- Emphasize border and show grip/overlay so it's clearly draggable
+    MM_Float:SetBackdropBorderColor(0.2, 0.8, 1.0, 1)
+    if MM_Float.dragOverlay then MM_Float.dragOverlay:Show() end
+    if MM_Float.grip then MM_Float.grip:Show() end
+    MM_Float:SetAlpha(0.95)
+  end
+end
+
+--- Create the floating button (SecureActionButtonTemplate).
+--- When LOCKED: PreClick prepares a random toy on THIS button and click uses it.
+--- When UNLOCKED: PreClick exits early; clicks do nothing; you can drag to move.
 function MM.CreateFloatingButton()
   if floatBtn then return floatBtn end
 
@@ -23,6 +42,10 @@ function MM.CreateFloatingButton()
   floatBtn:SetMovable(true)
   floatBtn:EnableMouse(true)
   floatBtn:RegisterForDrag("LeftButton")
+
+  -- Secure: accept both down/up, but behavior is gated by "locked" state.
+  floatBtn:RegisterForClicks("AnyDown", "AnyUp")
+
   floatBtn:SetScript("OnDragStart", function(s)
     if not MM.DB().button.locked then s:StartMoving() end
   end)
@@ -31,12 +54,17 @@ function MM.CreateFloatingButton()
     saveAnchor(s)
   end)
 
-  -- Register clicks explicitly
-  floatBtn:RegisterForClicks("AnyDown", "AnyUp")
-
-  -- Prepare *this* button on PreClick, then the secure click will use it
+  -- Prepare on PreClick ONLY if locked; otherwise ignore click completely.
   floatBtn:SetScript("PreClick", function(self)
-    print("MM PreClick: running (MM_Float)") -- debug
+    if not MM.DB().button.locked then
+      -- Safety: clear attributes so no stale secure action can fire.
+      self:SetAttribute("type", nil)
+      self:SetAttribute("item", nil)
+      self:SetAttribute("macrotext", nil)
+      -- Debug (comment if noisy): print("MM Float: unlocked, click ignored")
+      return
+    end
+    -- Locked -> prepare this very button to use a random toy
     if MM and MM.PrepareButtonForRandomToy then MM.PrepareButtonForRandomToy(self) end
   end)
 
@@ -48,11 +76,54 @@ function MM.CreateFloatingButton()
     insets = { left = 2, right = 2, top = 2, bottom = 2 },
   })
   floatBtn:SetBackdropColor(0, 0, 0, 0.45)
+  floatBtn:SetBackdropBorderColor(0.8, 0.8, 0.8, 1)
 
+  -- Icon: Orb of Deception by default
   local tex = floatBtn:CreateTexture(nil, "ARTWORK")
   tex:SetAllPoints()
-  tex:SetTexture(GetItemIcon(1973) or 134414) -- Orb of Deception or fallback generic "toy-like" icon
+  tex:SetTexture(GetItemIcon(1973) or 134414)
   floatBtn.icon = tex
+
+  -- Drag overlay (subtle diagonal)
+  local overlay = floatBtn:CreateTexture(nil, "OVERLAY")
+  overlay:SetAllPoints()
+  overlay:SetTexture("Interface/Buttons/WHITE8x8")
+  overlay:SetVertexColor(0.2, 0.7, 1.0, 0.10) -- light cyan tint
+  overlay:Hide()
+  floatBtn.dragOverlay = overlay
+
+  -- Grip icon (center)
+  local grip = floatBtn:CreateTexture(nil, "OVERLAY")
+  grip:SetSize(16, 16)
+  grip:SetPoint("CENTER")
+  -- Common size-grab icon from chat/im
+  grip:SetTexture("Interface/ChatFrame/UI-ChatIM-SizeGrabber-Up")
+  grip:SetVertexColor(0.8, 0.95, 1.0, 0.9)
+  grip:Hide()
+  floatBtn.grip = grip
+
+  -- Tooltip (changes based on lock state)
+  local tip = CreateFrame("GameTooltip", "MM_Float_Tooltip", UIParent, "GameTooltipTemplate")
+  floatBtn:SetScript("OnEnter", function(self)
+    tip:SetOwner(self, "ANCHOR_RIGHT")
+    tip:SetText("Morphomatic", 1, 1, 1)
+    if MM.DB().button.locked then
+      tip:AddLine(
+        "Click: triggers a random cosmetic toy (from your selection).",
+        0.9,
+        0.9,
+        0.9,
+        true
+      )
+      tip:AddLine("Unlock in Settings to move the button.", 0.7, 0.7, 0.7)
+    else
+      tip:AddLine("Unlocked: drag to move.", 0.9, 0.9, 0.9)
+      tip:AddLine("Clicks are disabled while unlocked.", 0.9, 0.5, 0.5)
+      tip:AddLine("Lock it in Settings to use it again.", 0.7, 0.7, 0.7)
+    end
+    tip:Show()
+  end)
+  floatBtn:SetScript("OnLeave", function() tip:Hide() end)
 
   -- Position & scale from saved settings
   local b = MM.DB().button
@@ -60,16 +131,8 @@ function MM.CreateFloatingButton()
   floatBtn:ClearAllPoints()
   floatBtn:SetPoint(b.point or "CENTER", UIParent, b.point or "CENTER", b.x or 0, b.y or 0)
 
-  -- Tooltip
-  local tip = CreateFrame("GameTooltip", "MM_Float_Tooltip", UIParent, "GameTooltipTemplate")
-  floatBtn:SetScript("OnEnter", function(self)
-    tip:SetOwner(self, "ANCHOR_RIGHT")
-    tip:SetText("Morphomatic", 1, 1, 1)
-    tip:AddLine("Click: triggers a random cosmetic toy (from your selection).", 0.9, 0.9, 0.9, true)
-    tip:AddLine("Drag to move (when unlocked in settings).", 0.7, 0.7, 0.7)
-    tip:Show()
-  end)
-  floatBtn:SetScript("OnLeave", function() tip:Hide() end)
+  -- Apply initial lock visuals
+  MM.RefreshButtonLockVisual()
 
   return floatBtn
 end
@@ -78,6 +141,7 @@ end
 function MM.ShowButton()
   if not MM_Float then MM.CreateFloatingButton() end
   MM_Float:Show()
+  MM.RefreshButtonLockVisual()
 end
 
 function MM.HideButton()

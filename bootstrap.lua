@@ -62,7 +62,7 @@ SlashCmdList.MMDEBUGDUMP = function(msg)
     else
       print("MorphomaticDB:", MorphomaticDB)
       for k, v in pairs(MorphomaticDB) do
-        print(" ", k, "=", type(v) == "table" and ("table("..tostring(#v)..")") or tostring(v))
+        print(" ", k, "=", type(v) == "table" and ("table(" .. tostring(#v) .. ")") or tostring(v))
       end
     end
     return
@@ -74,7 +74,7 @@ SlashCmdList.MMDEBUGDUMP = function(msg)
     if DevTools_Dump then
       DevTools_Dump(MorphomaticDB[key])
     else
-      print("MorphomaticDB."..key..":", MorphomaticDB[key])
+      print("MorphomaticDB." .. key .. ":", MorphomaticDB[key])
       if type(MorphomaticDB[key]) == "table" then
         for k2, v2 in pairs(MorphomaticDB[key]) do
           print("   ", k2, "=", tostring(v2))

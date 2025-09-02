@@ -174,6 +174,8 @@ local function buildCanvas()
   end
   lockBtn:SetScript("OnClick", function()
     MM.DB().button.locked = not MM.DB().button.locked
+    -- NEW:
+    if MM.RefreshButtonLockVisual then MM.RefreshButtonLockVisual() end
     refreshLockText()
   end)
   refreshLockText()
