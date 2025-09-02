@@ -130,31 +130,31 @@ end
 ----------------------------------------------------------------------
 
 local function buildCanvas()
+  local L = MM.L
+
   local f = CreateFrame("Frame")
   f:Hide()
 
   -- Title + description
   local title = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   title:SetPoint("TOPLEFT", 16, -16)
-  title:SetText("Morphomatic")
+  title:SetText(L["TITLE"])
 
   local desc = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
   desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
   desc:SetWidth(560)
-  desc:SetText(
-    "Use the 'MM' macro or the floating button to trigger a random cosmetic toy from your Favorites."
-  )
+  desc:SetText(L["DESC"])
 
   --------------------------------------------------------------------
   -- Section 1: Floating Button
   --------------------------------------------------------------------
   local s1 = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   s1:SetPoint("TOPLEFT", desc, "BOTTOMLEFT", 0, -14)
-  s1:SetText("Floating Button")
+  s1:SetText(L["FLOATING_BUTTON"])
 
   local showBtn = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
   showBtn:SetPoint("TOPLEFT", s1, "BOTTOMLEFT", 0, -8)
-  showBtn.Text:SetText("Show floating button")
+  showBtn.Text:SetText(L["SHOW_BUTTON"])
   showBtn:SetChecked(MM.DB().showButton ~= false)
   showBtn:SetScript("OnClick", function(self)
     local v = self:GetChecked()
@@ -170,7 +170,7 @@ local function buildCanvas()
   lockBtn:SetSize(150, 22)
   lockBtn:SetPoint("TOPLEFT", showBtn, "BOTTOMLEFT", 0, -8)
   local function refreshLockText()
-    lockBtn:SetText(MM.DB().button.locked and "Unlock button" or "Lock button")
+    lockBtn:SetText(MM.DB().button.locked and L["UNLOCK_BUTTON"] or L["LOCK_BUTTON"])
   end
   lockBtn:SetScript("OnClick", function()
     MM.DB().button.locked = not MM.DB().button.locked
@@ -188,13 +188,13 @@ local function buildCanvas()
   scale:SetValue(MM.DB().button.scale or 1)
   _G["MM_ScaleSliderLow"]:SetText("0.7")
   _G["MM_ScaleSliderHigh"]:SetText("1.8")
-  _G["MM_ScaleSliderText"]:SetText("Button scale")
+  _G["MM_ScaleSliderText"]:SetText(L["BUTTON_SCALE"])
   scale:SetScript("OnValueChanged", function(_, v) MM.UpdateButtonScale(v) end)
 
   local resetBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
   resetBtn:SetSize(150, 22)
   resetBtn:SetPoint("LEFT", scale, "RIGHT", 16, 0)
-  resetBtn:SetText("Reset position")
+  resetBtn:SetText(L["RESET_POSITION"])
   resetBtn:SetScript("OnClick", MM.ResetButtonAnchor)
 
   --------------------------------------------------------------------
@@ -202,11 +202,11 @@ local function buildCanvas()
   --------------------------------------------------------------------
   local s2 = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   s2:SetPoint("TOPLEFT", lockBtn, "BOTTOMLEFT", 0, -18)
-  s2:SetText("Macro")
+  s2:SetText(L["MACRO_SECTION"])
 
   local auto = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
   auto:SetPoint("TOPLEFT", s2, "BOTTOMLEFT", 0, -8)
-  auto.Text:SetText("Auto-(re)create 'MM' macro at login")
+  auto.Text:SetText(L["AUTO_MACRO"])
   auto:SetChecked(MM.DB().autoCreateMacro ~= false)
   auto:SetScript(
     "OnClick",
@@ -216,24 +216,24 @@ local function buildCanvas()
   local make = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
   make:SetSize(180, 22)
   make:SetPoint("TOPLEFT", auto, "BOTTOMLEFT", 0, -8)
-  make:SetText("Create/Refresh macro now")
+  make:SetText(L["MAKE_MACRO"])
   make:SetScript("OnClick", MM.RecreateMacro) -- defined in macro.lua
 
   local macroNote = f:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
   macroNote:SetPoint("LEFT", make, "RIGHT", 12, 0)
-  macroNote:SetText("Icon is set to Orb of Deception (1973).")
+  macroNote:SetText(L["MACRO_NOTE"])
 
   --------------------------------------------------------------------
-  -- Section 3: Toys Management
+  -- Section 3: Toys / Favorites Management
   --------------------------------------------------------------------
   local s3 = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   s3:SetPoint("TOPLEFT", make, "BOTTOMLEFT", 0, -24)
-  s3:SetText("Toys Management")
+  s3:SetText(L["TOYS_SECTION"])
 
   -- Row 1: runtime option (applies when picking a toy)
   local skipcd = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
   skipcd:SetPoint("TOPLEFT", s3, "BOTTOMLEFT", 0, -10)
-  skipcd.Text:SetText("Skip toys on cooldown (runtime)")
+  skipcd.Text:SetText(L["SKIP_CD"])
   skipcd:SetChecked(MM.DB().skipOnCooldown)
   skipcd:SetScript("OnClick", function(self)
     MM.DB().skipOnCooldown = self:GetChecked() and true or false
@@ -243,7 +243,7 @@ local function buildCanvas()
   -- Row 2: list filter toggle (visual-only)
   local hidecd = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
   hidecd:SetPoint("TOPLEFT", skipcd, "BOTTOMLEFT", 0, -6)
-  hidecd.Text:SetText("Hide toys on cooldown in list")
+  hidecd.Text:SetText(L["HIDE_CD"])
   hidecd:SetChecked(MM.DB().listHideCooldown == true)
   hidecd:SetScript("OnClick", function(self)
     MM.DB().listHideCooldown = self:GetChecked() and true or false
@@ -258,25 +258,25 @@ local function buildCanvas()
   local selectAll = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
   selectAll:SetSize(160, 22)
   selectAll:SetPoint("TOPLEFT", 0, 0)
-  selectAll:SetText("Select all favorites")
+  selectAll:SetText(L["SELECT_ALL"])
   selectAll:SetScript("OnClick", MM.SelectAllToys)
 
   local unselectAll = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
   unselectAll:SetSize(170, 22)
   unselectAll:SetPoint("LEFT", selectAll, "RIGHT", 10, 0)
-  unselectAll:SetText("Unselect all favorites")
+  unselectAll:SetText(L["UNSELECT_ALL"])
   unselectAll:SetScript("OnClick", MM.UnselectAllToys)
 
   local resetSel = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
   resetSel:SetSize(140, 22)
   resetSel:SetPoint("LEFT", unselectAll, "RIGHT", 10, 0)
-  resetSel:SetText("Reset favorites")
+  resetSel:SetText(L["RESET_SELECTION"])
   resetSel:SetScript("OnClick", MM.ResetSelection)
 
   -- Row 4: Label + scroll checklist
   local label = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
   label:SetPoint("TOPLEFT", row, "BOTTOMLEFT", 0, -14)
-  label:SetText("Favorites (from your curated toys):")
+  label:SetText(L["FAVORITES_LABEL"])
 
   local scroll = CreateFrame("ScrollFrame", "MM_OptionsScroll", f, "UIPanelScrollFrameTemplate")
   scroll:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 0, -6)
