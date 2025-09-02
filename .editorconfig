@@ -1,0 +1,25 @@
+# Top-most EditorConfig file
+root = true
+
+# Default (Lua, TOC, XML)
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Markdown: keep trailing spaces (for line breaks)
+[*.md]
+trim_trailing_whitespace = false
+
+# TOC files sometimes need ASCII-only; keep as utf-8 but same style
+[*.toc]
+indent_style = space
+indent_size = 2
+
+# Lua files
+[*.lua]
+indent_style = space
+indent_size = 2

@@ -1,0 +1,13 @@
+## Interface: 110002
+## Title: Morphomatic
+## Notes: Randomly uses a cosmetic toy from a curated DB via a secure macro or an optional floating button.
+## Author: Eyolas
+## Version: 2.2.0
+## SavedVariables: MorphomaticDB, MorphomaticCustom
+
+toys_db.lua
+helpers.lua
+randomizer.lua
+floating_button.lua
+settings.lua
+bootstrap.lua

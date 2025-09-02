@@ -1,0 +1,37 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editors/IDE
+.vscode/
+.idea/
+*.iml
+*.code-workspace
+
+# Build / packaging artifacts
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+/dist/
+/build/
+release/
+.releases/
+.pkgmeta
+.release
+
+# Logs / scratch
+*.log
+tmp/
+.cache/
+.cache/**
+
+# WoW-specific (keep repo clean; SavedVariables live outside the addon anyway)
+# (These are not usually inside the addon folder, but ignore just in case)
+WTF/
+WTF/**
+
+# Lua tooling caches (if you use them)
+.luacheckcache
+.stylua.toml.bak
