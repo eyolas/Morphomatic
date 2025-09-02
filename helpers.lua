@@ -113,7 +113,7 @@ function MM.EnsureSecureButton()
   -- Prepare attributes right before the protected click (same hardware event)
   secureBtn:SetScript("PreClick", function(self)
     if InCombatLockdown() then return end
-
+    print("MM PreClick: running")
     local db = MM.DB()
     local eligible = {}
     for _, id in ipairs(MM.BuildEligibleIDs()) do

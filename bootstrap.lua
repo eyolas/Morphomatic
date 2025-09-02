@@ -25,6 +25,27 @@ SlashCmdList.MMWHY = function()
   if MM.DebugWhy then MM.DebugWhy() end
 end
 
+-- /mmprobe: prints state of the secure button and macro
+SLASH_MMPROBE1 = "/mmprobe"
+SlashCmdList.MMPROBE = function()
+  local b = MM_SecureUse
+  print("MM probe — button:", b and b:GetName() or "nil")
+  if b then
+    print("  IsObjectType(Button) =", b:IsObjectType("Button"))
+    print("  type attr            =", tostring(b:GetAttribute("type")))
+    print("  item attr            =", tostring(b:GetAttribute("item")))
+    local mt = b:GetAttribute("macrotext")
+    print("  macrotext len        =", mt and #mt or 0)
+  end
+  local idx = GetMacroIndexByName("MM")
+  print("  macro 'MM' index     =", idx)
+  if idx > 0 then
+    local _, icon, body = GetMacroInfo(idx)
+    body = body or ""
+    print("  macro body first line:", body:match("([^\n\r]+)") or "")
+  end
+end
+
 -- Events
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
