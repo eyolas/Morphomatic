@@ -15,11 +15,15 @@ end
 
 -- Slash: debug
 SLASH_MMDEBUG1 = "/mmdebug"
-SlashCmdList.MMDEBUG = function() if MM.DebugDump then MM.DebugDump() end end
+SlashCmdList.MMDEBUG = function()
+  if MM.DebugDump then MM.DebugDump() end
+end
 
 -- Slash: why
 SLASH_MMWHY1 = "/mmwhy"
-SlashCmdList.MMWHY = function() if MM.DebugWhy then MM.DebugWhy() end end
+SlashCmdList.MMWHY = function()
+  if MM.DebugWhy then MM.DebugWhy() end
+end
 
 -- Events
 local f = CreateFrame("Frame")
@@ -32,14 +36,16 @@ f:SetScript("OnEvent", function(_, evt, arg1)
     MM.DB()
     MM.OptionsRegister()
     MM.OptionsRefresh()
-
   elseif evt == "PLAYER_LOGIN" then
     MM.SeedRNG()
     if MM.EnsureSecureButton then MM.EnsureSecureButton() end
     if MM.DB().autoCreateMacro ~= false and MM.EnsureMacro then MM.EnsureMacro() end
     -- Floating button visibility on login
-    if MM.DB().showButton ~= false then MM.ShowButton() else MM.HideButton() end
-
+    if MM.DB().showButton ~= false then
+      MM.ShowButton()
+    else
+      MM.HideButton()
+    end
   elseif evt == "TOYS_UPDATED" then
     MM.OptionsRefresh()
   end

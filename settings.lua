@@ -6,7 +6,7 @@ MM = MM or {}
 -- Macro helper
 ----------------------------------------------------------------------
 function MM.EnsureMacro()
-  local idx  = GetMacroIndexByName("MM")
+  local idx = GetMacroIndexByName("MM")
   local body = [[
 #showtooltip
 /run if MM and MM.PrepareSecureUse then MM.PrepareSecureUse() end
@@ -34,13 +34,14 @@ local function refreshChecklist(container)
 
   -- Remove previous row widgets
   local kids = { container:GetChildren() }
-  for _, c in ipairs(kids) do c:Hide(); c:SetParent(nil) end
+  for _, c in ipairs(kids) do
+    c:Hide()
+    c:SetParent(nil)
+  end
 
-  local db   = MM.DB()
+  local db = MM.DB()
   local list = MM.BuildEligibleIDs()
-  table.sort(list, function(a, b)
-    return (GetItemInfo(a) or "") < (GetItemInfo(b) or "")
-  end)
+  table.sort(list, function(a, b) return (GetItemInfo(a) or "") < (GetItemInfo(b) or "") end)
 
   local width = container:GetWidth() - 14
   local y = -4
@@ -58,15 +59,16 @@ local function refreshChecklist(container)
     cb.Text:SetPoint("LEFT", cb, "RIGHT", 6, 0)
     cb.Text:SetWidth(math.max(100, width - 40))
     cb.Text:SetJustifyH("LEFT")
-    cb.Text:SetText(("|T%d:16|t %s (%d)"):format(icon or 134414, name or ("Toy "..id), id))
+    cb.Text:SetText(("|T%d:16|t %s (%d)"):format(icon or 134414, name or ("Toy " .. id), id))
 
     -- Make the whole row clickable without stretching the checkbox
     cb:SetHitRectInsets(0, -(width - 24), 0, 0)
 
     cb:SetChecked(db.enabledToys[id] ~= false)
-    cb:SetScript("OnClick", function(self)
-      db.enabledToys[id] = self:GetChecked() and nil or false
-    end)
+    cb:SetScript(
+      "OnClick",
+      function(self) db.enabledToys[id] = self:GetChecked() and nil or false end
+    )
 
     cb:Show()
     y = y - 24
@@ -91,7 +93,9 @@ local function buildCanvas()
   local desc = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
   desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
   desc:SetWidth(560)
-  desc:SetText("Check toys to include. Use the 'MM' macro or the optional floating button to trigger a random one.")
+  desc:SetText(
+    "Check toys to include. Use the 'MM' macro or the optional floating button to trigger a random one."
+  )
 
   -- Skip cooldown
   local skipcd = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
@@ -111,7 +115,11 @@ local function buildCanvas()
   showBtn:SetScript("OnClick", function(self)
     local v = self:GetChecked()
     MM.DB().showButton = v and true or false
-    if v then MM.ShowButton() else MM.HideButton() end
+    if v then
+      MM.ShowButton()
+    else
+      MM.HideButton()
+    end
   end)
 
   -- Lock / Scale / Reset row
@@ -138,9 +146,7 @@ local function buildCanvas()
   _G["MM_ScaleSliderLow"]:SetText("0.7")
   _G["MM_ScaleSliderHigh"]:SetText("1.8")
   _G["MM_ScaleSliderText"]:SetText("Button scale")
-  scale:SetScript("OnValueChanged", function(_, v)
-    MM.UpdateButtonScale(v)
-  end)
+  scale:SetScript("OnValueChanged", function(_, v) MM.UpdateButtonScale(v) end)
 
   local resetBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
   resetBtn:SetSize(150, 22)
@@ -153,9 +159,10 @@ local function buildCanvas()
   auto:SetPoint("TOPLEFT", lockBtn, "BOTTOMLEFT", 0, -12)
   auto.Text:SetText("Auto-create 'MM' macro at login")
   auto:SetChecked(MM.DB().autoCreateMacro ~= false)
-  auto:SetScript("OnClick", function(self)
-    MM.DB().autoCreateMacro = self:GetChecked() and true or false
-  end)
+  auto:SetScript(
+    "OnClick",
+    function(self) MM.DB().autoCreateMacro = self:GetChecked() and true or false end
+  )
 
   -- Create macro now (button BELOW the checkbox so it never overlaps)
   local make = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
@@ -194,9 +201,7 @@ local function buildCanvas()
   f._listContainer = container
 
   -- Reflow list when panel resizes
-  f:SetScript("OnSizeChanged", function()
-    MM.OptionsRefresh()
-  end)
+  f:SetScript("OnSizeChanged", function() MM.OptionsRefresh() end)
 
   return f
 end
@@ -210,7 +215,7 @@ local function registerSettings()
   cat.ID = "MorphomaticCategory"
   Settings.RegisterAddOnCategory(cat)
   MM._optionsCategory = cat
-  MM._optionsCanvas   = canvas
+  MM._optionsCanvas = canvas
 end
 
 local function registerLegacy()

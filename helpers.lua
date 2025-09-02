@@ -2,52 +2,73 @@
 MM = MM or {}
 
 -- Saved variables
-MorphomaticDB     = MorphomaticDB     or {}
+MorphomaticDB = MorphomaticDB or {}
 MorphomaticCustom = MorphomaticCustom or { extraToys = {}, skipToys = {} }
 
 -- Defaults applied to MorphomaticDB
 local DEFAULTS = {
-  enabledToys     = {},    -- [itemID] = false means "explicitly excluded" (default: included)
-  skipOnCooldown  = true,  -- skip toys on cooldown
-  autoCreateMacro = true,  -- auto-create the macro at login
-  showButton      = true,  -- show the floating button
-  button          = { point="CENTER", x=0, y=0, scale=1, locked=false },
+  enabledToys = {}, -- [itemID] = false means "explicitly excluded" (default: included)
+  skipOnCooldown = true, -- skip toys on cooldown
+  autoCreateMacro = true, -- auto-create the macro at login
+  showButton = true, -- show the floating button
+  button = { point = "CENTER", x = 0, y = 0, scale = 1, locked = false },
 }
 
 -- utils
-local function deepcopy(t) local r={}; for k,v in pairs(t) do r[k]=(type(v)=="table") and deepcopy(v) or v end; return r end
+local function deepcopy(t)
+  local r = {}
+  for k, v in pairs(t) do
+    r[k] = (type(v) == "table") and deepcopy(v) or v
+  end
+  return r
+end
 local function applyDefaults(dst, src)
-  for k,v in pairs(src) do
-    if dst[k]==nil then dst[k]=(type(v)=="table") and deepcopy(v) or v
-    elseif type(dst[k])=="table" and type(v)=="table" then applyDefaults(dst[k], v) end
+  for k, v in pairs(src) do
+    if dst[k] == nil then
+      dst[k] = (type(v) == "table") and deepcopy(v) or v
+    elseif type(dst[k]) == "table" and type(v) == "table" then
+      applyDefaults(dst[k], v)
+    end
   end
 end
 
 -- Accessor for SavedVariables with defaults applied
-function MM.DB() applyDefaults(MorphomaticDB, DEFAULTS); return MorphomaticDB end
+function MM.DB()
+  applyDefaults(MorphomaticDB, DEFAULTS)
+  return MorphomaticDB
+end
 
 -- RNG seeding (safe even if math.randomseed is messed with)
 function MM.SeedRNG()
   local seed = (GetServerTime and GetServerTime()) or (time and time()) or 0
   local guid = UnitGUID and UnitGUID("player")
   if guid then seed = seed + (tonumber(string.sub(guid, -6), 16) or 0) end
-  if math and type(math.randomseed)=="function" then
-    math.randomseed(seed); if type(math.random)=="function" then math.random(); math.random(); math.random() end
+  if math and type(math.randomseed) == "function" then
+    math.randomseed(seed)
+    if type(math.random) == "function" then
+      math.random()
+      math.random()
+      math.random()
+    end
   end
 end
 
 -- Cooldown API (ToyBox preferred; fallback to item API)
 function MM.GetCooldown(itemID)
   if C_ToyBox and C_ToyBox.GetToyCooldown then
-    local s,d,e = C_ToyBox.GetToyCooldown(itemID); return s or 0, d or 0, e
+    local s, d, e = C_ToyBox.GetToyCooldown(itemID)
+    return s or 0, d or 0, e
   end
   if GetItemCooldown then
-    local s,d,e = GetItemCooldown(itemID); return s or 0, d or 0, e
+    local s, d, e = GetItemCooldown(itemID)
+    return s or 0, d or 0, e
   end
-  return 0,0,1
+  return 0, 0, 1
 end
 function MM.IsOnCooldown(itemID)
-  local s,d = MM.GetCooldown(itemID); if s==0 or d==0 then return false end; return (s+d) > GetTime()
+  local s, d = MM.GetCooldown(itemID)
+  if s == 0 or d == 0 then return false end
+  return (s + d) > GetTime()
 end
 
 -- Usability cross-build
@@ -63,9 +84,21 @@ function MM.PlayerHasToy(itemID) return PlayerHasToy and PlayerHasToy(itemID) or
 -- Build pool: DB + extras - skips
 function MM.BuildPool()
   local pool = {}
-  if MM_DB then for id in pairs(MM_DB) do pool[id]=true end end
-  if MorphomaticCustom and MorphomaticCustom.extraToys then for id in pairs(MorphomaticCustom.extraToys) do pool[id]=true end end
-  if MorphomaticCustom and MorphomaticCustom.skipToys  then for id in pairs(MorphomaticCustom.skipToys)  do pool[id]=nil  end end
+  if MM_DB then
+    for id in pairs(MM_DB) do
+      pool[id] = true
+    end
+  end
+  if MorphomaticCustom and MorphomaticCustom.extraToys then
+    for id in pairs(MorphomaticCustom.extraToys) do
+      pool[id] = true
+    end
+  end
+  if MorphomaticCustom and MorphomaticCustom.skipToys then
+    for id in pairs(MorphomaticCustom.skipToys) do
+      pool[id] = nil
+    end
+  end
   return pool
 end
 

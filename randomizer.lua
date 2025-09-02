@@ -5,10 +5,13 @@ MM = MM or {}
 function MM.BuildEligibleIDs()
   local db, pool, out = MM.DB(), MM.BuildPool(), {}
   for id in pairs(pool) do
-    if MM.PlayerHasToy(id)
+    if
+      MM.PlayerHasToy(id)
       and (not db.skipOnCooldown or not MM.IsOnCooldown(id))
       and MM.IsUsable(id)
-    then table.insert(out, id) end
+    then
+      table.insert(out, id)
+    end
   end
   table.sort(out)
   return out
@@ -49,16 +52,16 @@ function MM.PrepareSecureUse()
   local btn = MM.EnsureSecureButton()
   btn:SetAttribute("type", "item")
   if type(toyName) == "string" and toyName ~= "" then
-    btn:SetAttribute("item", toyName)          -- preferred: ToyBox name
+    btn:SetAttribute("item", toyName) -- preferred: ToyBox name
   elseif type(itemName) == "string" and itemName ~= "" then
-    btn:SetAttribute("item", itemName)         -- fallback: item name
+    btn:SetAttribute("item", itemName) -- fallback: item name
   else
-    btn:SetAttribute("item", "item:" .. pick)  -- last resort: raw itemID
+    btn:SetAttribute("item", "item:" .. pick) -- last resort: raw itemID
   end
 
   local label = (type(toyName) == "string" and toyName)
-             or (type(itemName) == "string" and itemName)
-             or ("Toy " .. tostring(pick))
+    or (type(itemName) == "string" and itemName)
+    or ("Toy " .. tostring(pick))
   print(("Morphomatic: prepared %s (%d)"):format(label, pick))
 end
 
@@ -67,15 +70,22 @@ function MM.DebugDump()
   local all = MM.BuildEligibleIDs()
   print("MM debug — eligible:", #all)
   local db, final = MM.DB(), {}
-  for _, id in ipairs(all) do if db.enabledToys[id] ~= false then table.insert(final, id) end end
+  for _, id in ipairs(all) do
+    if db.enabledToys[id] ~= false then table.insert(final, id) end
+  end
   print("MM debug — after filters:", #final)
   if #final > 0 then
     local pick = final[math.random(#final)]
-    local name = GetItemInfo(pick) or ("Toy "..pick)
-    local s,d = MM.GetCooldown(pick)
-    print(("MM debug — pick=%d (%s), cd=%s, usable=%s"):format(
-      pick, name, ((s>0 and d>0) and "yes" or "no"), tostring(MM.IsUsable(pick))
-    ))
+    local name = GetItemInfo(pick) or ("Toy " .. pick)
+    local s, d = MM.GetCooldown(pick)
+    print(
+      ("MM debug — pick=%d (%s), cd=%s, usable=%s"):format(
+        pick,
+        name,
+        ((s > 0 and d > 0) and "yes" or "no"),
+        tostring(MM.IsUsable(pick))
+      )
+    )
     local spell = GetItemSpell(pick)
     print(("MM debug — item=%s, spell=%s"):format(tostring(GetItemInfo(pick)), tostring(spell)))
   else
@@ -89,13 +99,19 @@ function MM.DebugWhy()
   local pool = MM.BuildPool()
   print("MM why — analyzing toys in pool:")
   for id in pairs(pool) do
-    local owned  = MM.PlayerHasToy(id)
-    local s,d    = MM.GetCooldown(id)
-    local oncd   = (s>0 and d>0)
-    local kept   = (db.enabledToys[id] ~= false)
-    local name   = GetItemInfo(id) or ("Toy "..id)
-    print(("%d | %s | owned=%s | cd=%s | checked=%s"):format(
-      id, name, tostring(owned), tostring(oncd), tostring(kept)
-    ))
+    local owned = MM.PlayerHasToy(id)
+    local s, d = MM.GetCooldown(id)
+    local oncd = (s > 0 and d > 0)
+    local kept = (db.enabledToys[id] ~= false)
+    local name = GetItemInfo(id) or ("Toy " .. id)
+    print(
+      ("%d | %s | owned=%s | cd=%s | checked=%s"):format(
+        id,
+        name,
+        tostring(owned),
+        tostring(oncd),
+        tostring(kept)
+      )
+    )
   end
 end

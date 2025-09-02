@@ -17,7 +17,8 @@ end
 function MM.CreateFloatingButton()
   if floatBtn then return floatBtn end
 
-  floatBtn = CreateFrame("Button", "MM_Float", UIParent, "SecureActionButtonTemplate,BackdropTemplate")
+  floatBtn =
+    CreateFrame("Button", "MM_Float", UIParent, "SecureActionButtonTemplate,BackdropTemplate")
   floatBtn:SetSize(44, 44)
   floatBtn:SetMovable(true)
   floatBtn:EnableMouse(true)
@@ -31,16 +32,17 @@ function MM.CreateFloatingButton()
   end)
 
   -- Secure macrotext: prepare then click the hidden secure button.
-  local macrotext = "/run if MM and MM.PrepareSecureUse then MM.PrepareSecureUse() end\n/click MM_SecureUse"
+  local macrotext =
+    "/run if MM and MM.PrepareSecureUse then MM.PrepareSecureUse() end\n/click MM_SecureUse"
   floatBtn:SetAttribute("type", "macro")
   floatBtn:SetAttribute("macrotext", macrotext)
 
   -- Visuals
   floatBtn:SetBackdrop({
-    bgFile   = "Interface/Buttons/WHITE8x8",
+    bgFile = "Interface/Buttons/WHITE8x8",
     edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
     edgeSize = 12,
-    insets   = { left = 2, right = 2, top = 2, bottom = 2 }
+    insets = { left = 2, right = 2, top = 2, bottom = 2 },
   })
   floatBtn:SetBackdropColor(0, 0, 0, 0.45)
 
@@ -64,9 +66,7 @@ function MM.CreateFloatingButton()
     tip:AddLine("Drag to move (when unlocked in settings).", 0.7, 0.7, 0.7)
     tip:Show()
   end)
-  floatBtn:SetScript("OnLeave", function()
-    tip:Hide()
-  end)
+  floatBtn:SetScript("OnLeave", function() tip:Hide() end)
 
   return floatBtn
 end
