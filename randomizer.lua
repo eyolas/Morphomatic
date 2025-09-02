@@ -92,6 +92,8 @@ function MM.DebugDump()
     print(("MM debug — pick=%d (%s), cd=%s, usable=%s"):format(
       pick, name, ((s>0 and d>0) and "yes" or "no"), tostring(MM.IsUsable(pick))
     ))
+    local spell = GetItemSpell(pick)
+    print(("MM debug — item=%s, spell=%s"):format(tostring(GetItemInfo(pick)), tostring(spell)))
   else
     print("MM debug — final list empty (DB empty? all unchecked? cooldown? area restricted?)")
   end
