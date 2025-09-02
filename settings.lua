@@ -164,6 +164,19 @@ local function buildCanvas()
   make:SetText("Create macro now")
   make:SetScript("OnClick", MM.EnsureMacro)
 
+  -- Reset selection button: clears all explicit exclusions (enabledToys)
+  local resetSel = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+  resetSel:SetSize(160, 22)
+  resetSel:SetPoint("LEFT", make, "RIGHT", 16, 0)
+  resetSel:SetText("Reset selection")
+  resetSel:SetScript("OnClick", function()
+    if MorphomaticDB and MorphomaticDB.enabledToys then
+      wipe(MorphomaticDB.enabledToys)
+      print("Morphomatic: selection reset (all toys back to included-by-default).")
+      MM.OptionsRefresh()
+    end
+  end)
+
   -- Checklist label + scroll
   local label = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
   label:SetPoint("TOPLEFT", make, "BOTTOMLEFT", 0, -14)
