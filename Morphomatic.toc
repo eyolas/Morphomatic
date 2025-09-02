@@ -5,6 +5,7 @@
 ## Version: 2.2.0
 ## SavedVariables: MorphomaticDB, MorphomaticCustom
 
+macro.lua
 toys_db.lua
 helpers.lua
 randomizer.lua
