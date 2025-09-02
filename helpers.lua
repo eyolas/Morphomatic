@@ -77,3 +77,20 @@ function MM.EnsureSecureButton()
   secureBtn:Hide() -- macro or floating button will /click it
   return secureBtn
 end
+
+--- Safely resolve a localized toy name from the ToyBox API.
+--- Different builds of WoW return different argument orders, so we pick
+--- whichever slot actually contains a string.
+---@param itemID number
+---@return string|nil
+function MM.ResolveToyNameFromToyBox(itemID)
+  if not (C_ToyBox and C_ToyBox.GetToyInfo) then return nil end
+
+  local a, b, c, d, e = C_ToyBox.GetToyInfo(itemID)
+  -- Look through known slots and return the first string
+  if type(a) == "string" then return a end
+  if type(b) == "string" then return b end
+  if type(e) == "string" then return e end
+
+  return nil
+end

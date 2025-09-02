@@ -16,6 +16,7 @@ end
 
 -- Prepare the hidden secure button with a random eligible toy.
 -- The macro or the floating button will then /click MM_SecureUse.
+-- Resolve a localized toy name from ToyBox in a signature-safe way
 function MM.PrepareSecureUse()
   if InCombatLockdown() then
     print("Morphomatic: cannot change toy during combat.")
@@ -25,9 +26,7 @@ function MM.PrepareSecureUse()
   local db = MM.DB()
   local candidates = {}
   for _, id in ipairs(MM.BuildEligibleIDs()) do
-    if db.enabledToys[id] ~= false then
-      table.insert(candidates, id)
-    end
+    if db.enabledToys[id] ~= false then table.insert(candidates, id) end
   end
   if #candidates == 0 then
     print("Morphomatic: no eligible toys. Use /mm to configure.")
@@ -36,33 +35,31 @@ function MM.PrepareSecureUse()
 
   local pick = candidates[math.random(#candidates)]
 
-  -- 1) Try to resolve the localized ToyBox name (most reliable for /use item by name)
-  local toyName
-  if C_ToyBox and C_ToyBox.GetToyInfo then
-    -- API signature differs across versions; one returns (name,...), another (itemID, name,...)
-    local n1, _, _, _, n2 = C_ToyBox.GetToyInfo(pick)
-    toyName = n1 or n2
-  end
+  -- 1) Try ToyBox-localized name (signature-safe)
+  local toyName = MM.ResolveToyNameFromToyBox(pick)
 
-  -- 2) Fallback: regular item name (if the toy still exists as an item in bags)
+  -- 2) Fallback to item name if needed
   local itemName = GetItemInfo(pick)
-  if (not itemName) and C_Item and C_Item.RequestLoadItemDataByID then
+  if type(itemName) ~= "string" and C_Item and C_Item.RequestLoadItemDataByID then
     C_Item.RequestLoadItemDataByID(pick)
     itemName = GetItemInfo(pick)
   end
 
-  -- 3) Configure the secure button: type="item", and provide the most reliable identifier
+  -- 3) Configure secure button: type="item" + best available identifier
   local btn = MM.EnsureSecureButton()
   btn:SetAttribute("type", "item")
-  if toyName and #toyName > 0 then
+  if type(toyName) == "string" and toyName ~= "" then
     btn:SetAttribute("item", toyName)          -- preferred: ToyBox name
-  elseif itemName and #itemName > 0 then
+  elseif type(itemName) == "string" and itemName ~= "" then
     btn:SetAttribute("item", itemName)         -- fallback: item name
   else
-    btn:SetAttribute("item", "item:" .. pick)  -- last resort: itemID
+    btn:SetAttribute("item", "item:" .. pick)  -- last resort: raw itemID
   end
 
-  print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy "..pick), pick))
+  local label = (type(toyName) == "string" and toyName)
+             or (type(itemName) == "string" and itemName)
+             or ("Toy " .. tostring(pick))
+  print(("Morphomatic: prepared %s (%d)"):format(label, pick))
 end
 
 -- Debug (counts + sample pick)
