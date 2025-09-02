@@ -121,12 +121,50 @@ function MM.ResolveToyName(itemID)
   if type(name) == "string" and name ~= "" then return name end
   -- Last resort: pick any string from GetToyInfo variants
   if C_ToyBox and C_ToyBox.GetToyInfo then
-    local a,b,_,_,e = C_ToyBox.GetToyInfo(itemID)
+    local a, b, _, _, e = C_ToyBox.GetToyInfo(itemID)
     if type(a) == "string" and a ~= "" then return a end
     if type(b) == "string" and b ~= "" then return b end
     if type(e) == "string" and e ~= "" then return e end
   end
   return nil
+end
+
+-- Prepare a given SecureActionButton with a random eligible toy.
+-- It sets attributes on `btn` so the protected click uses the toy.
+function MM.PrepareButtonForRandomToy(btn)
+  if InCombatLockdown() then return false end
+
+  local db = MM.DB()
+  local eligible = {}
+  for _, id in ipairs(MM.BuildEligibleIDs()) do
+    if db.enabledToys[id] ~= false then table.insert(eligible, id) end
+  end
+  if #eligible == 0 then
+    print("Morphomatic: no eligible toys. Use /mm to configure.")
+    -- clear stale attrs
+    btn:SetAttribute("type", nil)
+    btn:SetAttribute("item", nil)
+    btn:SetAttribute("macrotext", nil)
+    return false
+  end
+
+  local pick = eligible[math.random(#eligible)]
+  local toyName = MM.ResolveToyName and MM.ResolveToyName(pick) or nil
+  local itemName = GetItemInfo(pick)
+
+  -- Option A: use as item by NAME (best for ToyBox)
+  btn:SetAttribute("type", "item")
+  if type(toyName) == "string" and toyName ~= "" then
+    btn:SetAttribute("item", toyName)
+  elseif type(itemName) == "string" and itemName ~= "" then
+    btn:SetAttribute("item", itemName)
+  else
+    -- last resort: raw itemID
+    btn:SetAttribute("item", "item:" .. pick)
+  end
+
+  print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy " .. pick), pick))
+  return true
 end
 
 -- Secure button that PREPARES (PreClick) and then EXECUTES in the same hardware click
@@ -144,38 +182,9 @@ function MM.EnsureSecureButton()
   secureBtn:SetScript("PreClick", function(self)
     if InCombatLockdown() then return end
     -- Debug: confirm we actually run
-    print("MM PreClick: running")
-
-    -- Build eligible list then apply user "checked" filter
-    local db = MM.DB()
-    local eligible = {}
-    for _, id in ipairs(MM.BuildEligibleIDs()) do
-      if db.enabledToys[id] ~= false then table.insert(eligible, id) end
-    end
-    if #eligible == 0 then
-      print("Morphomatic: no eligible toys. Use /mm to configure.")
-      -- Clear attributes so stale values aren't reused
-      self:SetAttribute("type", nil)
-      self:SetAttribute("item", nil)
-      return
-    end
-
-    local pick = eligible[math.random(#eligible)]
-    local toyName = MM.ResolveToyName(pick)
-    local itemName = GetItemInfo(pick)
-
-    -- Set secure action to use the item by NAME (preferred), else itemID
-    self:SetAttribute("type", "item")
-    if type(toyName) == "string" and toyName ~= "" then
-      self:SetAttribute("item", toyName)
-    elseif type(itemName) == "string" and itemName ~= "" then
-      self:SetAttribute("item", itemName)
-    else
-      self:SetAttribute("item", "item:" .. pick)
-    end
-
-    -- Optional debug:
-    print(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy "..pick), pick))
+    -- Debug to confirm firing
+    print("MM PreClick: running (MM_SecureUse)")
+    MM.PrepareButtonForRandomToy(self)
   end)
 
   secureBtn:Hide()

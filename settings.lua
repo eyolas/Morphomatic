@@ -27,7 +27,11 @@ function MM.RecreateMacro()
     print("Morphomatic: macro 'MM' updated.")
   else
     local id = CreateMacro(name, icon, body, true) or CreateMacro(name, icon, body, false)
-    if id then print("Morphomatic: macro 'MM' created.") else print("Morphomatic: failed to create macro.") end
+    if id then
+      print("Morphomatic: macro 'MM' created.")
+    else
+      print("Morphomatic: failed to create macro.")
+    end
   end
 end
 

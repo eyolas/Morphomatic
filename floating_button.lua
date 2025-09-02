@@ -31,8 +31,14 @@ function MM.CreateFloatingButton()
     saveAnchor(s)
   end)
 
-  floatBtn:SetAttribute("type", "click")
-  floatBtn:SetAttribute("clickbutton", MM.EnsureSecureButton())
+  -- Register clicks explicitly
+  floatBtn:RegisterForClicks("AnyDown", "AnyUp")
+
+  -- Prepare *this* button on PreClick, then the secure click will use it
+  floatBtn:SetScript("PreClick", function(self)
+    print("MM PreClick: running (MM_Float)") -- debug
+    if MM and MM.PrepareButtonForRandomToy then MM.PrepareButtonForRandomToy(self) end
+  end)
 
   -- Visuals
   floatBtn:SetBackdrop({
