@@ -2,59 +2,85 @@
 -- Settings panel with 3 sections:
 --   1) Floating Button
 --   2) Macro
---   3) Toys Management (skip CD + checklist + bulk actions)
+--   3) Toys Management (skip CD at runtime, list filter toggle, checklist + bulk actions)
 
 MM = MM or {}
 
 ----------------------------------------------------------------------
--- Bulk selection helpers
+-- UI list sources
 ----------------------------------------------------------------------
-local function bulkSelectOwned(toValue)
-  -- toValue: true  => select all (remove explicit exclusions)
-  --          false => unselect all (explicitly exclude)
+
+-- Stable list of OWNED toys from the curated pool (ignores cooldown)
+local function buildOwnedList()
+  local pool = MM.BuildPool()
+  local out = {}
+  for id in pairs(pool) do
+    if MM.PlayerHasToy(id) then table.insert(out, id) end
+  end
+  table.sort(out)
+  return out
+end
+
+-- List used by the UI depending on the toggle "Hide toys on cooldown in list"
+local function buildListForUI()
+  local db = MM.DB()
+  local owned = buildOwnedList()
+  if db.listHideCooldown ~= true then return owned end
+  -- Filter out toys currently on cooldown (visual-only; does not affect runtime)
+  local out = {}
+  for _, id in ipairs(owned) do
+    if not MM.IsOnCooldown(id) then table.insert(out, id) end
+  end
+  return out
+end
+
+----------------------------------------------------------------------
+-- Bulk selection helpers
+-- - Select/Unselect apply to the CURRENT LIST VIEW (matches what the user sees)
+-- - Reset selection wipes all explicit exclusions globally
+----------------------------------------------------------------------
+
+local function bulkSelectCurrentView(selectAll)
   local db = MM.DB()
   db.enabledToys = db.enabledToys or {}
 
-  -- Operate on the same list the checklist shows (owned + cooldown filter applied)
-  local list = MM.BuildEligibleIDs()
+  local list = buildListForUI()
   for _, id in ipairs(list) do
-    if toValue then
-      -- Selected-by-default is represented by nil (no explicit exclusion)
-      db.enabledToys[id] = nil
+    if selectAll then
+      db.enabledToys[id] = nil -- included-by-default
     else
-      -- Explicitly excluded
-      db.enabledToys[id] = false
+      db.enabledToys[id] = false -- explicitly excluded
     end
   end
-
   MM.OptionsRefresh()
 end
 
 function MM.SelectAllToys()
-  bulkSelectOwned(true)
-  print("Morphomatic: all listed toys selected.")
+  bulkSelectCurrentView(true)
+  print("Morphomatic: all toys in the current view selected.")
 end
 
 function MM.UnselectAllToys()
-  bulkSelectOwned(false)
-  print("Morphomatic: all listed toys unselected.")
+  bulkSelectCurrentView(false)
+  print("Morphomatic: all toys in the current view unselected.")
 end
 
 function MM.ResetSelection()
   local db = MM.DB()
   db.enabledToys = db.enabledToys or {}
-  wipe(db.enabledToys) -- clear explicit exclusions for ALL toys
+  wipe(db.enabledToys) -- clear ALL explicit exclusions
   MM.OptionsRefresh()
   print("Morphomatic: selection reset (all toys back to included-by-default).")
 end
 
 ----------------------------------------------------------------------
--- Checklist renderer (owned toys from DB; checked = included)
+-- Checklist renderer (checked = included)
 ----------------------------------------------------------------------
+
 local function refreshChecklist(container)
   if not container then return end
 
-  -- Remove previous row widgets
+  -- Clear previous row widgets
   local kids = { container:GetChildren() }
   for _, c in ipairs(kids) do
     c:Hide()
@@ -62,7 +88,7 @@ local function refreshChecklist(container)
   end
 
   local db = MM.DB()
-  local list = MM.BuildEligibleIDs()
+  local list = buildListForUI()
   table.sort(list, function(a, b) return (GetItemInfo(a) or "") < (GetItemInfo(b) or "") end)
 
   local width = container:GetWidth() - 14
@@ -102,6 +128,7 @@ end
 ----------------------------------------------------------------------
 -- Build Settings canvas (3 sections)
 ----------------------------------------------------------------------
+
 local function buildCanvas()
   local f = CreateFrame("Frame")
   f:Hide()
@@ -202,20 +229,30 @@ local function buildCanvas()
   s3:SetPoint("TOPLEFT", make, "BOTTOMLEFT", 0, -24)
   s3:SetText("Toys Management")
 
-  -- Row 1: Skip cooldown (alone on its row for spacing)
+  -- Row 1: runtime option (applies when picking a toy)
   local skipcd = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
   skipcd:SetPoint("TOPLEFT", s3, "BOTTOMLEFT", 0, -10)
-  skipcd.Text:SetText("Skip toys on cooldown")
+  skipcd.Text:SetText("Skip toys on cooldown (runtime)")
   skipcd:SetChecked(MM.DB().skipOnCooldown)
   skipcd:SetScript("OnClick", function(self)
     MM.DB().skipOnCooldown = self:GetChecked() and true or false
+    -- runtime only; no need to refresh list
+  end)
+
+  -- Row 2: list filter toggle (visual-only)
+  local hidecd = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
+  hidecd:SetPoint("TOPLEFT", skipcd, "BOTTOMLEFT", 0, -6)
+  hidecd.Text:SetText("Hide toys on cooldown in list")
+  hidecd:SetChecked(MM.DB().listHideCooldown == true)
+  hidecd:SetScript("OnClick", function(self)
+    MM.DB().listHideCooldown = self:GetChecked() and true or false
     MM.OptionsRefresh()
   end)
 
-  -- Row 2: Bulk action buttons
+  -- Row 3: bulk action buttons
   local row = CreateFrame("Frame", nil, f)
   row:SetSize(1, 22)
-  row:SetPoint("TOPLEFT", skipcd, "BOTTOMLEFT", 0, -10)
+  row:SetPoint("TOPLEFT", hidecd, "BOTTOMLEFT", 0, -10)
 
   local selectAll = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
   selectAll:SetSize(120, 22)
@@ -235,7 +272,7 @@ local function buildCanvas()
   resetSel:SetText("Reset selection")
   resetSel:SetScript("OnClick", MM.ResetSelection)
 
-  -- Row 3: Label + scroll checklist
+  -- Row 4: Label + scroll checklist
   local label = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
   label:SetPoint("TOPLEFT", row, "BOTTOMLEFT", 0, -14)
   label:SetText("Owned cosmetic toys (from your DB):")
@@ -259,6 +296,7 @@ end
 ----------------------------------------------------------------------
 -- Register with Settings API (Dragonflight+) or legacy fallback
 ----------------------------------------------------------------------
+
 local function registerSettings()
   local canvas = buildCanvas()
   local cat = Settings.RegisterCanvasLayoutCategory(canvas, "Morphomatic")
@@ -286,6 +324,7 @@ end
 ----------------------------------------------------------------------
 -- External refresh (called from events)
 ----------------------------------------------------------------------
+
 function MM.OptionsRefresh()
   local container
   if MM._optionsCanvas and MM._optionsCanvas._listContainer then
