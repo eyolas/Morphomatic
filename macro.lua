@@ -6,8 +6,8 @@
 MM = MM or {}
 
 local MACRO_SIGNATURE = "# Morphomatic macro"
-local MACRO_NAME      = "Morphomatic" -- change to "MM" if you prefer the short name
-local MACRO_ICON      = (GetItemIcon and GetItemIcon(1973)) or "INV_Misc_QuestionMark" -- Orb of Deception
+local MACRO_NAME = "Morphomatic" -- change to "MM" if you prefer the short name
+local MACRO_ICON = (GetItemIcon and GetItemIcon(1973)) or "INV_Misc_QuestionMark" -- Orb of Deception
 
 --- Return total macro count (global + character)
 local function TotalMacroCount()
@@ -23,9 +23,7 @@ function MM.FindMacroIndex()
   local total = (g or 0) + (c or 0)
   for i = 1, total do
     local body = GetMacroBody(i)
-    if body and body:find(MACRO_SIGNATURE, 1, true) then
-      return i
-    end
+    if body and body:find(MACRO_SIGNATURE, 1, true) then return i end
   end
   return 0
 end
@@ -33,11 +31,15 @@ end
 --- Build the working macro body (LeftButton, optionally " 1" if key-down casting)
 local function BuildMacroBody()
   local needsDown = (GetCVar("ActionButtonUseKeyDown") == "1")
-  return string.format([[
+  return string.format(
+    [[
 #showtooltip
 %s
 /click MM_SecureUse LeftButton%s
-]], MACRO_SIGNATURE, needsDown and " 1" or "")
+]],
+    MACRO_SIGNATURE,
+    needsDown and " 1" or ""
+  )
 end
 
 --- Create or refresh the Morphomatic macro
@@ -72,9 +74,9 @@ function MM.RecreateMacro()
   end
 
   -- 3) Create NEW macro — prefer GLOBAL; if full, fallback to per-character
-  local created = CreateMacro(MACRO_NAME, icon, body, false)  -- false/nil => GLOBAL
+  local created = CreateMacro(MACRO_NAME, icon, body, false) -- false/nil => GLOBAL
   if not created then
-    created = CreateMacro(MACRO_NAME, icon, body, true)       -- true => per-character
+    created = CreateMacro(MACRO_NAME, icon, body, true) -- true => per-character
   end
 
   if created then
