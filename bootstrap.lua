@@ -91,7 +91,7 @@ SlashCmdList.MORPHOMATIC = function(msg)
   end
 
   -- options
-  if cmd == "options" then
+  if cmd == "options" or "opt" then
     MM.OpenOptions()
     return
   end
