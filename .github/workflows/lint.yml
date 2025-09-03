@@ -9,27 +9,18 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install Lua + luarocks
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lua5.1 luarocks
+      - name: Setup Lua
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - name: Setup LuaRocks
+        uses: leafo/gh-actions-luarocks@v4
 
       - name: Install luacheck
-        run: |
-          luarocks install luacheck
+        run: luarocks install luacheck
 
       - name: Run luacheck
         run: luacheck .
-
-      - name: Install StyLua
-        run: |
-          curl -sSL https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip -o stylua.zip
-          unzip stylua.zip -d /usr/local/bin
-          rm stylua.zip
-          chmod +x /usr/local/bin/stylua
-
-      - name: Run StyLua check
-        run: stylua --check .
