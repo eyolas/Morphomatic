@@ -1,0 +1,35 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Lua + luarocks
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.1 luarocks
+
+      - name: Install luacheck
+        run: |
+          luarocks install luacheck
+
+      - name: Run luacheck
+        run: luacheck .
+
+      - name: Install StyLua
+        run: |
+          curl -sSL https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip -o stylua.zip
+          unzip stylua.zip -d /usr/local/bin
+          rm stylua.zip
+          chmod +x /usr/local/bin/stylua
+
+      - name: Run StyLua check
+        run: stylua --check .
