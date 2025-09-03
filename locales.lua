@@ -38,6 +38,13 @@ L["TIP_DRAG_TO_MOVE"] = "Unlocked: drag to move."
 L["TIP_CLICKS_DISABLED"] = "Clicks are disabled while unlocked."
 L["TIP_LOCK_TO_USE"] = "Lock it in Settings to use it again."
 
+-- Minimap-specific
+L["SHOW_MINIMAP"] = "Show minimap button"
+L["OPTIONS_NOT_AVAILABLE"] = "Morphomatic: options not available."
+L["MINIMAP_RIGHTCLICK"] = "Morphomatic: right-click reserved for future features."
+L["MINIMAP_TIP_LEFT"] = "Left-click: open options"
+L["MINIMAP_TIP_RIGHT"] = "Right-click: reserved"
+
 ----------------------------------------------------------------------
 -- French (frFR)
 ----------------------------------------------------------------------
@@ -69,6 +76,13 @@ if locale == "frFR" then
   L["TIP_DRAG_TO_MOVE"] = "Déverrouillé : faites-le glisser pour le déplacer."
   L["TIP_CLICKS_DISABLED"] = "Les clics sont désactivés tant qu’il est déverrouillé."
   L["TIP_LOCK_TO_USE"] = "Verrouillez-le dans les options pour l’utiliser à nouveau."
+
+  -- Minimap-specific
+  L["SHOW_MINIMAP"] = "Afficher le bouton sur la mini-carte"
+  L["OPTIONS_NOT_AVAILABLE"] = "Morphomatic : options indisponibles."
+  L["MINIMAP_RIGHTCLICK"] = "Morphomatic : clic droit réservé à de futures fonctionnalités."
+  L["MINIMAP_TIP_LEFT"] = "Clic gauche : ouvrir les options"
+  L["MINIMAP_TIP_RIGHT"] = "Clic droit : réservé"
 end
 
 ----------------------------------------------------------------------

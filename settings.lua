@@ -197,6 +197,18 @@ local function buildCanvas()
   resetBtn:SetText(L["RESET_POSITION"])
   resetBtn:SetScript("OnClick", MM.ResetButtonAnchor)
 
+  -- Minimap toggle (only if libs are available)
+  if MM.HasMinimapLibs and MM.HasMinimapLibs() then
+    local showMinimap = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
+    showMinimap:SetPoint("TOPLEFT", resetBtn, "BOTTOMLEFT", 0, -8)
+    showMinimap.Text:SetText(MM.T("SHOW_MINIMAP", "Show minimap button"))
+    local isShown = not (MM.DB().minimap and MM.DB().minimap.hide)
+    showMinimap:SetChecked(isShown)
+    showMinimap:SetScript("OnClick", function(self)
+      if MM.ToggleMinimap then MM.ToggleMinimap(self:GetChecked()) end
+    end)
+  end
+
   --------------------------------------------------------------------
   -- Section 2: Macro
   --------------------------------------------------------------------

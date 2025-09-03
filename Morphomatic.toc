@@ -4,8 +4,11 @@
 ## Author: Eyolas
 ## Version: 2.2.0
 ## SavedVariables: MorphomaticDB, MorphomaticCustom
+## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0
+
 
 locales.lua
+minimap.lua
 helpers.lua
 macro.lua
 toys_db.lua
