@@ -168,8 +168,9 @@ SlashCmdList.MORPHOMATIC = function(msg)
         local mt = b:GetAttribute("macrotext")
         MM.dprint("  macrotext len        =", mt and #mt or 0)
       end
-      local idx = GetMacroIndexByName("MM")
-      MM.dprint("  macro 'MM' index     =", idx)
+
+      local idx = MM.FindMacroIndex()
+      MM.dprint("  Morphomatic macro index =", idx)
       if idx > 0 then
         local body = GetMacroBody(idx) or ""
         MM.dprint("  macro body first line:", body:match("([^\n\r]*)") or "")
