@@ -199,7 +199,7 @@ local function buildCanvas()
 
   -- Minimap toggle (libs are embedded, so this control is always shown)
   local showMinimap = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
-  showMinimap:SetPoint("TOPLEFT", resetBtn, "BOTTOMLEFT", 0, -8)
+  showMinimap:SetPoint("TOPLEFT", resetBtn, "BOTTOMLEFT", 0, -14)
   showMinimap.Text:SetText(MM.T("SHOW_MINIMAP", "Show minimap button"))
   local isShown = not (MM.DB().minimap and MM.DB().minimap.hide)
   showMinimap:SetChecked(isShown)
