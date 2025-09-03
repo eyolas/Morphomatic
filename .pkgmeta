@@ -1,0 +1,17 @@
+package-as: Morphomatic
+
+externals: {}   # libs déjà embarquées dans /Libs
+
+ignore:
+  - .github
+  - .gitignore
+  - .editorconfig
+  - .luacheckrc
+  - stylua.toml
+  - .stylua.toml
+  - tests
+  - Tools
+  - Media/raw
+
+enable-nolib-creation: no
+manual-changelog: CHANGELOG.md

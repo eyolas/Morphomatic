@@ -18,7 +18,6 @@ Thumbs.db
 /build/
 release/
 .releases/
-.pkgmeta
 .release
 
 # Logs / scratch
