@@ -211,7 +211,7 @@ local function buildCanvas()
   -- Section 2: Macro
   --------------------------------------------------------------------
   local s2 = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-  s2:SetPoint("TOPLEFT", lockBtn, "BOTTOMLEFT", 0, -18)
+  s2:SetPoint("TOPLEFT", showMinimap, "BOTTOMLEFT", 0, -18)
   s2:SetText(L["MACRO_SECTION"])
 
   local auto = CreateFrame("CheckButton", nil, f, "InterfaceOptionsCheckButtonTemplate")
