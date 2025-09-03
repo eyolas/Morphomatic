@@ -37,7 +37,8 @@ end
 function MM.CreateFloatingButton()
   if floatBtn then return floatBtn end
 
-  floatBtn = CreateFrame("Button", "MM_Float", UIParent, "SecureActionButtonTemplate,BackdropTemplate")
+  floatBtn =
+    CreateFrame("Button", "MM_Float", UIParent, "SecureActionButtonTemplate,BackdropTemplate")
   floatBtn:SetSize(44, 44)
   floatBtn:SetMovable(true)
   floatBtn:EnableMouse(true)
@@ -108,8 +109,19 @@ function MM.CreateFloatingButton()
     tip:SetOwner(self, "ANCHOR_RIGHT")
     tip:SetText(MM.T("TITLE", "Morphomatic"), 1, 1, 1)
     if MM.DB().button.locked then
-      tip:AddLine(MM.T("TIP_CLICK", "Click: triggers a random cosmetic toy (from your selection)."), 0.9, 0.9, 0.9, true)
-      tip:AddLine(MM.T("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."), 0.7, 0.7, 0.7)
+      tip:AddLine(
+        MM.T("TIP_CLICK", "Click: triggers a random cosmetic toy (from your selection)."),
+        0.9,
+        0.9,
+        0.9,
+        true
+      )
+      tip:AddLine(
+        MM.T("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."),
+        0.7,
+        0.7,
+        0.7
+      )
     else
       tip:AddLine(MM.T("TIP_DRAG_TO_MOVE", "Unlocked: drag to move."), 0.9, 0.9, 0.9)
       tip:AddLine(MM.T("TIP_CLICKS_DISABLED", "Clicks are disabled while unlocked."), 0.9, 0.5, 0.5)
