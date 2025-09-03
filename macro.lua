@@ -9,12 +9,6 @@ local MACRO_SIGNATURE = "# Morphomatic macro"
 local MACRO_NAME = "Morphomatic" -- change to "MM" if you prefer the short name
 local MACRO_ICON = (GetItemIcon and GetItemIcon(1973)) or "INV_Misc_QuestionMark" -- Orb of Deception
 
---- Return total macro count (global + character)
-local function TotalMacroCount()
-  local g, c = GetNumMacros()
-  return (g or 0) + (c or 0)
-end
-
 --- Find the index of the Morphomatic macro by its body signature.
 --- Scans BOTH global and character macro slots.
 ---@return number idx (0 if not found)

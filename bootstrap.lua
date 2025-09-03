@@ -6,13 +6,6 @@ MM = MM or {}
 ----------------------------------------------------------------------
 -- Utilities
 ----------------------------------------------------------------------
-local function parseBool(arg)
-  arg = arg and arg:lower() or ""
-  if arg == "on" or arg == "true" or arg == "1" then return true end
-  if arg == "off" or arg == "false" or arg == "0" then return false end
-  return nil
-end
-
 function MM.OpenOptions()
   if Settings and Settings.OpenToCategory and MM._optionsCategory then
     Settings.OpenToCategory(MM._optionsCategory.ID or MM._optionsCategory)

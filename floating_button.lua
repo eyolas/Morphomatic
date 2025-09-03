@@ -2,7 +2,6 @@
 -- Floating button that can be locked (click to use) or unlocked (drag only).
 
 MM = MM or {}
-local L = MM.L or {}
 
 local floatBtn
 local function saveAnchor(self)
