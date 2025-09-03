@@ -36,6 +36,7 @@ f:SetScript("OnEvent", function(_, evt, arg1)
     if MM.DB then MM.DB() end
     if MM.OptionsRegister then MM.OptionsRegister() end
     if MM.OptionsRefresh then MM.OptionsRefresh() end
+    if MM.RegisterMinimap then MM.RegisterMinimap() end
   elseif evt == "PLAYER_LOGIN" then
     if MM.SeedRNG then MM.SeedRNG() end
     if MM.EnsureSecureButton then MM.EnsureSecureButton() end

@@ -1,23 +1,22 @@
 -- Morphomatic — minimap.lua
--- Minimap icon integration (optional, only if Libs are available)
+-- Minimap icon integration using LibDataBroker + LibDBIcon (embedded).
 
 MM = MM or {}
 local T = MM.T
 
-local hasLDB = LibStub and LibStub:GetLibrary("LibDataBroker-1.1", true)
-local hasLDI = LibStub and LibStub:GetLibrary("LibDBIcon-1.0", true)
+-- Try to fetch libs (they are embedded and loaded via .toc)
+local LDB = LibStub and LibStub:GetLibrary("LibDataBroker-1.1", true)
+local LDI = LibStub and LibStub:GetLibrary("LibDBIcon-1.0", true)
 
--- Expose a helper so UI can know if minimap is available
-function MM.HasMinimapLibs() return (hasLDB and hasLDI) and true or false end
+-- Helper so other modules (settings) can check availability
+function MM.HasMinimapLibs() return (LDB ~= nil and LDI ~= nil) end
 
 if not MM.HasMinimapLibs() then
   MM.dprint("Morphomatic: minimap support not available (LibDataBroker/LibDBIcon missing).")
   return
 end
 
-local LDB = hasLDB
-local LDI = hasLDI
-
+-- Create DataBroker launcher
 local broker = LDB:NewDataObject("Morphomatic", {
   type = "launcher",
   text = T("TITLE", "Morphomatic"),
@@ -30,19 +29,20 @@ local broker = LDB:NewDataObject("Morphomatic", {
         InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
         InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
       else
-        print(T("OPTIONS_NOT_AVAILABLE"))
+        print(T("OPTIONS_NOT_AVAILABLE", "Morphomatic: options not available."))
       end
     elseif button == "RightButton" then
-      print(T("MINIMAP_RIGHTCLICK"))
+      print(T("MINIMAP_RIGHTCLICK", "Morphomatic: right-click reserved for future features."))
     end
   end,
   OnTooltipShow = function(tt)
     tt:AddLine(T("TITLE", "Morphomatic"))
-    tt:AddLine(T("MINIMAP_TIP_LEFT"), 1, 1, 1)
-    tt:AddLine(T("MINIMAP_TIP_RIGHT"), 0.7, 0.7, 0.7)
+    tt:AddLine(T("MINIMAP_TIP_LEFT", "Left-click: open options"), 1, 1, 1)
+    tt:AddLine(T("MINIMAP_TIP_RIGHT", "Right-click: reserved"), 0.7, 0.7, 0.7)
   end,
 })
 
+-- Register the minimap button
 function MM.RegisterMinimap()
   MM.DB().minimap = MM.DB().minimap or { hide = false }
   LDI:Register("Morphomatic", broker, MM.DB().minimap)
