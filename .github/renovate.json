@@ -30,9 +30,9 @@
       "labels": ["deps", "github-actions"],
       "pinDigests": true,
       "rangeStrategy": "pin",
+      "commitMessagePrefix": "chore(deps): ",
       "commitMessageTopic": "{{depName}} action",
-      "commitMessageExtra": "to {{newVersion}}",
-      "commitMessagePrefix": "chore(deps): "
+      "commitMessageExtra": "to {{newVersion}}"
     },
     {
       "matchManagers": ["github-actions"],
@@ -47,9 +47,14 @@
       "labels": ["deps", "github-actions", "safe-to-upgrade"]
     },
     {
+      /* Split majors vs. non-majors into separate PRs (no matchUpdateTypes here) */
+      "matchManagers": ["github-actions"],
+      "separateMajorMinor": true
+    },
+    {
+      /* Add an extra label when the update is a major */
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["major"],
-      "separateMajorMinor": true,
       "labels": ["deps", "github-actions", "major"]
     }
   ]
