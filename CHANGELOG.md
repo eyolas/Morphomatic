@@ -1,5 +1,21 @@
 # Changelog
 
+# [1.0.2](https://github.com/eyolas/Morphomatic/compare/v1.0.1...v1.0.2) - (2025-09-04)
+
+## <!-- 1 -->🐛 Bug Fixes
+
+- **release:** Add --latest argument to changelog generation step ([63146f7](https://github.com/eyolas/Morphomatic/commit/63146f77a6815429b1a1dc3d82dd05a8c757b4b6))  - (eyolas)
+- **toc:** Update interface version to support new features ([43bc8f9](https://github.com/eyolas/Morphomatic/commit/43bc8f9b5e36e11d1435211dedb46b2654d57131))  - (eyolas)
+- **readme:** Update screenshot paths to correct images ([592dcb2](https://github.com/eyolas/Morphomatic/commit/592dcb25de24d56fcf7b1b3d391a447dbfb45beb))  - (eyolas)
+
+## <!-- 30 -->📝 Other
+
+- PR [#5](https://github.com/eyolas/Morphomatic/pull/5): update CHANGELOG for v1.0.1 ([3697196](https://github.com/eyolas/Morphomatic/commit/3697196cb2c87292ac96fdda825f921851d4f8fe))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for v1.0.1 ([2ac7505](https://github.com/eyolas/Morphomatic/commit/2ac75053a6aeecf74bfd668a4062a950008ca851))  - (eyolas)
+
 # [1.0.1](https://github.com/eyolas/Morphomatic/compare/v1.0.0...v1.0.1) - (2025-09-04)
 
 ## <!-- 1 -->🐛 Bug Fixes
