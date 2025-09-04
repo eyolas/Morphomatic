@@ -1,25 +1,102 @@
-name: Package & Upload (CurseForge)
+name: Package & Upload (CurseForge) + Persist Changelog
+
+permissions:
+  contents: write
+  pull-requests: write
 
 on:
-  push:
-    tags:
-      - "v*.*.*"   # ex: v1.2.3
+  release:
+    types: [published]
 
 jobs:
-  build:
+  release:
+    name: Build & Publish
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout repository with full history and tags (needed for git-cliff & packager)
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # packager lit les tags/commits
+          fetch-depth: 0
 
+      # Debug info: show the tag name
+      - name: Show tag
+        run: |
+          echo "Tag: ${{ github.event.release.tag_name }}"
+
+      # Install zip, required by BigWigs packager
       - name: Install zip
-        run: sudo apt-get update && sudo apt-get install -y zip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip
 
-      - name: Run BigWigs Packager
+      # Generate the "latest" changelog section (for this tag only)
+      - name: Generate changelog for latest tag (scoped)
+        uses: tj-actions/git-cliff@v1
+        with:
+          args: --config cliff.toml --latest
+          output: LATEST_CHANGELOG.md
+
+      # (Optional: only if using .pkgmeta with `manual-changelog: CHANGELOG.md`)
+      # Copy LATEST_CHANGELOG.md into CHANGELOG.md so CurseForge displays only this release section
+      - name: Copy latest → CHANGELOG.md for packager
+        run: cp LATEST_CHANGELOG.md CHANGELOG.md
+
+      # Run BigWigs packager to build the .zip and upload to CurseForge
+      - name: Run BigWigs Packager (Retail)
         uses: BigWigsMods/packager@v2
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
         with:
           args: -g retail
+          # If `.pkgmeta` has `manual-changelog: CHANGELOG.md`, packager will use that file
+          # Otherwise, it will use the GitHub release body (updated below)
+
+      # Update the GitHub release body with the latest changelog section
+      - name: Update GitHub release body with generated changelog
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          body_path: LATEST_CHANGELOG.md
+          append_body: false      # overwrite, don't append
+          make_latest: true
+
+  persist-changelog:
+    name: Open PR with full CHANGELOG.md
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # Checkout again (this job is separate)
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Generate the full changelog (all tags)
+      - name: Generate full changelog (all tags)
+        uses: tj-actions/git-cliff@v1
+        with:
+          args: --config cliff.toml --all
+          output: CHANGELOG.md
+
+      # Open a PR with the updated CHANGELOG.md (persist full history into repo)
+      - name: Create Pull Request with CHANGELOG.md
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: main
+          branch: "chore/update-changelog-${{ github.event.release.tag_name }}"
+          title: "chore: update CHANGELOG for ${{ github.event.release.tag_name }}"
+          commit-message: "chore: update CHANGELOG for ${{ github.event.release.tag_name }}"
+          add-paths: |
+            CHANGELOG.md
+          labels: |
+            merge when passing
+          body: |
+            This PR persists the generated CHANGELOG for **${{ github.event.release.tag_name }}**.
+            - Release body used: LATEST_CHANGELOG.md (single tag)
+            - Repo file updated to full history: CHANGELOG.md
