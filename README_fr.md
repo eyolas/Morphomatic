@@ -1,0 +1,55 @@
+# Morphomatic
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CurseForge](https://cf.way2muchnoise.eu/full_ADDON_ID_downloads.svg)](https://www.curseforge.com/wow/addons/morphomatic)
+
+
+<p align="center">
+  <img src="logo.png" alt="Morphomatic logo" width="200"/>
+</p>
+
+**Morphomatic** est un addon pour World of Warcraft qui permet de **transformer votre personnage aléatoirement** à l’aide de vos jouets cosmétiques préférés.  
+Idéal pour les rôlistes, les streamers ou simplement pour varier votre apparence entre deux combats !
+
+👉 [Read documentation in English](README.md)
+
+---
+
+## ✨ Fonctionnalités
+- **Sélecteur de jouet aléatoire** : utilisez la macro `/mm` ou le bouton flottant pour déclencher une transformation aléatoire.  
+- **Gestion des favoris** : sélectionnez/désélectionnez/réinitialisez les jouets éligibles depuis le panneau d’options.  
+- **Gestion des temps de recharge** : possibilité d’ignorer les jouets en recharge ou de les masquer dans la liste.  
+- **Support macro** : création/recréation automatique d’une macro (`/mm`).  
+- **Bouton flottant** : bouton d’UI déplaçable, redimensionnable et verrouillable.  
+- **Icône minimap** : accès rapide aux options via votre minimap.  
+- **Localisation** : anglais et français inclus.  
+- **Librairies intégrées** : fonctionne immédiatement avec LibStub, CallbackHandler-1.0, LibDataBroker-1.1 et LibDBIcon-1.0.  
+
+---
+
+## 📦 Utilisation
+1. Ouvrez les options avec `/mm options` ou via **Interface → AddOns**.  
+2. Sélectionnez vos jouets favoris dans la liste **Favorites**.  
+3. Utilisez la macro `/mm` ou le bouton flottant pour vous transformer !  
+
+---
+
+## 🖼 Captures d’écran
+
+<p align="center">
+  <img src="screenshots/options.png" alt="Panneau d’options" width="400"/>
+  <img src="screenshots/floating-button.png" alt="Bouton flottant" width="400"/>
+</p>
+
+---
+
+## 🔧 Installation
+
+- **CurseForge** : [Télécharger ici](https://www.curseforge.com/wow/addons/morphomatic)  
+- **Manuelle** : téléchargez la dernière version sur [GitHub Releases](https://github.com/eyolas/Morphomatic/releases) et extrayez le dossier dans `Interface/AddOns/`.
+
+---
+
+## 📜 License
+
+Released under the [MIT License](LICENSE).
