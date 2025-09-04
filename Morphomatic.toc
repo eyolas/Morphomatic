@@ -1,8 +1,10 @@
 ## Interface: 110002
 ## Title: Morphomatic
-## Notes: Randomly uses a cosmetic toy from a curated DB via a secure macro or an optional floating button.
+## Notes: Randomly uses a cosmetic toy from a curated DB via a secure macro or an optional floating button. Build @project-version@ (@build-date-iso@).
 ## Author: Eyolas
-## Version: @project-version@.
+## Version: @project-version@
+## X-Website: https://github.com/eyolas/Morphomatic
+## X-Curse-Project-ID: 1340910
 ## SavedVariables: MorphomaticDB, MorphomaticCustom
 ## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0, CallbackHandler-1.0
 
