@@ -1,4 +1,4 @@
-## Interface: 110002
+## Interface: 110200,110205
 ## Title: Morphomatic
 ## Notes: Randomly uses a cosmetic toy from a curated DB via a secure macro or an optional floating button. Build @project-version@ (@build-date-iso@).
 ## Author: Eyolas
