@@ -2,7 +2,7 @@
 ## Title: Morphomatic
 ## Notes: Randomly uses a cosmetic toy from a curated DB via a secure macro or an optional floating button.
 ## Author: Eyolas
-## Version: 2.2.0
+## Version: @project-version@.
 ## SavedVariables: MorphomaticDB, MorphomaticCustom
 ## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0, CallbackHandler-1.0
 
