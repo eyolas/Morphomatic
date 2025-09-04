@@ -11,7 +11,6 @@ ignore:
   - .stylua.toml
   - screenshots
   - logo.png
-  - cliff.toml
 
 enable-nolib-creation: no
 manual-changelog: CHANGELOG.md
