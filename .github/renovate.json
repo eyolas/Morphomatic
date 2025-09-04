@@ -1,0 +1,56 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  "extends": [
+    "config:recommended",
+    ":prNotPending",
+    ":disableRateLimiting",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
+
+  "dependencyDashboard": true,
+  "rebaseWhen": "conflicted",
+  "timezone": "Europe/Paris",
+  "schedule": ["after 08:00 and before 18:00 on monday, wednesday, friday"],
+  "prConcurrentLimit": 5,
+
+  "ignorePaths": [
+    "Libs/**",
+    ".luarocks/**",
+    ".github/ISSUE_TEMPLATE/**"
+  ],
+
+  "enabledManagers": ["github-actions"],
+
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "labels": ["deps", "github-actions"],
+      "pinDigests": true,
+      "rangeStrategy": "pin",
+      "commitMessageTopic": "{{depName}} action",
+      "commitMessageExtra": "to {{newVersion}}",
+      "commitMessagePrefix": "chore(deps): "
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": [
+        "actions/checkout",
+        "actions/setup-node",
+        "tj-actions/git-cliff",
+        "softprops/action-gh-release",
+        "peter-evans/create-pull-request",
+        "BigWigsMods/packager"
+      ],
+      "labels": ["deps", "github-actions", "safe-to-upgrade"]
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "separateMajorMinor": true,
+      "labels": ["deps", "github-actions", "major"]
+    }
+  ]
+}
