@@ -35,6 +35,7 @@ jobs:
       - name: Generate changelog for latest tag (scoped)
         uses: tj-actions/git-cliff@8bfb7bf10268aed30bde8e34ecaeddb6c6149edd # v2
         with:
+          args: --latest
           output: LATEST_CHANGELOG.md
 
       # (Optional: only if using .pkgmeta with `manual-changelog: CHANGELOG.md`)
