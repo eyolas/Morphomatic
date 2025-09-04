@@ -16,7 +16,7 @@ jobs:
     steps:
       # Checkout repository with full history and tags (needed for git-cliff & packager)
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           fetch-depth: 0
 
@@ -33,7 +33,7 @@ jobs:
 
       # Generate the "latest" changelog section (for this tag only)
       - name: Generate changelog for latest tag (scoped)
-        uses: tj-actions/git-cliff@75599f745633e29f99bd9e14a30865b7d2fcbe84 # v1
+        uses: tj-actions/git-cliff@8bfb7bf10268aed30bde8e34ecaeddb6c6149edd # v2
         with:
           args: --config cliff.toml --latest
           output: LATEST_CHANGELOG.md
@@ -73,20 +73,20 @@ jobs:
     steps:
       # Checkout again (this job is separate)
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           fetch-depth: 0
 
       # Generate the full changelog (all tags)
       - name: Generate full changelog (all tags)
-        uses: tj-actions/git-cliff@75599f745633e29f99bd9e14a30865b7d2fcbe84 # v1
+        uses: tj-actions/git-cliff@8bfb7bf10268aed30bde8e34ecaeddb6c6149edd # v2
         with:
           args: --config cliff.toml --all
           output: CHANGELOG.md
 
       # Open a PR with the updated CHANGELOG.md (persist full history into repo)
       - name: Create Pull Request with CHANGELOG.md
-        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
         with:
           base: main
           branch: "chore/update-changelog-${{ github.event.release.tag_name }}"
