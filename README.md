@@ -77,8 +77,8 @@ Idéal pour les rôlistes, les streamers ou simplement pour varier votre apparen
 ## 🖼 Captures d’écran
 
 <p align="center">
-  <img src="screenshots/options_fr.png" alt="Panneau d’options" width="400"/>
-  <img src="screenshots/floating-button_fr.png" alt="Bouton flottant" width="400"/>
+  <img src="screenshots/options.png" alt="Panneau d’options" width="400"/>
+  <img src="screenshots/floating-button.png" alt="Bouton flottant" width="400"/>
 </p>
 
 ---
