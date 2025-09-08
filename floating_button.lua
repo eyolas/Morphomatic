@@ -3,6 +3,13 @@
 
 MM = MM or {}
 
+-- === Icon config ===
+local ICON_PATH = "Interface\\AddOns\\Morphomatic\\Images\\button.blp"
+local function GetFallbackIcon()
+  -- Orb of Deception (1973) or question mark if missing
+  return GetItemIcon and GetItemIcon(1973) or 134400 -- INV_Misc_QuestionMark
+end
+
 local floatBtn
 local function saveAnchor(self)
   local p, _, _, x, y = self:GetPoint()
@@ -15,14 +22,12 @@ function MM.RefreshButtonLockVisual()
   if not MM_Float then return end
   local locked = MM.DB().button.locked and true or false
 
-  -- Border & overlay
   if locked then
     MM_Float:SetBackdropBorderColor(0.8, 0.8, 0.8, 1)
     if MM_Float.dragOverlay then MM_Float.dragOverlay:Hide() end
     if MM_Float.grip then MM_Float.grip:Hide() end
     MM_Float:SetAlpha(1)
   else
-    -- Emphasize border and show grip/overlay so it's clearly draggable
     MM_Float:SetBackdropBorderColor(0.2, 0.8, 1.0, 1)
     if MM_Float.dragOverlay then MM_Float.dragOverlay:Show() end
     if MM_Float.grip then MM_Float.grip:Show() end
@@ -42,8 +47,6 @@ function MM.CreateFloatingButton()
   floatBtn:SetMovable(true)
   floatBtn:EnableMouse(true)
   floatBtn:RegisterForDrag("LeftButton")
-
-  -- Secure: accept both down/up, but behavior is gated by "locked" state.
   floatBtn:RegisterForClicks("AnyDown", "AnyUp")
 
   floatBtn:SetScript("OnDragStart", function(s)
@@ -54,21 +57,18 @@ function MM.CreateFloatingButton()
     saveAnchor(s)
   end)
 
-  -- Prepare on PreClick ONLY if locked; otherwise ignore click completely.
   floatBtn:SetScript("PreClick", function(self)
     if not MM.DB().button.locked then
-      -- Safety: clear attributes so no stale secure action can fire.
+      -- Clear attributes to avoid firing stale secure actions
       self:SetAttribute("type", nil)
       self:SetAttribute("item", nil)
       self:SetAttribute("macrotext", nil)
-      -- Debug (comment if noisy): MM.dprint("MM Float: unlocked, click ignored")
       return
     end
-    -- Locked -> prepare this very button to use a random toy
     if MM and MM.PrepareButtonForRandomToy then MM.PrepareButtonForRandomToy(self) end
   end)
 
-  -- Visuals
+  -- Frame visuals
   floatBtn:SetBackdrop({
     bgFile = "Interface/Buttons/WHITE8x8",
     edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
@@ -78,49 +78,43 @@ function MM.CreateFloatingButton()
   floatBtn:SetBackdropColor(0, 0, 0, 0.45)
   floatBtn:SetBackdropBorderColor(0.8, 0.8, 0.8, 1)
 
-  -- Icon: Orb of Deception by default
+  -- Icon: addon logo with circular mask, fallback if missing
   local tex = floatBtn:CreateTexture(nil, "ARTWORK")
   tex:SetAllPoints()
-  tex:SetTexture(GetItemIcon(1973) or 134414)
+  local ok = tex:SetTexture(ICON_PATH)
+  if not ok then tex:SetTexture(GetFallbackIcon()) end
   floatBtn.icon = tex
 
-  -- Drag overlay (subtle diagonal)
+  local mask = floatBtn:CreateMaskTexture(nil, "ARTWORK")
+  mask:SetAllPoints()
+  mask:SetTexture("Interface\\CharacterFrame\\TempPortraitAlphaMask")
+  tex:AddMaskTexture(mask)
+
+  -- Drag overlay
   local overlay = floatBtn:CreateTexture(nil, "OVERLAY")
   overlay:SetAllPoints()
   overlay:SetTexture("Interface/Buttons/WHITE8x8")
-  overlay:SetVertexColor(0.2, 0.7, 1.0, 0.10) -- light cyan tint
+  overlay:SetVertexColor(0.2, 0.7, 1.0, 0.10)
   overlay:Hide()
   floatBtn.dragOverlay = overlay
 
-  -- Grip icon (center)
+  -- Grip icon
   local grip = floatBtn:CreateTexture(nil, "OVERLAY")
   grip:SetSize(16, 16)
   grip:SetPoint("CENTER")
-  -- Common size-grab icon from chat/im
   grip:SetTexture("Interface/ChatFrame/UI-ChatIM-SizeGrabber-Up")
   grip:SetVertexColor(0.8, 0.95, 1.0, 0.9)
   grip:Hide()
   floatBtn.grip = grip
 
-  -- Tooltip (changes based on lock state)
+  -- Tooltip
   local tip = CreateFrame("GameTooltip", "MM_Float_Tooltip", UIParent, "GameTooltipTemplate")
   floatBtn:SetScript("OnEnter", function(self)
     tip:SetOwner(self, "ANCHOR_RIGHT")
     tip:SetText(MM.T("TITLE", "Morphomatic"), 1, 1, 1)
     if MM.DB().button.locked then
-      tip:AddLine(
-        MM.T("TIP_CLICK", "Click: triggers a random cosmetic toy (from your selection)."),
-        0.9,
-        0.9,
-        0.9,
-        true
-      )
-      tip:AddLine(
-        MM.T("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."),
-        0.7,
-        0.7,
-        0.7
-      )
+      tip:AddLine(MM.T("TIP_CLICK", "Click: triggers a random cosmetic toy."), 0.9, 0.9, 0.9, true)
+      tip:AddLine(MM.T("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."), 0.7, 0.7, 0.7)
     else
       tip:AddLine(MM.T("TIP_DRAG_TO_MOVE", "Unlocked: drag to move."), 0.9, 0.9, 0.9)
       tip:AddLine(MM.T("TIP_CLICKS_DISABLED", "Clicks are disabled while unlocked."), 0.9, 0.5, 0.5)
@@ -130,19 +124,17 @@ function MM.CreateFloatingButton()
   end)
   floatBtn:SetScript("OnLeave", function() tip:Hide() end)
 
-  -- Position & scale from saved settings
+  -- Position & scale
   local b = MM.DB().button
   floatBtn:SetScale(b.scale or 1)
   floatBtn:ClearAllPoints()
   floatBtn:SetPoint(b.point or "CENTER", UIParent, b.point or "CENTER", b.x or 0, b.y or 0)
 
-  -- Apply initial lock visuals
   MM.RefreshButtonLockVisual()
-
   return floatBtn
 end
 
---- Show/hide helpers (used by settings)
+--- Show/hide helpers
 function MM.ShowButton()
   if not MM_Float then MM.CreateFloatingButton() end
   MM_Float:Show()
@@ -153,7 +145,7 @@ function MM.HideButton()
   if MM_Float then MM_Float:Hide() end
 end
 
---- Reset position to screen center
+--- Reset position
 function MM.ResetButtonAnchor()
   local b = MM.DB().button
   b.point, b.x, b.y = "CENTER", 0, 0
