@@ -6,13 +6,15 @@
 ## X-Website: https://github.com/eyolas/Morphomatic
 ## X-Curse-Project-ID: 1340910
 ## SavedVariables: MorphomaticDB, MorphomaticCustom
-## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0, CallbackHandler-1.0
+## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0, CallbackHandler-1.0, Poncho-2.0, Sushi-3.2
 
 # Embedded libraries
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+Libs\Poncho-2.0\Poncho-2.0.lua
+Libs\Sushi-3.2\Sushi-3.2.lua
 
 db.lua
 locales.lua
