@@ -1,5 +1,21 @@
 # Changelog
 
+# [1.0.5](https://github.com/eyolas/Morphomatic/compare/v1.0.4...v1.0.5) - (2025-09-08)
+
+## <!-- 0 -->🚀 Features
+
+- **button:** Update visuals for locked and unlocked states ([eba125c](https://github.com/eyolas/Morphomatic/commit/eba125c26c518465ecbb03e7b11146da96aeb775))  - (eyolas)
+- **button:** Enhance visuals and functionality of the floating button ([6628db5](https://github.com/eyolas/Morphomatic/commit/6628db5769d1185e99528171be5628113b8c315e))  - (eyolas)
+- **minimap:** Update icon to use custom button image ([c78f098](https://github.com/eyolas/Morphomatic/commit/c78f098d96f1c9ffb1fd5dd95a304823a99cf6f8))  - (eyolas)
+
+## <!-- 30 -->📝 Other
+
+- PR [#8](https://github.com/eyolas/Morphomatic/pull/8): update CHANGELOG for v1.0.4 ([9ec5309](https://github.com/eyolas/Morphomatic/commit/9ec530997c43c92d9e328e4b0e7288186a7db211))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for v1.0.4 ([f70158e](https://github.com/eyolas/Morphomatic/commit/f70158e0930f76886c1b4c80e527827c1658d19a))  - (eyolas)
+
 # [1.0.4](https://github.com/eyolas/Morphomatic/compare/v1.0.3...v1.0.4) - (2025-09-08)
 
 ## <!-- 1 -->🐛 Bug Fixes
