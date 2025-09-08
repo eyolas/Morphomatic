@@ -2,23 +2,15 @@
 -- Minimap icon integration using LibDataBroker + LibDBIcon (embedded).
 
 MM = MM or {}
-local T = MM.T
+local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
 
 local LDB = LibStub("LibDataBroker-1.1")
 local LDI = LibStub("LibDBIcon-1.0")
 
--- Helper so other modules (settings) can check availability
-function MM.HasMinimapLibs() return (LDB ~= nil and LDI ~= nil) end
-
-if not MM.HasMinimapLibs() then
-  MM.dprint("Morphomatic: minimap support not available (LibDataBroker/LibDBIcon missing).")
-  return
-end
-
 -- Create DataBroker launcher
 local broker = LDB:NewDataObject("Morphomatic", {
   type = "launcher",
-  text = T("TITLE", "Morphomatic"),
+  text = L.TITLE,
   icon = "Interface\\AddOns\\Morphomatic\\images\\button.blp",
   OnClick = function(_, button)
     if button == "LeftButton" then
@@ -28,16 +20,16 @@ local broker = LDB:NewDataObject("Morphomatic", {
         InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
         InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
       else
-        print(T("OPTIONS_NOT_AVAILABLE", "Morphomatic: options not available."))
+        print(L.OPTIONS_NOT_AVAILABLE)
       end
     elseif button == "RightButton" then
-      print(T("MINIMAP_RIGHTCLICK", "Morphomatic: right-click reserved for future features."))
+      print(L.MINIMAP_RIGHTCLICK)
     end
   end,
   OnTooltipShow = function(tt)
-    tt:AddLine(T("TITLE", "Morphomatic"))
-    tt:AddLine(T("MINIMAP_TIP_LEFT", "Left-click: open options"), 1, 1, 1)
-    tt:AddLine(T("MINIMAP_TIP_RIGHT", "Right-click: reserved"), 0.7, 0.7, 0.7)
+    tt:AddLine(L.TITLE)
+    tt:AddLine(L.MINIMAP_TIP_LEFT, 1, 1, 1)
+    tt:AddLine(L.MINIMAP_TIP_RIGHT, 0.7, 0.7, 0.7)
   end,
 })
 

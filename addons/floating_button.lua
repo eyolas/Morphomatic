@@ -2,6 +2,7 @@
 -- Floating button that can be locked (click to use) or unlocked (drag only).
 
 MM = MM or {}
+local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
 
 -- === Icon config ===
 local ICON_PATH = "Interface\\AddOns\\Morphomatic\\images\\button.blp"
@@ -115,14 +116,14 @@ function MM.CreateFloatingButton()
   local tip = CreateFrame("GameTooltip", "MM_Float_Tooltip", UIParent, "GameTooltipTemplate")
   floatBtn:SetScript("OnEnter", function(self)
     tip:SetOwner(self, "ANCHOR_RIGHT")
-    tip:SetText(MM.T("TITLE", "Morphomatic"), 1, 1, 1)
+    tip:SetText(L("TITLE", "Morphomatic"), 1, 1, 1)
     if MM.DB().button.locked then
-      tip:AddLine(MM.T("TIP_CLICK", "Click: triggers a random cosmetic toy."), 0.9, 0.9, 0.9, true)
-      tip:AddLine(MM.T("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."), 0.7, 0.7, 0.7)
+      tip:AddLine(L("TIP_CLICK", "Click: triggers a random cosmetic toy."), 0.9, 0.9, 0.9, true)
+      tip:AddLine(L("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."), 0.7, 0.7, 0.7)
     else
-      tip:AddLine(MM.T("TIP_DRAG_TO_MOVE", "Unlocked: drag to move."), 0.9, 0.9, 0.9)
-      tip:AddLine(MM.T("TIP_CLICKS_DISABLED", "Clicks are disabled while unlocked."), 0.9, 0.5, 0.5)
-      tip:AddLine(MM.T("TIP_LOCK_TO_USE", "Lock it in Settings to use it again."), 0.7, 0.7, 0.7)
+      tip:AddLine(L("TIP_DRAG_TO_MOVE", "Unlocked: drag to move."), 0.9, 0.9, 0.9)
+      tip:AddLine(L("TIP_CLICKS_DISABLED", "Clicks are disabled while unlocked."), 0.9, 0.5, 0.5)
+      tip:AddLine(L("TIP_LOCK_TO_USE", "Lock it in Settings to use it again."), 0.7, 0.7, 0.7)
     end
     tip:Show()
   end)

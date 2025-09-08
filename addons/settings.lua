@@ -1,4 +1,4 @@
--- Morphomatic — settings.lua (Sushi-only, self-contained, uses MM.T)
+-- Morphomatic — settings.lua
 -- Settings panel with 3 sections:
 --   1) Floating Button
 --   2) Macro
@@ -6,6 +6,7 @@
 
 MM = MM or {}
 
+local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
 local Sushi = LibStub("Sushi-3.2") -- embedded, assumed available
 
 ----------------------------------------------------------------------
@@ -136,15 +137,12 @@ local function buildCanvas()
   -- Title + description
   local title = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   title:SetPoint("TOPLEFT", 16, -16)
-  title:SetText(MM.T("TITLE", "Morphomatic"))
+  title:SetText(L.TITLE)
 
   local desc = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
   desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
   desc:SetWidth(560)
-  desc:SetText(MM.T(
-    "DESC",
-    "Use the 'MM' macro or the floating button to trigger a random cosmetic toy from your Favorites."
-  ))
+  desc:SetText(L.DESC)
 
   --------------------------------------------------------------------
   -- Section 1: Floating Button
@@ -164,12 +162,12 @@ local function buildCanvas()
 
   local s1t = s1:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   s1t:SetPoint("TOPLEFT", 10, -10)
-  s1t:SetText(MM.T("FLOATING_BUTTON", "Floating Button"))
+  s1t:SetText(L.FLOATING_BUTTON)
 
   local showBtn = Sushi.Check()
   showBtn:SetParent(s1)
   showBtn:SetPoint("TOPLEFT", s1t, "BOTTOMLEFT", -6, -10)
-  showBtn:SetLabel(MM.T("SHOW_BUTTON", "Show floating button"))
+  showBtn:SetLabel(L.SHOW_BUTTON)
   showBtn:SetValue(MM.DB().showButton ~= false)
   showBtn:SetScript("OnClick", function(self)
     local v = self.state and true or false
@@ -181,7 +179,7 @@ local function buildCanvas()
   lockBtn:SetPoint("TOPLEFT", showBtn, "BOTTOMLEFT", 6, -8)
   lockBtn:SetWidth(150) lockBtn:SetHeight(22)
   local function refreshLockText()
-    lockBtn:SetText(MM.DB().button.locked and MM.T("UNLOCK_BUTTON", "Unlock button") or MM.T("LOCK_BUTTON", "Lock button"))
+    lockBtn:SetText(MM.DB().button.locked and L.UNLOCK_BUTTON or L.LOCK_BUTTON)
   end
   lockBtn:SetScript("OnClick", function()
     MM.DB().button.locked = not MM.DB().button.locked
@@ -193,7 +191,7 @@ local function buildCanvas()
   local scale = Sushi.Slider(s1)
   scale:SetPoint("LEFT", lockBtn, "RIGHT", 16, 0)
   scale:SetWidth(200)
-  scale:SetLabel(MM.T("BUTTON_SCALE", "Button scale"))
+  scale:SetLabel(L.BUTTON_SCALE)
   scale:SetRange(0.7, 1.8)
   scale:SetStep(0.05)
   scale:SetValue(MM.DB().button.scale or 1)
@@ -202,14 +200,14 @@ local function buildCanvas()
   local resetBtn = Sushi.RedButton(s1)
   resetBtn:SetPoint("LEFT", scale, "RIGHT", 16, 0)
   resetBtn:SetWidth(150) resetBtn:SetHeight(22)
-  resetBtn:SetText(MM.T("RESET_POSITION", "Reset position"))
+  resetBtn:SetText(L.RESET_POSITION)
   resetBtn:SetScript("OnClick", MM.ResetButtonAnchor)
 
   -- Minimap toggle (embedded libs => always available)
   local showMinimap = Sushi.Check()
   showMinimap:SetParent(f)
   showMinimap:SetPoint("TOPLEFT", s1, "BOTTOMLEFT", -6, -10)
-  showMinimap:SetLabel(MM.T("SHOW_MINIMAP", "Show minimap button"))
+  showMinimap:SetLabel(L.SHOW_MINIMAP)
   local isShown = not (MM.DB().minimap and MM.DB().minimap.hide)
   showMinimap:SetValue(isShown)
   showMinimap:SetScript("OnClick", function(self)
@@ -234,12 +232,12 @@ local function buildCanvas()
 
   local s2t = s2:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   s2t:SetPoint("TOPLEFT", 10, -10)
-  s2t:SetText(MM.T("MACRO_SECTION", "Macro"))
+  s2t:SetText(L.MACRO_SECTION)
 
   local auto = Sushi.Check()
   auto:SetParent(s2)
   auto:SetPoint("TOPLEFT", s2t, "BOTTOMLEFT", -6, -10)
-  auto:SetLabel(MM.T("AUTO_MACRO", "Auto-(re)create 'MM' macro at login"))
+  auto:SetLabel(L.AUTO_MACRO)
   auto:SetValue(MM.DB().autoCreateMacro ~= false)
   auto:SetScript("OnClick", function(self)
     MM.DB().autoCreateMacro = self.state and true or false
@@ -248,12 +246,12 @@ local function buildCanvas()
   local make = Sushi.RedButton(s2)
   make:SetPoint("TOPLEFT", auto, "BOTTOMLEFT", 6, -8)
   make:SetWidth(180) make:SetHeight(22)
-  make:SetText(MM.T("MAKE_MACRO", "Create/Refresh macro now"))
+  make:SetText(L.MAKE_MACRO)
   make:SetScript("OnClick", MM.RecreateMacro)
 
   local macroNote = s2:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
   macroNote:SetPoint("LEFT", make, "RIGHT", 12, 0)
-  macroNote:SetText(MM.T("MACRO_NOTE", "Icon is set to Orb of Deception (1973)."))
+  macroNote:SetText(L.MACRO_NOTE)
 
   --------------------------------------------------------------------
   -- Section 3: Favorites / Toys Management
@@ -272,13 +270,13 @@ local function buildCanvas()
 
   local s3t = s3:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
   s3t:SetPoint("TOPLEFT", 10, -10)
-  s3t:SetText(MM.T("TOYS_SECTION", "Toys Management"))
+  s3t:SetText(L.TOYS_SECTION)
 
   -- Row 1: runtime option (applies when picking a toy)
   local skipcd = Sushi.Check()
   skipcd:SetParent(s3)
   skipcd:SetPoint("TOPLEFT", s3t, "BOTTOMLEFT", -6, -10)
-  skipcd:SetLabel(MM.T("SKIP_CD", "Skip toys on cooldown (runtime)"))
+  skipcd:SetLabel(L.SKIP_CD)
   skipcd:SetValue(MM.DB().skipOnCooldown)
   skipcd:SetScript("OnClick", function(self)
     MM.DB().skipOnCooldown = self.state and true or false
@@ -288,7 +286,7 @@ local function buildCanvas()
   local hidecd = Sushi.Check()
   hidecd:SetParent(s3)
   hidecd:SetPoint("TOPLEFT", skipcd, "BOTTOMLEFT", 0, -6)
-  hidecd:SetLabel(MM.T("HIDE_CD", "Hide toys on cooldown in list"))
+  hidecd:SetLabel(L.HIDE_CD)
   hidecd:SetValue(MM.DB().listHideCooldown == true)
   hidecd:SetScript("OnClick", function(self)
     MM.DB().listHideCooldown = self.state and true or false
@@ -303,25 +301,25 @@ local function buildCanvas()
   local selectAll = Sushi.RedButton(row)
   selectAll:SetPoint("LEFT", row, "LEFT", 0, 0)
   selectAll:SetWidth(160) selectAll:SetHeight(22)
-  selectAll:SetText(MM.T("SELECT_ALL", "Select all favorites"))
+  selectAll:SetText(L.SELECT_ALL)
   selectAll:SetScript("OnClick", MM.SelectAllToys)
 
   local unselectAll = Sushi.RedButton(row)
   unselectAll:SetPoint("LEFT", selectAll, "RIGHT", 10, 0)
   unselectAll:SetWidth(170) unselectAll:SetHeight(22)
-  unselectAll:SetText(MM.T("UNSELECT_ALL", "Unselect all favorites"))
+  unselectAll:SetText(L.UNSELECT_ALL)
   unselectAll:SetScript("OnClick", MM.UnselectAllToys)
 
   local resetSel = Sushi.RedButton(row)
   resetSel:SetPoint("LEFT", unselectAll, "RIGHT", 10, 0)
   resetSel:SetWidth(140) resetSel:SetHeight(22)
-  resetSel:SetText(MM.T("RESET_SELECTION", "Reset favorites"))
+  resetSel:SetText(L.RESET_SELECTION)
   resetSel:SetScript("OnClick", MM.ResetSelection)
 
   -- Row 4: Label + scroll checklist
   local label = s3:CreateFontString(nil, "ARTWORK", "GameFontNormal")
   label:SetPoint("TOPLEFT", row, "BOTTOMLEFT", 0, -14)
-  label:SetText(MM.T("FAVORITES_LABEL", "Favorites (from your curated toys):"))
+  label:SetText(L.FAVORITES_LABEL)
 
   local scroll = CreateFrame("ScrollFrame", "MM_OptionsScroll", s3, "UIPanelScrollFrameTemplate")
   scroll:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 0, -6)

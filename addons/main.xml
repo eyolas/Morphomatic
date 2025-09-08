@@ -1,7 +1,7 @@
 <Ui>
   <Include file="..\libs\libs.xml"/>
+  <Include file="..\localization\localization.xml"/>
   <Script file="db.lua"/>
-  <Script file="locales.lua"/>
   <Script file="minimap.lua"/>
   <Script file="helpers.lua"/>
   <Script file="macro.lua"/>
