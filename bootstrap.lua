@@ -10,6 +10,7 @@ function MM.OpenOptions()
   if Settings and Settings.OpenToCategory and MM._optionsCategory then
     Settings.OpenToCategory(MM._optionsCategory.ID or MM._optionsCategory)
   elseif InterfaceOptionsFrame then
+    -- Legacy fallback needs double call to focus the panel
     InterfaceOptionsFrame_OpenToCategory("Morphomatic")
     InterfaceOptionsFrame_OpenToCategory("Morphomatic")
   end
@@ -26,10 +27,12 @@ f:RegisterEvent("TOYS_UPDATED")
 
 f:SetScript("OnEvent", function(_, evt, arg1)
   if evt == "ADDON_LOADED" and arg1 == "Morphomatic" then
+    -- db.lua already applies defaults; MM.DB() call is harmless but optional
     if MM.DB then MM.DB() end
     if MM.OptionsRegister then MM.OptionsRegister() end
     if MM.OptionsRefresh then MM.OptionsRefresh() end
     if MM.RegisterMinimap then MM.RegisterMinimap() end
+
   elseif evt == "PLAYER_LOGIN" then
     if MM.SeedRNG then MM.SeedRNG() end
     if MM.EnsureSecureButton then MM.EnsureSecureButton() end
@@ -41,12 +44,16 @@ f:SetScript("OnEvent", function(_, evt, arg1)
     end
     if MM.RefreshButtonLockVisual then MM.RefreshButtonLockVisual() end
 
-    if MM.DB().autoCreateMacro ~= false and MM.RecreateMacro then MM.RecreateMacro() end
+    if MM.DB().autoCreateMacro ~= false and MM.RecreateMacro then
+      MM.RecreateMacro()
+    end
+
   elseif evt == "PLAYER_REGEN_ENABLED" then
     if MM._macroNeedsRecreate and MM.RecreateMacro then
       MM._macroNeedsRecreate = nil
       MM.RecreateMacro()
     end
+
   elseif evt == "TOYS_UPDATED" then
     if MM.OptionsRefresh then MM.OptionsRefresh() end
   end
@@ -84,8 +91,8 @@ SlashCmdList.MORPHOMATIC = function(msg)
     return
   end
 
-  -- options
-  if cmd == "options" or "opt" then
+  -- options / opt
+  if cmd == "options" or cmd == "opt" then
     MM.OpenOptions()
     return
   end
@@ -163,7 +170,7 @@ SlashCmdList.MORPHOMATIC = function(msg)
         MM.dprint("  macrotext len        =", mt and #mt or 0)
       end
 
-      local idx = MM.FindMacroIndex()
+      local idx = MM.FindMacroIndex and MM.FindMacroIndex() or 0
       MM.dprint("  Morphomatic macro index =", idx)
       if idx > 0 then
         local body = GetMacroBody(idx) or ""
