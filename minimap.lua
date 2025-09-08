@@ -19,7 +19,7 @@ end
 local broker = LDB:NewDataObject("Morphomatic", {
   type = "launcher",
   text = T("TITLE", "Morphomatic"),
-  icon = GetItemIcon(1973) or "Interface\\Icons\\INV_Misc_QuestionMark",
+  icon = "Interface\\AddOns\\Morphomatic\\Images\\button.blp",
   OnClick = function(_, button)
     if button == "LeftButton" then
       if Settings and Settings.OpenToCategory and MM._optionsCategory then
