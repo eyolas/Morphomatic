@@ -76,7 +76,7 @@ function MM.ResetSelection()
 end
 
 ----------------------------------------------------------------------
--- Checklist renderer (checked = included) using Sushi.CheckBox rows
+-- Checklist renderer (checked = included) using Sushi.CheckButton rows
 ----------------------------------------------------------------------
 
 local function refreshChecklist(container)
@@ -104,7 +104,7 @@ local function refreshChecklist(container)
     row:SetPoint("TOPLEFT", 6, y)
     row:SetSize(width, 22)
 
-    local cb = Sushi.CheckBox(row)
+    local cb = Sushi.CheckButton(row)
     cb:SetPoint("LEFT", row, "LEFT", 0, 0)
     cb:SetLabel(("|T%d:16|t %s (%d)"):format(icon or 134414, name, id))
     cb:SetWidth(width)
@@ -165,7 +165,7 @@ local function buildCanvas()
   s1t:SetPoint("TOPLEFT", 10, -10)
   s1t:SetText(MM.T("FLOATING_BUTTON", "Floating Button"))
 
-  local showBtn = Sushi.CheckBox(s1)
+  local showBtn = Sushi.CheckButton(s1)
   showBtn:SetPoint("TOPLEFT", s1t, "BOTTOMLEFT", -6, -10)
   showBtn:SetLabel(MM.T("SHOW_BUTTON", "Show floating button"))
   showBtn:SetState(MM.DB().showButton ~= false)
@@ -204,7 +204,7 @@ local function buildCanvas()
   resetBtn:SetScript("OnClick", MM.ResetButtonAnchor)
 
   -- Minimap toggle (embedded libs => always available)
-  local showMinimap = Sushi.CheckBox(f)
+  local showMinimap = Sushi.CheckButton(f)
   showMinimap:SetPoint("TOPLEFT", s1, "BOTTOMLEFT", -6, -10)
   showMinimap:SetLabel(MM.T("SHOW_MINIMAP", "Show minimap button"))
   local isShown = not (MM.DB().minimap and MM.DB().minimap.hide)
@@ -233,7 +233,7 @@ local function buildCanvas()
   s2t:SetPoint("TOPLEFT", 10, -10)
   s2t:SetText(MM.T("MACRO_SECTION", "Macro"))
 
-  local auto = Sushi.CheckBox(s2)
+  local auto = Sushi.CheckButton(s2)
   auto:SetPoint("TOPLEFT", s2t, "BOTTOMLEFT", -6, -10)
   auto:SetLabel(MM.T("AUTO_MACRO", "Auto-(re)create 'MM' macro at login"))
   auto:SetState(MM.DB().autoCreateMacro ~= false)
@@ -271,7 +271,7 @@ local function buildCanvas()
   s3t:SetText(MM.T("TOYS_SECTION", "Toys Management"))
 
   -- Row 1: runtime option (applies when picking a toy)
-  local skipcd = Sushi.CheckBox(s3)
+  local skipcd = Sushi.CheckButton(s3)
   skipcd:SetPoint("TOPLEFT", s3t, "BOTTOMLEFT", -6, -10)
   skipcd:SetLabel(MM.T("SKIP_CD", "Skip toys on cooldown (runtime)"))
   skipcd:SetState(MM.DB().skipOnCooldown)
@@ -280,7 +280,7 @@ local function buildCanvas()
   end)
 
   -- Row 2: list filter toggle (visual-only)
-  local hidecd = Sushi.CheckBox(s3)
+  local hidecd = Sushi.CheckButton(s3)
   hidecd:SetPoint("TOPLEFT", skipcd, "BOTTOMLEFT", 0, -6)
   hidecd:SetLabel(MM.T("HIDE_CD", "Hide toys on cooldown in list"))
   hidecd:SetState(MM.DB().listHideCooldown == true)
