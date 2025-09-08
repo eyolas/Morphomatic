@@ -4,7 +4,7 @@
 MM = MM or {}
 
 -- === Icon config ===
-local ICON_PATH = "Interface\\AddOns\\Morphomatic\\Images\\button.blp"
+local ICON_PATH = "Interface\\AddOns\\Morphomatic\\images\\button.blp"
 local function GetFallbackIcon()
   -- Orb of Deception (1973) or question mark if missing
   return GetItemIcon and GetItemIcon(1973) or 134400 -- INV_Misc_QuestionMark

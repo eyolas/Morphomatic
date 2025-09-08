@@ -1,0 +1,13 @@
+<Ui>
+  <Include file="..\libs\libs.xml"/>
+  <Script file="db.lua"/>
+  <Script file="locales.lua"/>
+  <Script file="minimap.lua"/>
+  <Script file="helpers.lua"/>
+  <Script file="macro.lua"/>
+  <Script file="toys_db.lua"/>
+  <Script file="randomizer.lua"/>
+  <Script file="floating_button.lua"/>
+  <Script file="settings.lua"/>
+  <Script file="bootstrap.lua"/>
+</Ui>
