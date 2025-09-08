@@ -23,12 +23,16 @@ function MM.RefreshButtonLockVisual()
   local locked = MM.DB().button.locked and true or false
 
   if locked then
+    -- Neutral grey border, normal dark background
     MM_Float:SetBackdropBorderColor(0.8, 0.8, 0.8, 1)
+    MM_Float:SetBackdropColor(0, 0, 0, 0.45) -- dark translucent background
     if MM_Float.dragOverlay then MM_Float.dragOverlay:Hide() end
     if MM_Float.grip then MM_Float.grip:Hide() end
     MM_Float:SetAlpha(1)
   else
-    MM_Float:SetBackdropBorderColor(0.2, 0.8, 1.0, 1)
+    -- ElvUI-style: red border + red translucent background
+    MM_Float:SetBackdropBorderColor(1.0, 0.1, 0.1, 1) -- solid red border
+    MM_Float:SetBackdropColor(0.8, 0, 0, 0.35)        -- red translucent background
     if MM_Float.dragOverlay then MM_Float.dragOverlay:Show() end
     if MM_Float.grip then MM_Float.grip:Show() end
     MM_Float:SetAlpha(0.95)
