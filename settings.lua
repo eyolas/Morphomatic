@@ -152,7 +152,7 @@ local function buildCanvas()
   local s1 = CreateFrame("Frame", nil, f, "BackdropTemplate")
   s1:SetPoint("TOPLEFT", desc, "BOTTOMLEFT", 0, -12)
   s1:SetPoint("RIGHT", f, "RIGHT", -16, 0)
-  s1:SetHeight(90)
+  s1:SetHeight(110)
   s1:SetBackdrop({
     bgFile = "Interface/Buttons/WHITE8x8",
     edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
@@ -222,7 +222,7 @@ local function buildCanvas()
   local s2 = CreateFrame("Frame", nil, f, "BackdropTemplate")
   s2:SetPoint("TOPLEFT", showMinimap, "BOTTOMLEFT", 6, -12)
   s2:SetPoint("RIGHT", f, "RIGHT", -16, 0)
-  s2:SetHeight(84)
+  s2:SetHeight(100)
   s2:SetBackdrop({
     bgFile = "Interface/Buttons/WHITE8x8",
     edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
@@ -325,7 +325,7 @@ local function buildCanvas()
 
   local scroll = CreateFrame("ScrollFrame", "MM_OptionsScroll", s3, "UIPanelScrollFrameTemplate")
   scroll:SetPoint("TOPLEFT", label, "BOTTOMLEFT", 0, -6)
-  scroll:SetPoint("BOTTOMRIGHT", s3, "BOTTOMRIGHT", -30, 12)
+  scroll:SetPoint("BOTTOMRIGHT", s3, "BOTTOMRIGHT", -30, 24)
 
   local container = CreateFrame("Frame", nil, scroll)
   container:SetPoint("TOPLEFT")
