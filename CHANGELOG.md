@@ -1,5 +1,24 @@
 # Changelog
 
+# [1.0.3](https://github.com/eyolas/Morphomatic/compare/v1.0.2...v1.0.3) - (2025-09-08)
+
+## <!-- 1 -->🐛 Bug Fixes
+
+- **toc:** Reorder CallbackHandler library entry in the toc file ([b8586d2](https://github.com/eyolas/Morphomatic/commit/b8586d23ca005e12fc232ef8f9a5fecdb9e185e8))  - (eyolas)
+- **minimap:** Ensure LibStub library fetching is always executed ([274c2e4](https://github.com/eyolas/Morphomatic/commit/274c2e4857a08c2b5777d6335bf3b44f18de0487))  - (eyolas)
+
+## <!-- 3 -->📚 Documentation
+
+- Split fr and en readme ([17354d7](https://github.com/eyolas/Morphomatic/commit/17354d7f09011c33d1eabebb75ce2cfa99f98c15))  - (David Touzet)
+
+## <!-- 30 -->📝 Other
+
+- PR [#6](https://github.com/eyolas/Morphomatic/pull/6): update CHANGELOG for v1.0.2 ([ee16cb4](https://github.com/eyolas/Morphomatic/commit/ee16cb4273bdce14c4e0b5d025a5fab7b968d02b))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for v1.0.2 ([bc7ec2d](https://github.com/eyolas/Morphomatic/commit/bc7ec2df6ab1b3321f02e17be12906fe2904030e))  - (eyolas)
+
 # [1.0.2](https://github.com/eyolas/Morphomatic/compare/v1.0.1...v1.0.2) - (2025-09-04)
 
 ## <!-- 1 -->🐛 Bug Fixes
