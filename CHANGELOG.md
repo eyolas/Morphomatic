@@ -1,5 +1,19 @@
 # Changelog
 
+# [1.0.4](https://github.com/eyolas/Morphomatic/compare/v1.0.3...v1.0.4) - (2025-09-08)
+
+## <!-- 1 -->🐛 Bug Fixes
+
+- Set button locked state to true in defaults ([8e5dfa7](https://github.com/eyolas/Morphomatic/commit/8e5dfa79d0c2ce040bee2702722655c9d5018229))  - (eyolas)
+
+## <!-- 30 -->📝 Other
+
+- PR [#7](https://github.com/eyolas/Morphomatic/pull/7): update CHANGELOG for v1.0.3 ([fd72438](https://github.com/eyolas/Morphomatic/commit/fd724385089c7dd7bd4b4311b9ba2effb39a1a1c))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for v1.0.3 ([c0ed83b](https://github.com/eyolas/Morphomatic/commit/c0ed83b4f3e1c62752d5c51b3420c90cbc03cfe1))  - (eyolas)
+
 # [1.0.3](https://github.com/eyolas/Morphomatic/compare/v1.0.2...v1.0.3) - (2025-09-08)
 
 ## <!-- 1 -->🐛 Bug Fixes
