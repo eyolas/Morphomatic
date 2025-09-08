@@ -4,9 +4,8 @@
 MM = MM or {}
 local T = MM.T
 
--- Try to fetch libs (they are embedded and loaded via .toc)
-local LDB = LibStub and LibStub:GetLibrary("LibDataBroker-1.1", true)
-local LDI = LibStub and LibStub:GetLibrary("LibDBIcon-1.0", true)
+local LDB = LibStub:GetLibrary("LibDataBroker-1.1", true)
+local LDI = LibStub:GetLibrary("LibDBIcon-1.0", true)
 
 -- Helper so other modules (settings) can check availability
 function MM.HasMinimapLibs() return (LDB ~= nil and LDI ~= nil) end
