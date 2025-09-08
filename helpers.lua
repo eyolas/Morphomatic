@@ -12,7 +12,7 @@ local DEFAULTS = {
   autoCreateMacro = true, -- auto-create the macro at login
   showButton = true, -- show the floating button
   debug = false, -- debug MM.dprints
-  button = { point = "CENTER", x = 0, y = 0, scale = 1, locked = false },
+  button = { point = "CENTER", x = 0, y = 0, scale = 1, locked = true },
 }
 
 -- utils
