@@ -1,6 +1,7 @@
 -- Morphomatic — db.lua
 -- Centralized SavedVariables, defaults, and accessors.
 
+-- luacheck: globals MM
 MM = MM or {}
 
 -- SavedVariables declared in the .toc:

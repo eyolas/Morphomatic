@@ -1,6 +1,7 @@
 -- Morphomatic — helpers.lua
 -- Shared utilities (no SavedVariables or defaults here).
 
+-- luacheck: globals MM
 MM = MM or {}
 
 -- RNG seeding (safe even if math.randomseed is messed with)
