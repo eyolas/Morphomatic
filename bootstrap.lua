@@ -32,7 +32,6 @@ f:SetScript("OnEvent", function(_, evt, arg1)
     if MM.OptionsRegister then MM.OptionsRegister() end
     if MM.OptionsRefresh then MM.OptionsRefresh() end
     if MM.RegisterMinimap then MM.RegisterMinimap() end
-
   elseif evt == "PLAYER_LOGIN" then
     if MM.SeedRNG then MM.SeedRNG() end
     if MM.EnsureSecureButton then MM.EnsureSecureButton() end
@@ -44,16 +43,12 @@ f:SetScript("OnEvent", function(_, evt, arg1)
     end
     if MM.RefreshButtonLockVisual then MM.RefreshButtonLockVisual() end
 
-    if MM.DB().autoCreateMacro ~= false and MM.RecreateMacro then
-      MM.RecreateMacro()
-    end
-
+    if MM.DB().autoCreateMacro ~= false and MM.RecreateMacro then MM.RecreateMacro() end
   elseif evt == "PLAYER_REGEN_ENABLED" then
     if MM._macroNeedsRecreate and MM.RecreateMacro then
       MM._macroNeedsRecreate = nil
       MM.RecreateMacro()
     end
-
   elseif evt == "TOYS_UPDATED" then
     if MM.OptionsRefresh then MM.OptionsRefresh() end
   end

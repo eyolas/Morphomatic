@@ -15,11 +15,11 @@ local SCHEMA_VERSION = 1
 -- Defaults applied to MorphomaticDB
 local DEFAULTS = {
   __schema = SCHEMA_VERSION,
-  enabledToys = {},            -- [itemID] = false => explicitly excluded (implicit = included)
-  skipOnCooldown = true,       -- runtime: skip toys on cooldown
-  autoCreateMacro = true,      -- auto-(re)create macro at login
-  showButton = true,           -- floating button visibility
-  debug = false,               -- gated debug prints
+  enabledToys = {}, -- [itemID] = false => explicitly excluded (implicit = included)
+  skipOnCooldown = true, -- runtime: skip toys on cooldown
+  autoCreateMacro = true, -- auto-(re)create macro at login
+  showButton = true, -- floating button visibility
+  debug = false, -- gated debug prints
   button = { point = "CENTER", x = 0, y = 0, scale = 1, locked = true },
 }
 
@@ -57,7 +57,7 @@ end
 function MM.Custom()
   -- ensure shape in case older versions didn’t create it
   MorphomaticCustom.extraToys = MorphomaticCustom.extraToys or {}
-  MorphomaticCustom.skipToys  = MorphomaticCustom.skipToys  or {}
+  MorphomaticCustom.skipToys = MorphomaticCustom.skipToys or {}
   return MorphomaticCustom
 end
 
@@ -76,9 +76,7 @@ end
 local function migrateIfNeeded()
   local db = MM.DB()
   local current = tonumber(db.__schema) or 0
-  if current < SCHEMA_VERSION then
-    db.__schema = SCHEMA_VERSION
-  end
+  if current < SCHEMA_VERSION then db.__schema = SCHEMA_VERSION end
 end
 
 -- Light-touch init at PLAYER_LOGIN (safe even if called multiple times)

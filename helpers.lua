@@ -11,7 +11,9 @@ function MM.SeedRNG()
   if math and type(math.randomseed) == "function" then
     math.randomseed(seed)
     if type(math.random) == "function" then
-      math.random(); math.random(); math.random()
+      math.random()
+      math.random()
+      math.random()
     end
   end
 end
@@ -43,22 +45,26 @@ function MM.IsUsable(itemID)
 end
 
 -- Ownership
-function MM.PlayerHasToy(itemID)
-  return PlayerHasToy and PlayerHasToy(itemID) or false
-end
+function MM.PlayerHasToy(itemID) return PlayerHasToy and PlayerHasToy(itemID) or false end
 
 -- Build pool: curated DB + user extras – user skips
 function MM.BuildPool()
   local pool = {}
   if MM_DB then
-    for id in pairs(MM_DB) do pool[id] = true end
+    for id in pairs(MM_DB) do
+      pool[id] = true
+    end
   end
   local custom = MM.Custom and MM.Custom() or nil
   if custom and custom.extraToys then
-    for id in pairs(custom.extraToys) do pool[id] = true end
+    for id in pairs(custom.extraToys) do
+      pool[id] = true
+    end
   end
   if custom and custom.skipToys then
-    for id in pairs(custom.skipToys) do pool[id] = nil end
+    for id in pairs(custom.skipToys) do
+      pool[id] = nil
+    end
   end
   return pool
 end

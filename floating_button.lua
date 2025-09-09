@@ -32,7 +32,7 @@ function MM.RefreshButtonLockVisual()
   else
     -- ElvUI-style: red border + red translucent background
     MM_Float:SetBackdropBorderColor(1.0, 0.1, 0.1, 1) -- solid red border
-    MM_Float:SetBackdropColor(0.8, 0, 0, 0.35)        -- red translucent background
+    MM_Float:SetBackdropColor(0.8, 0, 0, 0.35) -- red translucent background
     if MM_Float.dragOverlay then MM_Float.dragOverlay:Show() end
     if MM_Float.grip then MM_Float.grip:Show() end
     MM_Float:SetAlpha(0.95)
@@ -118,7 +118,12 @@ function MM.CreateFloatingButton()
     tip:SetText(MM.T("TITLE", "Morphomatic"), 1, 1, 1)
     if MM.DB().button.locked then
       tip:AddLine(MM.T("TIP_CLICK", "Click: triggers a random cosmetic toy."), 0.9, 0.9, 0.9, true)
-      tip:AddLine(MM.T("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."), 0.7, 0.7, 0.7)
+      tip:AddLine(
+        MM.T("TIP_UNLOCK_TO_MOVE", "Unlock in Settings to move the button."),
+        0.7,
+        0.7,
+        0.7
+      )
     else
       tip:AddLine(MM.T("TIP_DRAG_TO_MOVE", "Unlocked: drag to move."), 0.9, 0.9, 0.9)
       tip:AddLine(MM.T("TIP_CLICKS_DISABLED", "Clicks are disabled while unlocked."), 0.9, 0.5, 0.5)
