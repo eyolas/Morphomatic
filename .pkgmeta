@@ -20,6 +20,7 @@ ignore:
   # Assets you don't want in the zip
   - screenshots
   - logo.png
+  - thumbnail.png
   - LATEST_CHANGELOG.md
 
   # (optional) top-level docs
@@ -31,5 +32,10 @@ manual-changelog: CHANGELOG.md
 
 curseforge:
   project-id: 1340910
+  changelog: CHANGELOG.md
+  changelog-format: markdown
+
+wago:
+  project-id: j6jznm6R
   changelog: CHANGELOG.md
   changelog-format: markdown

@@ -48,6 +48,7 @@ jobs:
         uses: BigWigsMods/packager@fd8ff7f95606c6d63c9a2d4d29c06e0abf1c3a60 # v2
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
         with:
           args: -g retail
           # If `.pkgmeta` has `manual-changelog: CHANGELOG.md`, packager will use that file
