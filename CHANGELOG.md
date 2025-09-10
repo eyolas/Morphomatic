@@ -1,5 +1,16 @@
 # Changelog
 
+# [1.0.7](https://github.com/eyolas/Morphomatic/compare/v1.0.6...v1.0.7) - (2025-09-09)
+
+## <!-- 30 -->📝 Other
+
+- PR [#10](https://github.com/eyolas/Morphomatic/pull/10): update CHANGELOG for v1.0.6 ([3ea8de3](https://github.com/eyolas/Morphomatic/commit/3ea8de37dc2a13f5fa06ff4d1da6d21961a3031b))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for v1.0.6 ([f910160](https://github.com/eyolas/Morphomatic/commit/f91016076330f1880eca7c760ecb677aba7f96c3))  - (eyolas)
+- Add missing Wago ID in Morphomatic.toc ([9c42245](https://github.com/eyolas/Morphomatic/commit/9c42245e5e49ccee988a94392ce888f6d06b5130))  - (eyolas)
+
 # [1.0.6](https://github.com/eyolas/Morphomatic/compare/v1.0.5...v1.0.6) - (2025-09-09)
 
 ## <!-- 0 -->🚀 Features
