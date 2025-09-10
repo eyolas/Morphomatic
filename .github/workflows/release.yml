@@ -33,7 +33,7 @@ jobs:
 
       # Generate the "latest" changelog section (for this tag only)
       - name: Generate changelog for latest tag (scoped)
-        uses: tj-actions/git-cliff@8bfb7bf10268aed30bde8e34ecaeddb6c6149edd # v2
+        uses: tj-actions/git-cliff@679041f051a4d2ab452f7e5e7b0eed2abee21131 # v2
         with:
           args: --latest
           output: LATEST_CHANGELOG.md
@@ -56,7 +56,7 @@ jobs:
 
       # Update the GitHub release body with the latest changelog section
       - name: Update GitHub release body with generated changelog
-        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
         with:
           tag_name: ${{ github.event.release.tag_name }}
           body_path: LATEST_CHANGELOG.md
@@ -80,7 +80,7 @@ jobs:
 
       # Generate the full changelog (all tags)
       - name: Generate full changelog (all tags)
-        uses: tj-actions/git-cliff@8bfb7bf10268aed30bde8e34ecaeddb6c6149edd # v2
+        uses: tj-actions/git-cliff@679041f051a4d2ab452f7e5e7b0eed2abee21131 # v2
         with:
           output: CHANGELOG.md
 
