@@ -11,6 +11,8 @@ ignore = { "ADDON" }
 -- This addon DEFINES and MUTATES the global table `MM` across multiple files.
 -- Declare writable fields here so "setting undefined field of global MM" goes away.
 globals = {
+  "dump",
+  "IsLoggedIn",
   -- SavedVariables (writable)
   "MorphomaticDB",
   "MorphomaticCustom",

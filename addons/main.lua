@@ -44,7 +44,6 @@ function MM:OnLoad()
   self:_SetupSlash()
 
   -- Init DB and options
-  local db = self.DB:Get()
   self.Settings:OptionsRegister()
   self.Settings:OptionsRefresh()
   self.Minimap:RegisterMinimap()

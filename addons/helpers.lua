@@ -165,10 +165,10 @@ function Helpers:EnsureSecureButton()
   secureBtn:SetAttribute("checkselfcast", false)
   secureBtn:SetAttribute("checkfocuscast", false)
 
-  secureBtn:SetScript("PreClick", function(self)
+  secureBtn:SetScript("PreClick", function(button)
     if InCombatLockdown() then return end
     Helpers:dprint("MM PreClick: running (MM_SecureUse)")
-    Helpers:PrepareButtonForRandomToy(self)
+    Helpers:PrepareButtonForRandomToy(button)
   end)
 
   secureBtn:Hide()

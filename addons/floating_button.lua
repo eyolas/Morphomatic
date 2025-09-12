@@ -114,8 +114,8 @@ function FloatButton:Create()
 
   -- Tooltip
   local tip = CreateFrame("GameTooltip", "MM_Float_Tooltip", UIParent, "GameTooltipTemplate")
-  btn:SetScript("OnEnter", function(self)
-    tip:SetOwner(self, "ANCHOR_RIGHT")
+  btn:SetScript("OnEnter", function(button)
+    tip:SetOwner(button, "ANCHOR_RIGHT")
     tip:SetText(L["TITLE"], 1, 1, 1)
     if MM.DB:Get().button.locked then
       tip:AddLine(L["TIP_CLICK"], 0.9, 0.9, 0.9, true)
