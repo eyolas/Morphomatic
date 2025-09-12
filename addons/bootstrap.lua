@@ -9,7 +9,3 @@ ns.MM = MM
 
 -- (optional) global alias for convenience in the REPL
 _G.MM = MM
-
-MM._modules = {}
-function MM:RegisterModule(name, mod) self._modules[name] = mod end
-function MM:Module(name) return self._modules[name] end

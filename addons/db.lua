@@ -4,7 +4,6 @@
 local ADDON, ns = ...
 local MM = ns.MM
 local DB = MM:NewModule("DB") -- <- WildAddon module
-MM:RegisterModule("DB", DB)
 
 -- SavedVariables declared in the .toc:
 --   MorphomaticDB, MorphomaticCustom
