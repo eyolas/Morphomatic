@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Cosmetic toys DB (appearance/transformations/costumes/etc.)
 -- Shape: MM_DB = { [itemID] = true, ... }
 -- Put YOUR vetted list here.

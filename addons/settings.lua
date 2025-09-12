@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — addons/Settings:lua
 -- Settings panel with 3 sections:
 --   1) Floating Button

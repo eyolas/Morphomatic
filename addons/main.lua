@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — bootstrap_wildaddon.lua
 -- Main bootstrap rewritten to use WildAddon (without StaleCheck)
 

@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — addons/floating_button.lua
 -- Floating button that can be locked (click to use) or unlocked (drag only).
 

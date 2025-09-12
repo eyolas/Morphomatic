@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — addons/db.lua
 -- DB module (WildAddon): SavedVariables, defaults, accessors + compat shims
 

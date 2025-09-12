@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — addons/macro.lua
 -- Create/update a macro identified by a signature in its body.
 -- Searches BOTH global and per-character macro pools to avoid duplicates.

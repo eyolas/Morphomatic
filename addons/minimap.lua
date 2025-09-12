@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — addons/minimap.lua
 -- Minimap icon integration using LibDataBroker + LibDBIcon (embedded).
 

@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — addons/Helpers:lua
 -- Shared utilities (no SavedVariables or defaults here).
 

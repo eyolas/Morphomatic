@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- bootstrap.lua
 local ADDON, ns = ...
 ns = ns or {} -- shared namespace across files

@@ -1,3 +1,6 @@
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
+
 -- Morphomatic — addons/randomizer.lua
 -- Build eligible list and prepare secure use (no protected calls here)
 
