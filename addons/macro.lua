@@ -6,7 +6,7 @@
 local ADDON, ns = ...
 local MM = ns.MM
 local Macro = MM:NewModule("Macro")
-MM:RegisterModule("Macro", Macro)
+
 local MACRO_SIGNATURE = "# Morphomatic macro"
 local MACRO_NAME = "Morphomatic" -- change to "MM" if you prefer the short name
 local MACRO_ICON = ( C_Item.GetItemIconByID and  C_Item.GetItemIconByID(1973)) or "INV_Misc_QuestionMark" -- Orb of Deception

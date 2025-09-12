@@ -4,7 +4,7 @@
 local ADDON, ns = ...
 local MM = ns.MM
 local Randomizer = MM:NewModule("Randomizer")
-MM:RegisterModule("Randomizer", Randomizer)
+
 function dump(o)
   if type(o) == "table" then
     local s = "{ "

@@ -4,7 +4,6 @@
 local ADDON, ns = ...
 local MM = ns.MM
 local FloatButton = MM:NewModule("FloatButton")
-MM:RegisterModule("FloatButton", FloatButton)
 local L = LibStub("AceLocale-3.0"):GetLocale("Morphomatic")
 
 -- === Icon config ===

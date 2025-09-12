@@ -7,7 +7,7 @@
 local ADDON, ns = ...
 local MM = ns.MM
 local Settings = MM:NewModule("Settings")
-MM:RegisterModule("Settings", Settings)
+
 
 local L = LibStub("AceLocale-3.0"):GetLocale("Morphomatic")
 local Sushi = LibStub("Sushi-3.2") -- embedded, assumed available

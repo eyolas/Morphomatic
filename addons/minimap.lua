@@ -4,7 +4,6 @@
 local ADDON, ns = ...
 local MM = ns.MM
 local Minimap = MM:NewModule("Minimap")
-MM:RegisterModule("Minimap", Minimap)
 
 local L = LibStub("AceLocale-3.0"):GetLocale("Morphomatic")
 local LDB = LibStub("LibDataBroker-1.1")

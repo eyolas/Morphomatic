@@ -4,7 +4,7 @@
 local ADDON, ns = ...
 local MM = ns.MM
 local Helpers = MM:NewModule("Helpers")
-MM:RegisterModule("Helpers", Helpers)
+
 -- RNG seeding (safe even if math.randomseed is messed with)
 function Helpers:SeedRNG()
   local seed = (GetServerTime and GetServerTime()) or (time and time()) or 0
