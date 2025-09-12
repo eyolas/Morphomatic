@@ -30,15 +30,9 @@ function MM:OnLoad()
   end
 end
 
--- Open the options panel (new Settings API or legacy fallback)
+-- Open the options panel
 function MM:OpenOptions()
-  if Settings and Settings.OpenToCategory and self._optionsCategory then
-    Settings:OpenToCategory(self._optionsCategory.ID or self._optionsCategory)
-  elseif InterfaceOptionsFrame then
-    -- Legacy fallback requires a double call to focus the panel
-    InterfaceOptionsFrame_OpenToCategory("Morphomatic")
-    InterfaceOptionsFrame_OpenToCategory("Morphomatic")
-  end
+  Settings:OpenToCategory(self._optionsCategory.ID or self._optionsCategory)
 end
 
 -- Run a function with temporary debug enabled, then restore state

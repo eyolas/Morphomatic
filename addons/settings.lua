@@ -359,7 +359,7 @@ local function buildCanvas()
 end
 
 ----------------------------------------------------------------------
--- Register with Settings API (Dragonflight+) or legacy fallback
+-- Register with Settings API
 ----------------------------------------------------------------------
 
 local function registerSettings()
@@ -372,20 +372,9 @@ local function registerSettings()
   MM._optionsCanvas = canvas
 end
 
-local function registerLegacy()
-  local p = buildCanvas()
-  p.name = "Morphomatic"
-  InterfaceOptions_AddCategory(p)
-  MM._legacyPanel = p
-end
-
 function Settings:OptionsRegister()
   local S = _G.Settings
-  if S and S.RegisterAddOnCategory then
-    registerSettings()
-  else
-    registerLegacy()
-  end
+  registerSettings()
 end
 
 ----------------------------------------------------------------------
@@ -396,11 +385,9 @@ function Settings:OptionsRefresh()
   local container
   if MM._optionsCanvas and MM._optionsCanvas._listContainer then
     container = MM._optionsCanvas._listContainer
-  elseif MM._legacyPanel and MM._legacyPanel._listContainer then
-    container = MM._legacyPanel._listContainer
   end
   if container then
-    local parent = MM._optionsCanvas or MM._legacyPanel
+    local parent = MM._optionsCanvas
     container:SetWidth(((parent and parent:GetWidth()) or 600) - 46)
     refreshChecklist(container)
   end

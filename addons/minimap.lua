@@ -22,9 +22,6 @@ local broker = LDB:NewDataObject("Morphomatic", {
       local S = _G.Settings
       if S and S.OpenToCategory and MM._optionsCategory then
         S.OpenToCategory(MM._optionsCategory.ID or MM._optionsCategory)
-      elseif InterfaceOptionsFrame_OpenToCategory and MM._legacyPanel then
-        InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
-        InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
       else
         print(L.OPTIONS_NOT_AVAILABLE)
       end
