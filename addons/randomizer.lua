@@ -46,7 +46,7 @@ function Randomizer:DebugDump()
   MM.Helpers:dprint("MM debug — after filters:", #final)
   if #final > 0 then
     local pick = final[math.random(#final)]
-    local name = GetItemInfo(pick) or ("Toy " .. pick)
+    local name = C_Item.GetItemInfo(pick) or ("Toy " .. pick)
     local s, d = MM.Helpers:GetCooldown(pick)
     MM.Helpers:dprint(
       ("MM debug — pick=%d (%s), cd=%s, usable=%s"):format(
@@ -56,9 +56,9 @@ function Randomizer:DebugDump()
         tostring(MM.Helpers:IsUsable(pick))
       )
     )
-    local spell = GetItemSpell(pick)
+    local spell = C_Item.GetItemSpell(pick)
     MM.Helpers:dprint(
-      ("MM debug — item=%s, spell=%s"):format(tostring(GetItemInfo(pick)), tostring(spell))
+      ("MM debug — item=%s, spell=%s"):format(tostring(C_Item.GetItemInfo(pick)), tostring(spell))
     )
   else
     MM.Helpers:dprint(
@@ -77,7 +77,7 @@ function Randomizer:DebugWhy()
     local s, d = MM.Helpers:GetCooldown(id)
     local oncd = (s > 0 and d > 0)
     local kept = (db.enabledToys[id] ~= false)
-    local name = GetItemInfo(id) or ("Toy " .. id)
+    local name = C_Item.GetItemInfo(id) or ("Toy " .. id)
     MM.Helpers:dprint(
       ("%d | %s | owned=%s | cd=%s | checked=%s"):format(
         id,

@@ -94,13 +94,13 @@ local function refreshChecklist(container)
 
   local db = MM.DB:Get()
   local list = buildListForUI()
-  table.sort(list, function(a, b) return (GetItemInfo(a) or "") < (GetItemInfo(b) or "") end)
+  table.sort(list, function(a, b) return (C_Item.GetItemInfo(a) or "") < (C_Item.GetItemInfo(b) or "") end)
 
   local width = math.max(120, container:GetWidth() - 14)
   local y = -4
 
   for _, id in ipairs(list) do
-    local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(id)
+    local name, _, _, _, _, _, _, _, _, icon = C_Item.GetItemInfo(id)
     name = name or ("Toy " .. id)
 
     local row = CreateFrame("Frame", nil, container)

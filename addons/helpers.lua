@@ -26,8 +26,8 @@ function Helpers:GetCooldown(itemID)
     local s, d, e = C_ToyBox.GetToyCooldown(itemID)
     return s or 0, d or 0, e
   end
-  if GetItemCooldown then
-    local s, d, e = GetItemCooldown(itemID)
+  if C_Item.GetItemCooldown then
+    local s, d, e = C_Item.GetItemCooldown(itemID)
     return s or 0, d or 0, e
   end
   return 0, 0, 1
@@ -42,7 +42,7 @@ end
 -- Usability (cross-build)
 function Helpers:IsUsable(itemID)
   if C_ToyBox and C_ToyBox.IsToyUsable then return not not C_ToyBox.IsToyUsable(itemID) end
-  if IsUsableItem then return not not IsUsableItem(itemID) end
+  if C_Item.IsUsableItem then return not not C_Item.IsUsableItem(itemID) end
   return true
 end
 
@@ -94,15 +94,15 @@ function Helpers:ResolveToyName(itemID)
   if C_ToyBox and C_ToyBox.GetToyLink then
     local link = C_ToyBox.GetToyLink(itemID)
     if type(link) == "string" then
-      local name = GetItemInfo(link)
+      local name = C_Item.GetItemInfo(link)
       if type(name) == "string" and name ~= "" then return name end
     end
   end
   -- Fallback: direct item info (warm cache if needed)
-  local name = GetItemInfo(itemID)
+  local name = C_Item.GetItemInfo(itemID)
   if type(name) ~= "string" and C_Item and C_Item.RequestLoadItemDataByID then
     C_Item.RequestLoadItemDataByID(itemID)
-    name = GetItemInfo(itemID)
+    name = C_Item.GetItemInfo(itemID)
   end
   if type(name) == "string" and name ~= "" then return name end
   -- Last resort: pick any string from GetToyInfo variants
@@ -136,7 +136,7 @@ function Helpers:PrepareButtonForRandomToy(btn)
 
   local pick = eligible[math.random(#eligible)]
   local toyName = self:ResolveToyName(pick)
-  local itemName = GetItemInfo(pick)
+  local itemName = C_Item.GetItemInfo(pick)
 
   -- Use the item by name (best with ToyBox); fallback to itemID
   btn:SetAttribute("type", "item")

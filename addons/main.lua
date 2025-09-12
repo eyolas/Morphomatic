@@ -49,9 +49,9 @@ function MM:OnLoad()
   self.Minimap:RegisterMinimap()
 
   if IsLoggedIn() then
-    self:OnPlayerLogin("PLAYER_LOGIN")
+    self:OnPlayerLogin()
   else
-    self:RegisterEvent("PLAYER_LOGIN", function(_, event, ...) self:OnPlayerLogin(event, ...) end)
+    self:RegisterEvent("PLAYER_LOGIN", function(_, event, ...) self:OnPlayerLogin() end)
   end
 end
 

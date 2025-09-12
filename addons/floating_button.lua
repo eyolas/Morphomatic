@@ -11,7 +11,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("Morphomatic")
 local ICON_PATH = "Interface\\AddOns\\Morphomatic\\images\\button.blp"
 local function GetFallbackIcon()
   -- Orb of Deception (1973) or question mark if missing
-  return GetItemIcon and GetItemIcon(1973) or 134400 -- INV_Misc_QuestionMark
+  return C_Item.GetItemIconByID and C_Item.GetItemIconByID(1973) or 134400 -- INV_Misc_QuestionMark
 end
 
 local function saveAnchor(frame)
