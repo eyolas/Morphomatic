@@ -1,10 +1,12 @@
--- Morphomatic — helpers.lua
+-- Morphomatic — addons/Helpers:lua
 -- Shared utilities (no SavedVariables or defaults here).
 
-MM = MM or {}
-
+local ADDON, ns = ...
+local MM = ns.MM
+local Helpers = MM:NewModule('Helpers')
+MM:RegisterModule('Helpers', Helpers)
 -- RNG seeding (safe even if math.randomseed is messed with)
-function MM.SeedRNG()
+function Helpers:SeedRNG()
   local seed = (GetServerTime and GetServerTime()) or (time and time()) or 0
   local guid = UnitGUID and UnitGUID("player")
   if guid then seed = seed + (tonumber(string.sub(guid, -6), 16) or 0) end
@@ -17,7 +19,7 @@ function MM.SeedRNG()
 end
 
 -- Cooldown API (ToyBox preferred; fallback to item API)
-function MM.GetCooldown(itemID)
+function Helpers:GetCooldown(itemID)
   if C_ToyBox and C_ToyBox.GetToyCooldown then
     local s, d, e = C_ToyBox.GetToyCooldown(itemID)
     return s or 0, d or 0, e
@@ -29,42 +31,56 @@ function MM.GetCooldown(itemID)
   return 0, 0, 1
 end
 
-function MM.IsOnCooldown(itemID)
-  local s, d = MM.GetCooldown(itemID)
+function Helpers:IsOnCooldown(itemID)
+  local s, d = self:GetCooldown(itemID)
   if s == 0 or d == 0 then return false end
   return (s + d) > GetTime()
 end
 
 -- Usability (cross-build)
-function MM.IsUsable(itemID)
+function Helpers:IsUsable(itemID)
   if C_ToyBox and C_ToyBox.IsToyUsable then return not not C_ToyBox.IsToyUsable(itemID) end
   if IsUsableItem then return not not IsUsableItem(itemID) end
   return true
 end
 
 -- Ownership
-function MM.PlayerHasToy(itemID)
+function Helpers:PlayerHasToy(itemID)
+  if type(itemID) ~= "number" then return false end
   return PlayerHasToy and PlayerHasToy(itemID) or false
 end
 
--- Build pool: curated DB + user extras – user skips
-function MM.BuildPool()
-  local pool = {}
-  if MM_DB then
-    for id in pairs(MM_DB) do pool[id] = true end
+function Helpers:BuildPool()
+  local function add(pool, k, v, src)
+    local id = (type(k) == "number") and k or v -- handle set vs array
+    id = (type(id) == "number") and id or tonumber(id)
+    if id then pool[id] = true
+    else print("BuildPool: bad id from", src, "->", tostring(k), tostring(v)) end
   end
-  local custom = MM.Custom and MM.Custom() or nil
+
+  local pool = {}
+
+  if MM_DB then
+    for k, v in pairs(MM_DB) do add(pool, k, v, "MM_DB") end
+  end
+
+  local custom = MM.DB and MM.DB.GetCustom and MM.DB:GetCustom() or nil
   if custom and custom.extraToys then
-    for id in pairs(custom.extraToys) do pool[id] = true end
+    for k, v in pairs(custom.extraToys) do add(pool, k, v, "extraToys") end
   end
   if custom and custom.skipToys then
-    for id in pairs(custom.skipToys) do pool[id] = nil end
+    for k, v in pairs(custom.skipToys) do
+      local id = (type(k) == "number") and v or k
+      id = (type(id) == "number") and id or tonumber(id)
+      if id then pool[id] = nil end
+    end
   end
+
   return pool
 end
 
 -- Returns a reliable localized toy name suitable for "/use <name>"
-function MM.ResolveToyName(itemID)
+function Helpers:ResolveToyName(itemID)
   -- Best: resolve from ToyBox link
   if C_ToyBox and C_ToyBox.GetToyLink then
     local link = C_ToyBox.GetToyLink(itemID)
@@ -92,16 +108,16 @@ end
 
 -- Prepare a given SecureActionButton with a random eligible toy.
 -- It sets attributes on `btn` so the protected click uses the toy.
-function MM.PrepareButtonForRandomToy(btn)
+function Helpers:PrepareButtonForRandomToy(btn)
   if InCombatLockdown() then return false end
 
-  local db = MM.DB()
+  local db = MM.DB:Get()
   local eligible = {}
-  for _, id in ipairs(MM.BuildEligibleIDs()) do
+  for _, id in ipairs(MM.Randomizer:BuildEligibleIDs()) do
     if db.enabledToys[id] ~= false then table.insert(eligible, id) end
   end
   if #eligible == 0 then
-    MM.dprint("Morphomatic: no eligible toys. Use /mm to configure.")
+    self:dprint("Morphomatic: no eligible toys. Use /mm to configure.")
     -- clear stale attrs
     btn:SetAttribute("type", nil)
     btn:SetAttribute("item", nil)
@@ -110,7 +126,7 @@ function MM.PrepareButtonForRandomToy(btn)
   end
 
   local pick = eligible[math.random(#eligible)]
-  local toyName = MM.ResolveToyName and MM.ResolveToyName(pick) or nil
+  local toyName = self:ResolveToyName(pick)
   local itemName = GetItemInfo(pick)
 
   -- Use the item by name (best with ToyBox); fallback to itemID
@@ -123,13 +139,14 @@ function MM.PrepareButtonForRandomToy(btn)
     btn:SetAttribute("item", "item:" .. pick)
   end
 
-  MM.dprint(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy " .. pick), pick))
+  self:dprint(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy " .. pick), pick))
   return true
 end
 
 -- Secure button that PREPARES (PreClick) and then EXECUTES in the same hardware click
 local secureBtn
-function MM.EnsureSecureButton()
+function Helpers:EnsureSecureButton()
+  self:dprint("Morphomatic: ensuring secure button")
   if secureBtn and secureBtn:IsObjectType("Button") then return secureBtn end
 
   secureBtn = CreateFrame("Button", "MM_SecureUse", UIParent, "SecureActionButtonTemplate")
@@ -139,10 +156,19 @@ function MM.EnsureSecureButton()
 
   secureBtn:SetScript("PreClick", function(self)
     if InCombatLockdown() then return end
-    MM.dprint("MM PreClick: running (MM_SecureUse)")
-    MM.PrepareButtonForRandomToy(self)
+    Helpers:dprint("MM PreClick: running (MM_SecureUse)")
+    Helpers:PrepareButtonForRandomToy(self)
   end)
 
   secureBtn:Hide()
   return secureBtn
+end
+
+function Helpers:IsDebug() return MM.DB:Get().debug == true end
+function Helpers:SetDebug(on)
+  MM.DB:Get().debug = (on and true) or false
+  return MM.DB:Get().debug
+end
+function Helpers:dprint(...)
+  if MM.DB:Get().debug then print(...) end
 end

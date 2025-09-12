@@ -1,9 +1,12 @@
--- Morphomatic — minimap.lua
+-- Morphomatic — addons/minimap.lua
 -- Minimap icon integration using LibDataBroker + LibDBIcon (embedded).
 
-MM = MM or {}
-local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
+local ADDON, ns = ...
+local MM = ns.MM
+local Minimap = MM:NewModule('Minimap')
+MM:RegisterModule('Minimap', Minimap)
 
+local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
 local LDB = LibStub("LibDataBroker-1.1")
 local LDI = LibStub("LibDBIcon-1.0")
 
@@ -14,8 +17,9 @@ local broker = LDB:NewDataObject("Morphomatic", {
   icon = "Interface\\AddOns\\Morphomatic\\images\\button.blp",
   OnClick = function(_, button)
     if button == "LeftButton" then
-      if Settings and Settings.OpenToCategory and MM._optionsCategory then
-        Settings.OpenToCategory(MM._optionsCategory.ID or MM._optionsCategory)
+      local S = _G.Settings
+      if S and S.OpenToCategory and MM._optionsCategory then
+        S.OpenToCategory(MM._optionsCategory.ID or MM._optionsCategory)
       elseif InterfaceOptionsFrame_OpenToCategory and MM._legacyPanel then
         InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
         InterfaceOptionsFrame_OpenToCategory(MM._legacyPanel)
@@ -34,14 +38,16 @@ local broker = LDB:NewDataObject("Morphomatic", {
 })
 
 -- Register the minimap button
-function MM.RegisterMinimap()
-  MM.DB().minimap = MM.DB().minimap or { hide = false }
-  LDI:Register("Morphomatic", broker, MM.DB().minimap)
+function Minimap:RegisterMinimap()
+  local db = MM.DB:Get()
+  db.minimap = db.minimap or { hide = false }
+  LDI:Register("Morphomatic", broker, db.minimap)
 end
 
-function MM.ToggleMinimap(show)
-  local minimap = MM.DB().minimap or {}
-  MM.DB().minimap = minimap
+function Minimap:ToggleMinimap(show)
+  local db = MM.DB:Get()
+  local minimap = db.minimap or {}
+  db.minimap = minimap
   minimap.hide = not show
   if show then
     LDI:Show("Morphomatic")

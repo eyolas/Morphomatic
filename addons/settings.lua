@@ -1,10 +1,13 @@
--- Morphomatic — settings.lua
+-- Morphomatic — addons/Settings:lua
 -- Settings panel with 3 sections:
 --   1) Floating Button
 --   2) Macro
 --   3) Favorites (skip CD at runtime, list filter, bulk actions, checklist)
 
-MM = MM or {}
+local ADDON, ns = ...
+local MM = ns.MM
+local Settings = MM:NewModule('Settings')
+MM:RegisterModule('Settings', Settings)
 
 local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
 local Sushi = LibStub("Sushi-3.2") -- embedded, assumed available
@@ -12,13 +15,12 @@ local Sushi = LibStub("Sushi-3.2") -- embedded, assumed available
 ----------------------------------------------------------------------
 -- UI list sources
 ----------------------------------------------------------------------
-
 -- Stable list of OWNED toys from the curated pool (ignores cooldown)
 local function buildOwnedList()
-  local pool = MM.BuildPool()
+  local pool = MM.Helpers:BuildPool()
   local out = {}
   for id in pairs(pool) do
-    if MM.PlayerHasToy(id) then table.insert(out, id) end
+    if MM.Helpers:PlayerHasToy(id) then table.insert(out, id) end
   end
   table.sort(out)
   return out
@@ -26,13 +28,13 @@ end
 
 -- List used by the UI depending on the toggle "Hide toys on cooldown in list"
 local function buildListForUI()
-  local db = MM.DB()
+  local db = MM.DB:Get()
   local owned = buildOwnedList()
   if db.listHideCooldown ~= true then return owned end
   -- Filter out toys currently on cooldown (visual-only; does not affect runtime)
   local out = {}
   for _, id in ipairs(owned) do
-    if not MM.IsOnCooldown(id) then table.insert(out, id) end
+    if not MM.Helpers:IsOnCooldown(id) then table.insert(out, id) end
   end
   return out
 end
@@ -44,7 +46,7 @@ end
 ----------------------------------------------------------------------
 
 local function bulkSelectCurrentView(selectAll)
-  local db = MM.DB()
+  local db = MM.DB:Get()
   db.enabledToys = db.enabledToys or {}
 
   local list = buildListForUI()
@@ -55,25 +57,25 @@ local function bulkSelectCurrentView(selectAll)
       db.enabledToys[id] = false -- explicitly excluded
     end
   end
-  MM.OptionsRefresh()
+  Settings:OptionsRefresh()
 end
 
-function MM.SelectAllToys()
+function Settings:SelectAllToys()
   bulkSelectCurrentView(true)
-  MM.dprint("Morphomatic: all favorites in the current view selected.")
+  MM.Helpers:dprint("Morphomatic: all favorites in the current view selected.") 
 end
 
-function MM.UnselectAllToys()
+function Settings:UnselectAllToys()
   bulkSelectCurrentView(false)
-  MM.dprint("Morphomatic: all favorites in the current view unselected.")
+  MM.Helpers:dprint("Morphomatic: all favorites in the current view unselected.")
 end
 
-function MM.ResetSelection()
-  local db = MM.DB()
+function Settings:ResetSelection()
+  local db = MM.DB:Get()
   db.enabledToys = db.enabledToys or {}
   wipe(db.enabledToys) -- back to implicit "included" for all
-  MM.OptionsRefresh()
-  MM.dprint("Morphomatic: favorites reset (all toys included by default).")
+  Settings:OptionsRefresh()
+  MM.Helpers:dprint("Morphomatic: favorites reset (all toys included by default).")
 end
 
 ----------------------------------------------------------------------
@@ -90,7 +92,7 @@ local function refreshChecklist(container)
     c:SetParent(nil)
   end
 
-  local db = MM.DB()
+  local db = MM.DB:Get()
   local list = buildListForUI()
   table.sort(list, function(a, b) return (GetItemInfo(a) or "") < (GetItemInfo(b) or "") end)
 
@@ -113,7 +115,7 @@ local function refreshChecklist(container)
     cb:SetValue(db.enabledToys[id] ~= false)
 
     cb:SetScript("OnClick", function(self)
-      local checked = self.state and true or false
+      local checked = self:GetValue() and true or false
       db.enabledToys[id] = checked and true or false
     end)
 
@@ -168,22 +170,28 @@ local function buildCanvas()
   showBtn:SetParent(s1)
   showBtn:SetPoint("TOPLEFT", s1t, "BOTTOMLEFT", -6, -10)
   showBtn:SetLabel(L.SHOW_BUTTON)
-  showBtn:SetValue(MM.DB().showButton ~= false)
+  showBtn:SetValue(MM.DB:Get().showButton ~= false)
   showBtn:SetScript("OnClick", function(self)
-    local v = self.state and true or false
-    MM.DB().showButton = v and true or false
-    if v then MM.ShowButton() else MM.HideButton() end
+    local v = self:GetValue() and true or false
+    print("showBtn clicked, new value:", MM.DB:Get().showButton, "->", v)
+    print(dump(MM.DB:Get()))
+    MM.DB:Get().showButton = v and true or false
+    if v then
+      MM.FloatButton:Show()
+    else
+      MM.FloatButton:Hide()
+    end
   end)
 
   local lockBtn = Sushi.RedButton(s1)
   lockBtn:SetPoint("TOPLEFT", showBtn, "BOTTOMLEFT", 6, -8)
   lockBtn:SetWidth(150) lockBtn:SetHeight(22)
   local function refreshLockText()
-    lockBtn:SetText(MM.DB().button.locked and L.UNLOCK_BUTTON or L.LOCK_BUTTON)
+    lockBtn:SetText(MM.DB:Get().button.locked and L.UNLOCK_BUTTON or L.LOCK_BUTTON)
   end
   lockBtn:SetScript("OnClick", function()
-    MM.DB().button.locked = not MM.DB().button.locked
-    if MM.RefreshButtonLockVisual then MM.RefreshButtonLockVisual() end
+    MM.DB:Get().button.locked = not MM.DB:Get().button.locked
+    MM.FloatButton:RefreshLockVisual()
     refreshLockText()
   end)
   refreshLockText()
@@ -194,24 +202,28 @@ local function buildCanvas()
   scale:SetLabel(L.BUTTON_SCALE)
   scale:SetRange(0.7, 1.8)
   scale:SetStep(0.05)
-  scale:SetValue(MM.DB().button.scale or 1)
-  scale:SetScript("OnValueChanged", function(_, v) MM.UpdateButtonScale(v) end)
+  scale:SetValue(MM.DB:Get().button.scale or 1)
+  scale:SetScript("OnValueChanged", function(_, v)
+    if MM.UpdateButtonScale then MM.UpdateButtonScale(v) end
+  end)
 
   local resetBtn = Sushi.RedButton(s1)
   resetBtn:SetPoint("LEFT", scale, "RIGHT", 16, 0)
   resetBtn:SetWidth(150) resetBtn:SetHeight(22)
   resetBtn:SetText(L.RESET_POSITION)
-  resetBtn:SetScript("OnClick", MM.ResetButtonAnchor)
+  resetBtn:SetScript("OnClick", function()
+    if MM.ResetButtonAnchor then MM.ResetButtonAnchor() end
+  end)
 
   -- Minimap toggle (embedded libs => always available)
   local showMinimap = Sushi.Check()
   showMinimap:SetParent(f)
   showMinimap:SetPoint("TOPLEFT", s1, "BOTTOMLEFT", -6, -10)
   showMinimap:SetLabel(L.SHOW_MINIMAP)
-  local isShown = not (MM.DB().minimap and MM.DB().minimap.hide)
+  local isShown = not (MM.DB:Get().minimap and MM.DB:Get().minimap.hide)
   showMinimap:SetValue(isShown)
   showMinimap:SetScript("OnClick", function(self)
-    if MM.ToggleMinimap then MM.ToggleMinimap(self.state and true or false) end
+    if MM.ToggleMinimap then MM.ToggleMinimap(self:GetValue() and true or false) end
   end)
 
   --------------------------------------------------------------------
@@ -238,16 +250,18 @@ local function buildCanvas()
   auto:SetParent(s2)
   auto:SetPoint("TOPLEFT", s2t, "BOTTOMLEFT", -6, -10)
   auto:SetLabel(L.AUTO_MACRO)
-  auto:SetValue(MM.DB().autoCreateMacro ~= false)
+  auto:SetValue(MM.DB:Get().autoCreateMacro ~= false)
   auto:SetScript("OnClick", function(self)
-    MM.DB().autoCreateMacro = self.state and true or false
+    MM.DB:Get().autoCreateMacro = self:GetValue() and true or false
   end)
 
   local make = Sushi.RedButton(s2)
   make:SetPoint("TOPLEFT", auto, "BOTTOMLEFT", 6, -8)
   make:SetWidth(180) make:SetHeight(22)
   make:SetText(L.MAKE_MACRO)
-  make:SetScript("OnClick", MM.RecreateMacro)
+  make:SetScript("OnClick", function()
+    MM.Macro:RecreateMacro()
+  end)
 
   local macroNote = s2:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
   macroNote:SetPoint("LEFT", make, "RIGHT", 12, 0)
@@ -277,9 +291,9 @@ local function buildCanvas()
   skipcd:SetParent(s3)
   skipcd:SetPoint("TOPLEFT", s3t, "BOTTOMLEFT", -6, -10)
   skipcd:SetLabel(L.SKIP_CD)
-  skipcd:SetValue(MM.DB().skipOnCooldown)
+  skipcd:SetValue(MM.DB:Get().skipOnCooldown)
   skipcd:SetScript("OnClick", function(self)
-    MM.DB().skipOnCooldown = self.state and true or false
+    MM.DB:Get().skipOnCooldown = self:GetValue() and true or false
   end)
 
   -- Row 2: list filter toggle (visual-only)
@@ -287,10 +301,10 @@ local function buildCanvas()
   hidecd:SetParent(s3)
   hidecd:SetPoint("TOPLEFT", skipcd, "BOTTOMLEFT", 0, -6)
   hidecd:SetLabel(L.HIDE_CD)
-  hidecd:SetValue(MM.DB().listHideCooldown == true)
+  hidecd:SetValue(MM.DB:Get().listHideCooldown == true)
   hidecd:SetScript("OnClick", function(self)
-    MM.DB().listHideCooldown = self.state and true or false
-    MM.OptionsRefresh()
+    MM.DB:Get().listHideCooldown = self:GetValue() and true or false
+    Settings:OptionsRefresh()
   end)
 
   -- Row 3: bulk action buttons
@@ -302,19 +316,19 @@ local function buildCanvas()
   selectAll:SetPoint("LEFT", row, "LEFT", 0, 0)
   selectAll:SetWidth(160) selectAll:SetHeight(22)
   selectAll:SetText(L.SELECT_ALL)
-  selectAll:SetScript("OnClick", MM.SelectAllToys)
+  selectAll:SetScript("OnClick", function() Settings:SelectAllToys() end)
 
   local unselectAll = Sushi.RedButton(row)
   unselectAll:SetPoint("LEFT", selectAll, "RIGHT", 10, 0)
   unselectAll:SetWidth(170) unselectAll:SetHeight(22)
   unselectAll:SetText(L.UNSELECT_ALL)
-  unselectAll:SetScript("OnClick", MM.UnselectAllToys)
+  unselectAll:SetScript("OnClick", function() Settings:UnselectAllToys() end)
 
   local resetSel = Sushi.RedButton(row)
   resetSel:SetPoint("LEFT", unselectAll, "RIGHT", 10, 0)
   resetSel:SetWidth(140) resetSel:SetHeight(22)
   resetSel:SetText(L.RESET_SELECTION)
-  resetSel:SetScript("OnClick", MM.ResetSelection)
+  resetSel:SetScript("OnClick", function() Settings:ResetSelection() end)
 
   -- Row 4: Label + scroll checklist
   local label = s3:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -333,7 +347,7 @@ local function buildCanvas()
 
   -- Reflow on resize to keep checklist width correct
   f:SetScript("OnSizeChanged", function()
-    MM.OptionsRefresh()
+    Settings:OptionsRefresh()
   end)
 
   return f
@@ -344,10 +358,11 @@ end
 ----------------------------------------------------------------------
 
 local function registerSettings()
+  local S = _G.Settings
   local canvas = buildCanvas()
-  local cat = Settings.RegisterCanvasLayoutCategory(canvas, "Morphomatic")
+  local cat = S.RegisterCanvasLayoutCategory(canvas, "Morphomatic")
   cat.ID = "MorphomaticCategory"
-  Settings.RegisterAddOnCategory(cat)
+  S.RegisterAddOnCategory(cat)
   MM._optionsCategory = cat
   MM._optionsCanvas = canvas
 end
@@ -359,8 +374,9 @@ local function registerLegacy()
   MM._legacyPanel = p
 end
 
-function MM.OptionsRegister()
-  if Settings and Settings.RegisterAddOnCategory then
+function Settings:OptionsRegister()
+  local S = _G.Settings
+  if S and S.RegisterAddOnCategory then
     registerSettings()
   else
     registerLegacy()
@@ -371,7 +387,7 @@ end
 -- External refresh (called from events)
 ----------------------------------------------------------------------
 
-function MM.OptionsRefresh()
+function Settings:OptionsRefresh()
   local container
   if MM._optionsCanvas and MM._optionsCanvas._listContainer then
     container = MM._optionsCanvas._listContainer
