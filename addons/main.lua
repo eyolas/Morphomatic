@@ -19,9 +19,11 @@ function MM:OnLoad()
   self:_SetupSlash()
 
   -- Init DB and options
-  self.Settings:OptionsRegister()
-  self.Settings:OptionsRefresh()
+  -- self.Settings:OptionsRegister()
+  -- self.Settings:OptionsRefresh()
   self.Minimap:RegisterMinimap()
+  print("Morphomatic: registering options panel...")
+  print(self.Options:GetCategory())
 
   if IsLoggedIn() then
     self:OnPlayerLogin()
@@ -32,7 +34,12 @@ end
 
 -- Open the options panel
 function MM:OpenOptions()
-  Settings:OpenToCategory(self._optionsCategory.ID or self._optionsCategory)
+  print("Morphomatic: opening options panel...", SettingsPanel and "SettingsPanel exists" or "no SettingsPanel", self.Options and "self.Options exists" or "no self.Options")
+  print(self.Options and self.Options.Main and self.Options.Main.category and "self.Options.Main.category exists" or "no self.Options.Main.category")
+  print(self.Options.Main)
+  if SettingsPanel and self.Options and self.Options.Main and self.Options.Main.category then
+    SettingsPanel:SelectCategory(self.Options.Main.category)
+  end
 end
 
 -- Run a function with temporary debug enabled, then restore state
@@ -79,7 +86,7 @@ end
 function MM:OnToysUpdated()
   self.Helpers:dprint("OnToysUpdated")
   -- Toys updated → refresh options if registered
-  self.Settings:OptionsRefresh()
+  -- self.Settings:OptionsRefresh()
 end
 
 ----------------------------------------------------------------------

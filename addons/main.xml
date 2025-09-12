@@ -12,6 +12,6 @@
   <Script file="toys_db.lua"/>
   <Script file="randomizer.lua"/>
   
-  <Script file="settings.lua"/>
+  <Script file="options.lua"/>
   <Script file="main.lua"/>
 </Ui>

@@ -149,11 +149,13 @@ function FloatButton:Show()
   local btn = self.frame or self:Create()
   btn:Show()
   self:RefreshLockVisual()
+  self:RegistersAll()
 end
 
 function FloatButton:Hide()
   MM.Helpers:dprint("FloatButton:Hide")
   if self.frame then self.frame:Hide() end
+  self:UnregistersAll()
 end
 
 --- Reset position
@@ -169,11 +171,22 @@ end
 
 --- Apply live scale changes
 function FloatButton:UpdateScale(val)
-  MM.DB:Get().button.scale = val
+  print("FloatButton:UpdateScale", val)
   if self.frame then self.frame:SetScale(val) end
 end
 
 function FloatButton:OnLoad()
-  -- Optionally auto-create on login
-  -- self:Create()
+end
+
+
+function FloatButton:RegistersAll()
+  self:RegisterSignal('REFRESH_BUTTON_VISUAL', 'RefreshLockVisual')
+  self:RegisterSignal('UPDATE_BUTTON_SCALE', 'UpdateScale')
+  self:RegisterSignal('RESET_BUTTON_ANCHOR', 'ResetAnchor') -- legacy
+end
+
+function FloatButton:UnregistersAll()
+  self:UnregisterSignal('REFRESH_BUTTON_VISUAL')
+  self:UnregisterSignal('UPDATE_BUTTON_SCALE')
+  self:UnregisterSignal('RESET_BUTTON_ANCHOR')
 end
