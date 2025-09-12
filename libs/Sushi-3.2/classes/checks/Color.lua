@@ -17,115 +17,117 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Color = LibStub('Sushi-3.2').TextedClickable:NewSushi('ColorPicker', 3, 'Button')
+local Color = LibStub("Sushi-3.2").TextedClickable:NewSushi("ColorPicker", 3, "Button")
 if not Color then return end
 
-Color.OpenPicker = OpenColorPicker or GenerateClosure(ColorPickerFrame.SetupColorPickerAndShow, ColorPickerFrame)
-ColorPickerFrame:HookScript('OnHide', function() 
-	if Color.Active and Color.Active:GetButtonState() == 'PUSHED' then
-		Color.Active:SetButtonState('NORMAL')
-		Color.Active:FireCalls('OnUpdate')
-	end
+Color.OpenPicker = OpenColorPicker
+  or GenerateClosure(ColorPickerFrame.SetupColorPickerAndShow, ColorPickerFrame)
+ColorPickerFrame:HookScript("OnHide", function()
+  if Color.Active and Color.Active:GetButtonState() == "PUSHED" then
+    Color.Active:SetButtonState("NORMAL")
+    Color.Active:FireCalls("OnUpdate")
+  end
 end)
 
-
---[[ Overrides ]]--
+--[[ Overrides ]]
+--
 
 function Color:Construct()
-	local b = self:Super(Color):Construct()
-	local text = b:CreateFontString(nil, nil, self.NormalFont)
-	text:SetPoint('LEFT', 28, 1)
+  local b = self:Super(Color):Construct()
+  local text = b:CreateFontString(nil, nil, self.NormalFont)
+  text:SetPoint("LEFT", 28, 1)
 
-	local swatch = b:CreateTexture(nil, 'BACKGROUND')
-	swatch:SetAtlas('Forge-ColorSwatch')
-	swatch:SetPoint('LEFT', 2, 1)
-	swatch:SetSize(20, 19)
+  local swatch = b:CreateTexture(nil, "BACKGROUND")
+  swatch:SetAtlas("Forge-ColorSwatch")
+  swatch:SetPoint("LEFT", 2, 1)
+  swatch:SetSize(20, 19)
 
-	local bg = b:CreateTexture(nil, 'BORDER')
-	bg:SetAtlas('Forge-ColorSwatchBackground')
-	bg:SetAllPoints(swatch)
-	bg:SetAlpha(.2)
+  local bg = b:CreateTexture(nil, "BORDER")
+  bg:SetAtlas("Forge-ColorSwatchBackground")
+  bg:SetAllPoints(swatch)
+  bg:SetAlpha(0.2)
 
-	local border = b:CreateTexture(nil, 'ARTWORK')
-	border:SetAtlas('Forge-ColorSwatchBorder')
-	border:SetAllPoints(swatch)
+  local border = b:CreateTexture(nil, "ARTWORK")
+  border:SetAtlas("Forge-ColorSwatchBorder")
+  border:SetAllPoints(swatch)
 
-	local glow = b:CreateTexture()
-	glow:SetAtlas('Forge-ColorSwatchHighlight')
-	glow:SetAllPoints(swatch)
+  local glow = b:CreateTexture()
+  glow:SetAtlas("Forge-ColorSwatchHighlight")
+  glow:SetAllPoints(swatch)
 
-	local pushed = b:CreateTexture()
-	pushed:SetAtlas('Forge-ColorSwatchSelection')
-	pushed:SetAllPoints(swatch)
+  local pushed = b:CreateTexture()
+  pushed:SetAtlas("Forge-ColorSwatchSelection")
+  pushed:SetAllPoints(swatch)
 
-	b.Swatch = swatch
-	b:SetHeight(26)
-	b:SetFontString(text)
-	b:SetNormalTexture(border)
-	b:SetHighlightTexture(glow)
-	b:SetPushedTexture(pushed)
-	return b
+  b.Swatch = swatch
+  b:SetHeight(26)
+  b:SetFontString(text)
+  b:SetNormalTexture(border)
+  b:SetHighlightTexture(glow)
+  b:SetPushedTexture(pushed)
+  return b
 end
 
 function Color:New(parent, text, color)
-	local b = self:Super(Color):New(parent, text)
-	b:SetValue(color)
-	return b
+  local b = self:Super(Color):New(parent, text)
+  b:SetValue(color)
+  return b
 end
 
 function Color:OnClick()
-	local color = self:GetValue()
+  local color = self:GetValue()
 
-	local set = function(color)
-		self:SetValue(color)
-		self:FireCalls('OnColor', color)
-		self:FireCalls('OnInput', color)
-	end
+  local set = function(color)
+    self:SetValue(color)
+    self:FireCalls("OnColor", color)
+    self:FireCalls("OnInput", color)
+  end
 
-	local update = function()
-		local a = (OpacitySliderFrame and OpacitySliderFrame:GetValue()) or (ColorPickerFrame:GetColorAlpha())
-		local r,g,b = ColorPickerFrame:GetColorRGB()
-		set(CreateColor(r,g,b,a))
-	end
+  local update = function()
+    local a = (OpacitySliderFrame and OpacitySliderFrame:GetValue())
+      or (ColorPickerFrame:GetColorAlpha())
+    local r, g, b = ColorPickerFrame:GetColorRGB()
+    set(CreateColor(r, g, b, a))
+  end
 
-	Color.Active = self
-	Color.OpenPicker {
-		cancelFunc = function() set(color) end,
-		swatchFunc = update, opacityFunc = update,
-		hasOpacity = self:HasAlpha(), opacity = color.a,
-		r = color.r, g = color.g, b = color.b,
-	}
+  Color.Active = self
+  Color.OpenPicker({
+    cancelFunc = function() set(color) end,
+    swatchFunc = update,
+    opacityFunc = update,
+    hasOpacity = self:HasAlpha(),
+    opacity = color.a,
+    r = color.r,
+    g = color.g,
+    b = color.b,
+  })
 
-	self:SetButtonState('PUSHED', true)
-	PlaySound(self.Sound)
+  self:SetButtonState("PUSHED", true)
+  PlaySound(self.Sound)
 end
 
-
---[[ API ]]--
+--[[ API ]]
+--
 
 function Color:SetValue(color)
-	self.color = color
-	self.Swatch:SetVertexColor(self.color:GetRGB())
+  self.color = color
+  self.Swatch:SetVertexColor(self.color:GetRGB())
 end
 
-function Color:GetValue()
-	return self.color
-end
+function Color:GetValue() return self.color end
 
-function Color:HasAlpha()
-	return type(self.color.a) == 'number'
-end
+function Color:HasAlpha() return type(self.color.a) == "number" end
 
+--[[ Properties ]]
+--
 
---[[ Properties ]]--
-
-Color.NormalFont = 'GameFontHighlight'
+Color.NormalFont = "GameFontHighlight"
 Color.SetColor = Color.SetValue
 Color.GetColor = Color.GetValue
 Color.MinWidth = 150
 Color.WidthOff = 28
 
-Color.color = CreateColor(1,1,1)
+Color.color = CreateColor(1, 1, 1)
 Color.bottom = 8
 Color.right = 10
 Color.left = 10

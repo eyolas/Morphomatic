@@ -3,19 +3,19 @@
 
 local ADDON, ns = ...
 local MM = ns.MM
-local Randomizer = MM:NewModule('Randomizer')
-MM:RegisterModule('Randomizer', Randomizer)
+local Randomizer = MM:NewModule("Randomizer")
+MM:RegisterModule("Randomizer", Randomizer)
 function dump(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. dump(v) .. ','
-      end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
+  if type(o) == "table" then
+    local s = "{ "
+    for k, v in pairs(o) do
+      if type(k) ~= "number" then k = '"' .. k .. '"' end
+      s = s .. "[" .. k .. "] = " .. dump(v) .. ","
+    end
+    return s .. "} "
+  else
+    return tostring(o)
+  end
 end
 
 -- Returns a sorted array of eligible toy itemIDs
@@ -61,7 +61,9 @@ function Randomizer:DebugDump()
       ("MM debug — item=%s, spell=%s"):format(tostring(GetItemInfo(pick)), tostring(spell))
     )
   else
-    MM.Helpers:dprint("MM debug — final list empty (DB empty? all unchecked? cooldown? area restricted?)")
+    MM.Helpers:dprint(
+      "MM debug — final list empty (DB empty? all unchecked? cooldown? area restricted?)"
+    )
   end
 end
 

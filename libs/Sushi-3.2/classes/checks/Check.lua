@@ -17,58 +17,58 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Check = LibStub('Sushi-3.2').TextedClickable:NewSushi('Check', 1, 'CheckButton')
+local Check = LibStub("Sushi-3.2").TextedClickable:NewSushi("Check", 1, "CheckButton")
 if not Check then return end
 
-
---[[ Construct ]]--
+--[[ Construct ]]
+--
 
 function Check:Construct()
-	local b = self:Super(Check):Construct()
-	local text = b:CreateFontString(nil, nil, self.NormalFont)
-	text:SetPoint('LEFT', 28, 1)
+  local b = self:Super(Check):Construct()
+  local text = b:CreateFontString(nil, nil, self.NormalFont)
+  text:SetPoint("LEFT", 28, 1)
 
-	local normal = b:CreateTexture()
-	normal:SetTexture('Interface/Buttons/UI-CheckBox-Up')
-	normal:SetPoint('LEFT')
-	normal:SetSize(26, 26)
+  local normal = b:CreateTexture()
+  normal:SetTexture("Interface/Buttons/UI-CheckBox-Up")
+  normal:SetPoint("LEFT")
+  normal:SetSize(26, 26)
 
-	local pushed = b:CreateTexture()
-	pushed:SetTexture('Interface/Buttons/UI-CheckBox-Down')
-	pushed:SetAllPoints(normal)
+  local pushed = b:CreateTexture()
+  pushed:SetTexture("Interface/Buttons/UI-CheckBox-Down")
+  pushed:SetAllPoints(normal)
 
-	local checked = b:CreateTexture()
-	checked:SetTexture('Interface/Buttons/UI-CheckBox-Check')
-	checked:SetAllPoints(normal)
+  local checked = b:CreateTexture()
+  checked:SetTexture("Interface/Buttons/UI-CheckBox-Check")
+  checked:SetAllPoints(normal)
 
-	local disabled = b:CreateTexture()
-	disabled:SetTexture('Interface/Buttons/UI-CheckBox-Check-Disabled')
-	disabled:SetAllPoints(normal)
+  local disabled = b:CreateTexture()
+  disabled:SetTexture("Interface/Buttons/UI-CheckBox-Check-Disabled")
+  disabled:SetAllPoints(normal)
 
-	local highlight = b:CreateTexture()
-	highlight:SetTexture('Interface/Buttons/UI-CheckBox-Highlight')
-	highlight:SetAllPoints(normal)
-	highlight:SetBlendMode('ADD')
+  local highlight = b:CreateTexture()
+  highlight:SetTexture("Interface/Buttons/UI-CheckBox-Highlight")
+  highlight:SetAllPoints(normal)
+  highlight:SetBlendMode("ADD")
 
-	b:SetHeight(26)
-	b:SetFontString(text)
-	b:SetNormalTexture(normal)
-	b:SetPushedTexture(pushed)
-	b:SetCheckedTexture(checked)
-	b:SetHighlightTexture(highlight)
-	b:SetDisabledCheckedTexture(disabled)
-	return b
+  b:SetHeight(26)
+  b:SetFontString(text)
+  b:SetNormalTexture(normal)
+  b:SetPushedTexture(pushed)
+  b:SetCheckedTexture(checked)
+  b:SetHighlightTexture(highlight)
+  b:SetDisabledCheckedTexture(disabled)
+  return b
 end
 
 function Check:Reset()
-	self:Super(Check):Reset()
-	self:SetChecked(false)
+  self:Super(Check):Reset()
+  self:SetChecked(false)
 end
 
+--[[ Properties ]]
+--
 
---[[ Properties ]]--
-
-Check.NormalFont = 'GameFontHighlight'
+Check.NormalFont = "GameFontHighlight"
 Check.SetValue = Check.SetChecked
 Check.GetValue = Check.GetChecked
 Check.MinWidth = 150

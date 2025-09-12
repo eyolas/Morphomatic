@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Help = LibStub('Sushi-3.2').Clickable:NewSushi('HelpButton', 1, 'Button')
+local Help = LibStub("Sushi-3.2").Clickable:NewSushi("HelpButton", 1, "Button")
 if not Help then return end
 
 function Help:Construct()
-	local b = self:Super(Help):Construct()
-	b:SetHighlightTexture('Interface/FriendsFrame/InformationIcon-Highlight')
-	b:SetNormalTexture('Interface/FriendsFrame/InformationIcon')
-	b:SetSize(16, 16)
-	return b
+  local b = self:Super(Help):Construct()
+  b:SetHighlightTexture("Interface/FriendsFrame/InformationIcon-Highlight")
+  b:SetNormalTexture("Interface/FriendsFrame/InformationIcon")
+  b:SetSize(16, 16)
+  return b
 end

@@ -1,4 +1,4 @@
-local L = LibStub('AceLocale-3.0'):NewLocale('Morphomatic', 'enUS', true, true)
+local L = LibStub("AceLocale-3.0"):NewLocale("Morphomatic", "enUS", true, true)
 
 L["TITLE"] = "Morphomatic"
 L["DESC"] =

@@ -3,8 +3,8 @@
 
 local ADDON, ns = ...
 local MM = ns.MM
-local Helpers = MM:NewModule('Helpers')
-MM:RegisterModule('Helpers', Helpers)
+local Helpers = MM:NewModule("Helpers")
+MM:RegisterModule("Helpers", Helpers)
 -- RNG seeding (safe even if math.randomseed is messed with)
 function Helpers:SeedRNG()
   local seed = (GetServerTime and GetServerTime()) or (time and time()) or 0
@@ -13,7 +13,9 @@ function Helpers:SeedRNG()
   if math and type(math.randomseed) == "function" then
     math.randomseed(seed)
     if type(math.random) == "function" then
-      math.random(); math.random(); math.random()
+      math.random()
+      math.random()
+      math.random()
     end
   end
 end
@@ -54,19 +56,26 @@ function Helpers:BuildPool()
   local function add(pool, k, v, src)
     local id = (type(k) == "number") and k or v -- handle set vs array
     id = (type(id) == "number") and id or tonumber(id)
-    if id then pool[id] = true
-    else print("BuildPool: bad id from", src, "->", tostring(k), tostring(v)) end
+    if id then
+      pool[id] = true
+    else
+      print("BuildPool: bad id from", src, "->", tostring(k), tostring(v))
+    end
   end
 
   local pool = {}
 
   if MM_DB then
-    for k, v in pairs(MM_DB) do add(pool, k, v, "MM_DB") end
+    for k, v in pairs(MM_DB) do
+      add(pool, k, v, "MM_DB")
+    end
   end
 
   local custom = MM.DB and MM.DB.GetCustom and MM.DB:GetCustom() or nil
   if custom and custom.extraToys then
-    for k, v in pairs(custom.extraToys) do add(pool, k, v, "extraToys") end
+    for k, v in pairs(custom.extraToys) do
+      add(pool, k, v, "extraToys")
+    end
   end
   if custom and custom.skipToys then
     for k, v in pairs(custom.skipToys) do
@@ -139,7 +148,9 @@ function Helpers:PrepareButtonForRandomToy(btn)
     btn:SetAttribute("item", "item:" .. pick)
   end
 
-  self:dprint(("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy " .. pick), pick))
+  self:dprint(
+    ("Morphomatic: prepared %s (%d)"):format(toyName or itemName or ("Toy " .. pick), pick)
+  )
   return true
 end
 

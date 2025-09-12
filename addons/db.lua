@@ -3,12 +3,12 @@
 
 local ADDON, ns = ...
 local MM = ns.MM
-local DB = MM:NewModule('DB')  -- <- WildAddon module
-MM:RegisterModule('DB', DB) 
+local DB = MM:NewModule("DB") -- <- WildAddon module
+MM:RegisterModule("DB", DB)
 
 -- SavedVariables declared in the .toc:
 --   MorphomaticDB, MorphomaticCustom
-MorphomaticDB     = MorphomaticDB     or {}
+MorphomaticDB = MorphomaticDB or {}
 MorphomaticCustom = MorphomaticCustom or { extraToys = {}, skipToys = {} }
 
 -- Schema bump when structure changes
@@ -17,11 +17,11 @@ local SCHEMA_VERSION = 1
 -- Defaults applied to MorphomaticDB
 local DEFAULTS = {
   __schema = SCHEMA_VERSION,
-  enabledToys = {},            -- [itemID] = false => explicitly excluded (implicit = included)
-  skipOnCooldown = true,       -- runtime: skip toys on cooldown
-  autoCreateMacro = true,      -- auto-(re)create macro at login
-  showButton = true,           -- floating button visibility
-  debug = false,               -- gated debug prints
+  enabledToys = {}, -- [itemID] = false => explicitly excluded (implicit = included)
+  skipOnCooldown = true, -- runtime: skip toys on cooldown
+  autoCreateMacro = true, -- auto-(re)create macro at login
+  showButton = true, -- floating button visibility
+  debug = false, -- gated debug prints
   button = { point = "CENTER", x = 0, y = 0, scale = 1, locked = true },
 }
 
@@ -60,7 +60,7 @@ function DB:GetCustom()
   -- Ensure shape (for compatibility with older versions)
   local c = MorphomaticCustom
   c.extraToys = c.extraToys or {}
-  c.skipToys  = c.skipToys  or {}
+  c.skipToys = c.skipToys or {}
   return c
 end
 
@@ -88,8 +88,8 @@ function DB:OnLoad()
   local f = CreateFrame("Frame")
   f:RegisterEvent("PLAYER_LOGIN")
   f:SetScript("OnEvent", function()
-    self:Get()        -- ensure defaults
-    self:GetCustom()  -- ensure shape
+    self:Get() -- ensure defaults
+    self:GetCustom() -- ensure shape
     self:migrateIfNeeded()
   end)
 end

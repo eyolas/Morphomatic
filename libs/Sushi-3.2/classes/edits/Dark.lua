@@ -17,44 +17,45 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Dark = LibStub('Sushi-3.2').Editable:NewSushi('DarkEdit', 2, 'EditBox', 'InputBoxScriptTemplate')
+local Dark =
+  LibStub("Sushi-3.2").Editable:NewSushi("DarkEdit", 2, "EditBox", "InputBoxScriptTemplate")
 if not Dark then return end
 
-
---[[ Construct ]]--
+--[[ Construct ]]
+--
 
 function Dark:Construct()
   local f = self:Super(Dark):Construct()
-  local bg = CreateFrame('Frame', nil, f, BackdropTemplateMixin and 'BackdropTemplate')
+  local bg = CreateFrame("Frame", nil, f, BackdropTemplateMixin and "BackdropTemplate")
   bg:SetBackdrop(f.Backdrop)
-  bg:SetBackdropColor(0,0,0, 0.25)
-  bg:SetBackdropBorderColor(0,0,0, 0.3)
+  bg:SetBackdropColor(0, 0, 0, 0.25)
+  bg:SetBackdropBorderColor(0, 0, 0, 0.3)
   bg:SetFrameLevel(f:GetFrameLevel())
   bg:Hide()
 
   local left = f:CreateFontString(nil, nil, self.NormalFont)
-  left:SetPoint('LEFT', bg, 3, 0)
+  left:SetPoint("LEFT", bg, 3, 0)
   local right = f:CreateFontString(nil, nil, self.NormalFont)
-  right:SetPoint('RIGHT', bg, -3, 0)
+  right:SetPoint("RIGHT", bg, -3, 0)
 
   f:SetHeight(18)
-  f:SetJustifyH('CENTER')
-  f:SetScript('OnTextChanged', f.OnTextChanged)
-  f:SetScript('OnEditFocusLost', EditBox_ClearHighlight)
+  f:SetJustifyH("CENTER")
+  f:SetScript("OnTextChanged", f.OnTextChanged)
+  f:SetScript("OnEditFocusLost", EditBox_ClearHighlight)
 
-  f.Label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 5, 0)
+  f.Label:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 5, 0)
   f.Bg, f.Left, f.Right = bg, left, right
   return f
 end
 
 function Dark:New(parent, value, pattern)
-	local f = self:Super(Dark):New(parent, nil, value)
-	f:SetPattern(pattern or '%s')
-	return f
+  local f = self:Super(Dark):New(parent, nil, value)
+  f:SetPattern(pattern or "%s")
+  return f
 end
 
-
---[[ API ]]--
+--[[ API ]]
+--
 
 function Dark:OnEnter()
   self:Super(Dark):OnEnter()
@@ -73,7 +74,7 @@ function Dark:OnTextChanged()
 end
 
 function Dark:SetFontObject(font)
-	self:Super(Dark):SetFontObject(font)
+  self:Super(Dark):SetFontObject(font)
 
   if self.Right then
     self.Right:SetFontObject(font)
@@ -82,27 +83,25 @@ function Dark:SetFontObject(font)
 end
 
 function Dark:SetPattern(pattern)
-  local left, right = strmatch(pattern, '(.*)%%s(.*)')
+  local left, right = strmatch(pattern, "(.*)%%s(.*)")
 
   self.Left:SetText(left)
   self.Right:SetText(right)
-  self.Bg:SetPoint('BOTTOMRIGHT', self.Right:GetWidth(), 0)
-  self.Bg:SetPoint('TOPLEFT', -self.Left:GetWidth(), 0)
+  self.Bg:SetPoint("BOTTOMRIGHT", self.Right:GetWidth(), 0)
+  self.Bg:SetPoint("TOPLEFT", -self.Left:GetWidth(), 0)
 end
 
-function Dark:GetPattern()
-  return self.Left:GetText() .. '%s' .. self.Right:GetText()
-end
+function Dark:GetPattern() return self.Left:GetText() .. "%s" .. self.Right:GetText() end
 
-
---[[ Properties ]]--
+--[[ Properties ]]
+--
 
 Dark.Ruler = Dark.Ruler or UIParent:CreateFontString()
 Dark.MaxWidth = 150
 Dark.WidthOff = 10
 Dark.Backdrop = {
-	bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
-	edgeFile = 'Interface/Tooltips/UI-Tooltip-Border',
-	insets = {left = 2, right = 2, top = 2, bottom = 2},
-	edgeSize = 11,
+  bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+  edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+  insets = { left = 2, right = 2, top = 2, bottom = 2 },
+  edgeSize = 11,
 }

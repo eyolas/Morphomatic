@@ -17,61 +17,55 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Tipped = LibStub('Sushi-3.2').Callable:NewSushi('Tipped', 1)
+local Tipped = LibStub("Sushi-3.2").Callable:NewSushi("Tipped", 1)
 if not Tipped then return end
 
-
---[[ Events ]]--
+--[[ Events ]]
+--
 
 function Tipped:Construct()
-	local f = self:Super(Tipped):Construct()
-	f:SetScript('OnEnter', f.OnEnter)
-	f:SetScript('OnLeave', f.OnLeave)
-	return f
+  local f = self:Super(Tipped):Construct()
+  f:SetScript("OnEnter", f.OnEnter)
+  f:SetScript("OnLeave", f.OnLeave)
+  return f
 end
 
 function Tipped:OnEnter()
-	local h1, p = self:GetTooltip()
-	if h1 then
-		GameTooltip:SetOwner(self, self:GetTooltipAnchor())
-		GameTooltip:AddLine(h1, nil, nil, nil, true)
+  local h1, p = self:GetTooltip()
+  if h1 then
+    GameTooltip:SetOwner(self, self:GetTooltipAnchor())
+    GameTooltip:AddLine(h1, nil, nil, nil, true)
 
-		if p then
-			GameTooltip:AddLine(p, 1, 1, 1, true)
-		end
+    if p then GameTooltip:AddLine(p, 1, 1, 1, true) end
 
-		GameTooltip:Show()
-	end
+    GameTooltip:Show()
+  end
 
-	self:FireCalls('OnEnter')
+  self:FireCalls("OnEnter")
 end
 
 function Tipped:OnLeave()
-	if GameTooltip:GetOwner() == self then
-		GameTooltip:Hide()
-	end
+  if GameTooltip:GetOwner() == self then GameTooltip:Hide() end
 
-	self:FireCalls('OnLeave')
+  self:FireCalls("OnLeave")
 end
 
-
---[[ API ]]--
+--[[ API ]]
+--
 
 function Tipped:SetTooltip(h1, p)
-	self.tooltipTitle, self.tooltipText = h1, p
+  self.tooltipTitle, self.tooltipText = h1, p
 end
 
-function Tipped:GetTooltip()
-	return self.tooltipTitle, self.tooltipText
-end
+function Tipped:GetTooltip() return self.tooltipTitle, self.tooltipText end
 
 function Tipped:GetTooltipAnchor()
-	local x = self:GetRight() / GetScreenWidth() > 0.8
-	return x and 'ANCHOR_LEFT' or 'ANCHOR_RIGHT'
+  local x = self:GetRight() / GetScreenWidth() > 0.8
+  return x and "ANCHOR_LEFT" or "ANCHOR_RIGHT"
 end
 
-
---[[ Properties ]]--
+--[[ Properties ]]
+--
 
 Tipped.SetTip = Tipped.SetTooltip
 Tipped.GetTip = Tipped.GetTooltip

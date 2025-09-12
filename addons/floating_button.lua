@@ -3,9 +3,9 @@
 
 local ADDON, ns = ...
 local MM = ns.MM
-local FloatButton = MM:NewModule('FloatButton')
-MM:RegisterModule('FloatButton', FloatButton)
-local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
+local FloatButton = MM:NewModule("FloatButton")
+MM:RegisterModule("FloatButton", FloatButton)
+local L = LibStub("AceLocale-3.0"):GetLocale("Morphomatic")
 
 -- === Icon config ===
 local ICON_PATH = "Interface\\AddOns\\Morphomatic\\images\\button.blp"
@@ -47,7 +47,8 @@ end
 function FloatButton:Create()
   if self.frame then return self.frame end
 
-  local btn = CreateFrame("Button", "MM_Float", UIParent, "SecureActionButtonTemplate,BackdropTemplate")
+  local btn =
+    CreateFrame("Button", "MM_Float", UIParent, "SecureActionButtonTemplate,BackdropTemplate")
   btn:SetSize(44, 44)
   btn:SetMovable(true)
   btn:EnableMouse(true)
@@ -70,9 +71,7 @@ function FloatButton:Create()
       s:SetAttribute("macrotext", nil)
       return
     end
-    if MM and MM.Helpers.PrepareButtonForRandomToy then
-      MM.Helpers:PrepareButtonForRandomToy(s)
-    end
+    if MM and MM.Helpers.PrepareButtonForRandomToy then MM.Helpers:PrepareButtonForRandomToy(s) end
   end)
 
   -- Frame visuals
@@ -151,7 +150,7 @@ function FloatButton:Show()
 end
 
 function FloatButton:Hide()
-   MM.Helpers:dprint("FloatButton:Hide")
+  MM.Helpers:dprint("FloatButton:Hide")
   if self.frame then self.frame:Hide() end
 end
 

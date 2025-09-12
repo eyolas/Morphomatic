@@ -17,44 +17,48 @@ You should have received a copy of the GNU General Public License
 along with Poncho. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub:NewLibrary('Poncho-2.0', 6)
+local Lib = LibStub:NewLibrary("Poncho-2.0", 6)
 if not Lib then return end
 
-local setmetatable, getmetatable, assert, type, tinsert, tremove = setmetatable, getmetatable, assert, type, tinsert, tremove
-local Base = {__type = 'Abstract'}
+local setmetatable, getmetatable, assert, type, tinsert, tremove =
+  setmetatable, getmetatable, assert, type, tinsert, tremove
+local Base = { __type = "Abstract" }
 
-local ClassMeta =  {
-  __index = function(class, key)
-    return class.__super[key] or class.__base[key]
-  end,
+local ClassMeta = {
+  __index = function(class, key) return class.__super[key] or class.__base[key] end,
 
-  __call = function(class, ...)
-    return class:New(...)
-  end
+  __call = function(class, ...) return class:New(...) end,
 }
 
 local SuperCall = setmetatable({}, {
   __index = function(super, key)
     local var = ClassMeta.__index(super.class, key) or super.frame.__base[key]
-    if type(var) == 'function' then
-      return function(super, ...)  return var(super.frame, ...) end
+    if type(var) == "function" then
+      return function(super, ...) return var(super.frame, ...) end
     end
 
     return var
-  end
+  end,
 })
 
-
---[[ Static ]]--
+--[[ Static ]]
+--
 
 function Base:NewClass(kind, name, template)
-  assert(not kind or type(kind) == 'string', 'Bad argument #1 to `:NewClass` (string or nil expected)')
-  assert(not name or type(name) == 'string', 'Bad argument #2 to `:NewClass` (string or nil expected)')
-  assert(not template or type(template) == 'string', 'Bad argument #3 to `:NewClass` (string or nil expected)')
+  assert(
+    not kind or type(kind) == "string",
+    "Bad argument #1 to `:NewClass` (string or nil expected)"
+  )
+  assert(
+    not name or type(name) == "string",
+    "Bad argument #2 to `:NewClass` (string or nil expected)"
+  )
+  assert(
+    not template or type(template) == "string",
+    "Bad argument #3 to `:NewClass` (string or nil expected)"
+  )
 
-  if kind and not Lib.Types[kind] then
-    Lib.Types[kind] = getmetatable(CreateFrame(kind)).__index
-  end
+  if kind and not Lib.Types[kind] then Lib.Types[kind] = getmetatable(CreateFrame(kind)).__index end
 
   local class = setmetatable({}, ClassMeta)
   class.__index = class
@@ -64,7 +68,7 @@ function Base:NewClass(kind, name, template)
   class.__template = template
   class.__base = Lib.Types[class.__type]
 
-  if class.__type ~= 'Abstract' then
+  if class.__type ~= "Abstract" then
     class.__frames = {}
     class.__count = 0
   end
@@ -73,7 +77,7 @@ function Base:NewClass(kind, name, template)
 end
 
 function Base:New(parent)
-  assert(self.__type ~= 'Abstract', 'Cannot initialize frame for absract class')
+  assert(self.__type ~= "Abstract", "Cannot initialize frame for absract class")
 
   local frame = tremove(self.__frames)
   if not frame then
@@ -88,54 +92,41 @@ function Base:New(parent)
 end
 
 function Base:Construct()
-  return self:Bind(CreateFrame(self.__type, self.__name and (self.__name .. self.__count) or nil, UIParent, self.__template))
+  return self:Bind(
+    CreateFrame(
+      self.__type,
+      self.__name and (self.__name .. self.__count) or nil,
+      UIParent,
+      self.__template
+    )
+  )
 end
 
-function Base:Bind(frame)
-  return setmetatable(frame, self)
-end
+function Base:Bind(frame) return setmetatable(frame, self) end
 
+--[[ Flexible ]]
+--
 
---[[ Flexible ]]--
+function Base:GetClassName() return self.__name end
 
-function Base:GetClassName()
-  return self.__name
-end
+function Base:GetSuper() return self.__super end
 
-function Base:GetSuper()
-  return self.__super
-end
+function Base:GetTemplate() return self.__template end
 
-function Base:GetTemplate()
-  return self.__template
-end
+function Base:GetFrameType() return self.__type end
 
-function Base:GetFrameType()
-  return self.__type
-end
+function Base:IsAbstract() return self.__type == "Abstract" end
 
-function Base:IsAbstract()
-  return self.__type == 'Abstract'
-end
+function Base:NumActive() return self.__count - #self.__frames end
 
-function Base:NumActive()
-  return self.__count - #self.__frames
-end
+function Base:NumInactive() return #self.__frames end
 
-function Base:NumInactive()
-  return #self.__frames
-end
+function Base:NumFrames() return self.__count end
 
-function Base:NumFrames()
-  return self.__count
-end
+--[[ Instance ]]
+--
 
-
---[[ Instance ]]--
-
-function Base:GetClass()
-  return getmetatable(self)
-end
+function Base:GetClass() return getmetatable(self) end
 
 function Base:Release()
   if self:IsActive() then
@@ -148,41 +139,36 @@ end
 function Base:Reset()
   self:SetParent(UIParent)
   self:ClearAllPoints()
-  self:SetPoint('BOTTOM', UIParent, 'TOP', 0, GetScreenHeight()) -- twice outside of screen
+  self:SetPoint("BOTTOM", UIParent, "TOP", 0, GetScreenHeight()) -- twice outside of screen
 end
 
-function Base:IsActive()
-  return self.__frames[self]
-end
+function Base:IsActive() return self.__frames[self] end
 
 function Base:Super(class)
-  assert(class, 'No argument #1 to `:Super`')
+  assert(class, "No argument #1 to `:Super`")
   SuperCall.class, SuperCall.frame = class, self
   return SuperCall
 end
 
+--[[ Public ]]
+--
 
---[[ Public ]]--
+function Lib:NewClass(kind, name, template) return Base:NewClass(kind, name, template) end
 
-function Lib:NewClass(kind, name, template)
-  return Base:NewClass(kind, name, template)
-end
+function Lib:Embed(object) object.NewClass = Lib.NewClass end
 
-function Lib:Embed(object)
-  object.NewClass = Lib.NewClass
-end
-
-
---[[ Properties ]]--
+--[[ Properties ]]
+--
 
 setmetatable(Lib, Lib)
 Lib.__call = Lib.NewClass
 Lib.Base, Lib.ClassMeta, Lib.SuperCall = Base, ClassMeta, SuperCall
-Lib.Types = Lib.Types or {
-  Abstract = {},
-  Frame = getmetatable(UIParent).__index,
-  Button = getmetatable(ChatFrameChannelButton).__index,
-  CheckButton = getmetatable(AddonListForceLoad or AddonList.ForceLoad).__index,
-  EditBox = getmetatable(ChatFrame1EditBox).__index,
-  GameTooltip = getmetatable(GameTooltip).__index,
-}
+Lib.Types = Lib.Types
+  or {
+    Abstract = {},
+    Frame = getmetatable(UIParent).__index,
+    Button = getmetatable(ChatFrameChannelButton).__index,
+    CheckButton = getmetatable(AddonListForceLoad or AddonList.ForceLoad).__index,
+    EditBox = getmetatable(ChatFrame1EditBox).__index,
+    GameTooltip = getmetatable(GameTooltip).__index,
+  }

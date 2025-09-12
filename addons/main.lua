@@ -36,7 +36,7 @@ end
 
 function MM:OnLoad()
   self.Helpers:dprint("Morphomatic: OnLoad")
-   -- Register events here
+  -- Register events here
   self:RegisterEvent("PLAYER_REGEN_ENABLED", "OnPlayerRegenEnabled")
   self:RegisterEvent("TOYS_UPDATED", "OnToysUpdated")
 
@@ -75,9 +75,7 @@ function MM:OnPlayerLogin()
   MM.FloatButton:RefreshLockVisual()
   -- if self.RefreshButtonLockVisual then self:RefreshButtonLockVisual() end
 
-  if db.autoCreateMacro ~= false then
-    self.Macro:RecreateMacro()
-  end
+  if db.autoCreateMacro ~= false then self.Macro:RecreateMacro() end
 end
 
 function MM:OnPlayerRegenEnabled()

@@ -17,57 +17,51 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Labeled = LibStub('Sushi-3.2').Tipped:NewSushi('Labeled', 1)
+local Labeled = LibStub("Sushi-3.2").Tipped:NewSushi("Labeled", 1)
 if not Labeled then return end
 
-
---[[ Construct ]]--
+--[[ Construct ]]
+--
 
 function Labeled:New(parent, label)
-	local f = self:Super(Labeled):New(parent)
-	f:SetLabel(label)
-	return f
+  local f = self:Super(Labeled):New(parent)
+  f:SetLabel(label)
+  return f
 end
 
 function Labeled:Reset()
-	self:Super(Labeled):Reset()
-	self:SetEnabled(true)
+  self:Super(Labeled):Reset()
+  self:SetEnabled(true)
 end
 
+--[[ API ]]
+--
 
---[[ API ]]--
+function Labeled:SetLabel(label) self.Label:SetText(label) end
 
-function Labeled:SetLabel(label)
-	self.Label:SetText(label)
-end
-
-function Labeled:GetLabel()
-	return self.Label:GetText()
-end
+function Labeled:GetLabel() return self.Label:GetText() end
 
 function Labeled:SetEnabled(enabled)
-	self:Super(Labeled):SetEnabled(enabled)
-	self:UpdateFont()
+  self:Super(Labeled):SetEnabled(enabled)
+  self:UpdateFont()
 end
 
 function Labeled:SetSmall(small)
-	self.small = small
-	self:UpdateFont()
+  self.small = small
+  self:UpdateFont()
 end
 
-function Labeled:IsSmall()
-	return self.small
-end
+function Labeled:IsSmall() return self.small end
 
 function Labeled:UpdateFont()
   local font = self:IsEnabled() and self.LabelFont or self.LabelDisabledFont
-  local small = self:IsSmall() and 'Small' or ''
+  local small = self:IsSmall() and "Small" or ""
 
   self.Label:SetFontObject(font .. small)
 end
 
+--[[ Properties ]]
+--
 
---[[ Properties ]]--
-
-Labeled.LabelFont = 'GameFontNormal'
-Labeled.LabelDisabledFont = 'GameFontDisable'
+Labeled.LabelFont = "GameFontNormal"
+Labeled.LabelDisabledFont = "GameFontDisable"

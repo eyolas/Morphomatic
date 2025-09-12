@@ -17,52 +17,46 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Texted = LibStub('Sushi-3.2').Clickable:NewSushi('TextedClickable', 1)
+local Texted = LibStub("Sushi-3.2").Clickable:NewSushi("TextedClickable", 1)
 if not Texted then return end
 
-
---[[ API ]]--
+--[[ API ]]
+--
 
 function Texted:New(parent, text)
   local b = self:Super(Texted):New(parent)
-	b:SetText(text)
-	return b
+  b:SetText(text)
+  return b
 end
 
 function Texted:Reset()
-	self:Super(Texted):Reset()
-	self:SetSmall(nil)
+  self:Super(Texted):Reset()
+  self:SetSmall(nil)
 end
 
 function Texted:SetText(text)
-	self:GetFontString():SetText(text)
-	self:SetWidth(max(self.MinWidth, self:GetTextWidth() + self.WidthOff))
+  self:GetFontString():SetText(text)
+  self:SetWidth(max(self.MinWidth, self:GetTextWidth() + self.WidthOff))
 end
 
-function Texted:SetLabel(label)
-	self:SetText(label)
-end
+function Texted:SetLabel(label) self:SetText(label) end
 
-function Texted:GetLabel()
-  return self:GetText()
-end
+function Texted:GetLabel() return self:GetText() end
 
 function Texted:SetSmall(small)
-	local suffix = small and 'Small' or ''
+  local suffix = small and "Small" or ""
 
-	self:SetHighlightFontObject(self.HighlightFont .. suffix)
-	self:SetDisabledFontObject(self.DisableFont .. suffix)
-	self:SetNormalFontObject(self.NormalFont .. suffix)
+  self:SetHighlightFontObject(self.HighlightFont .. suffix)
+  self:SetDisabledFontObject(self.DisableFont .. suffix)
+  self:SetNormalFontObject(self.NormalFont .. suffix)
 end
 
-function Texted:IsSmall()
-	return self:GetNormalFontObject() == self.NormalFont
-end
+function Texted:IsSmall() return self:GetNormalFontObject() == self.NormalFont end
 
+--[[ Properties ]]
+--
 
---[[ Properties ]]--
-
-Texted.HighlightFont = 'GameFontHighlight'
-Texted.DisableFont = 'GameFontDisable'
-Texted.NormalFont = 'GameFontNormal'
+Texted.HighlightFont = "GameFontHighlight"
+Texted.DisableFont = "GameFontDisable"
+Texted.NormalFont = "GameFontNormal"
 Texted.MinWidth = 0

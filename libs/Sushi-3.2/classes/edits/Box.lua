@@ -17,14 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Box = LibStub('Sushi-3.2').Editable:NewSushi('BoxEdit', 1, 'EditBox', 'InputBoxTemplate')
+local Box = LibStub("Sushi-3.2").Editable:NewSushi("BoxEdit", 1, "EditBox", "InputBoxTemplate")
 if not Box then return end
 
 function Box:Construct()
-	local f = self:Super(Box):Construct()
-	f.Label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', -7, -4)
-	f:SetSize(150, 35)
-	return f
+  local f = self:Super(Box):Construct()
+  f.Label:SetPoint("BOTTOMLEFT", f, "TOPLEFT", -7, -4)
+  f:SetSize(150, 35)
+  return f
 end
 
 Box.bottom = 6

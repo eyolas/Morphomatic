@@ -1,9 +1,9 @@
-local L = LibStub('AceLocale-3.0'):NewLocale('Morphomatic', 'frFR')
+local L = LibStub("AceLocale-3.0"):NewLocale("Morphomatic", "frFR")
 if not L then return end
 
 L["TITLE"] = "Morphomatic"
 L["DESC"] =
-"Utilisez la macro 'MM' ou le bouton flottant pour déclencher un jouet cosmétique aléatoire parmi vos Favoris."
+  "Utilisez la macro 'MM' ou le bouton flottant pour déclencher un jouet cosmétique aléatoire parmi vos Favoris."
 L["FLOATING_BUTTON"] = "Bouton flottant"
 L["SHOW_BUTTON"] = "Afficher le bouton flottant"
 L["LOCK_BUTTON"] = "Verrouiller le bouton"

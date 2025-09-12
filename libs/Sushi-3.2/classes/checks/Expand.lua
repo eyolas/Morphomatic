@@ -17,53 +17,55 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Expand = LibStub('Sushi-3.2').Check:NewSushi('ExpandCheck', 1, 'CheckButton')
+local Expand = LibStub("Sushi-3.2").Check:NewSushi("ExpandCheck", 1, "CheckButton")
 if not Expand then return end
 
-
---[[ API ]]--
+--[[ API ]]
+--
 
 function Expand:Construct()
-	local b = self:Super(Expand):Construct()
-	local toggle = CreateFrame('Button', nil, b)
-	toggle:SetHighlightTexture('Interface/Buttons/UI-PlusButton-Hilight')
-	toggle:SetScript('OnClick', function() b:OnExpandClick() end)
-	toggle:SetPoint('LEFT', -14, 0)
-	toggle:SetSize(14, 14)
+  local b = self:Super(Expand):Construct()
+  local toggle = CreateFrame("Button", nil, b)
+  toggle:SetHighlightTexture("Interface/Buttons/UI-PlusButton-Hilight")
+  toggle:SetScript("OnClick", function() b:OnExpandClick() end)
+  toggle:SetPoint("LEFT", -14, 0)
+  toggle:SetSize(14, 14)
 
-	b.Toggle = toggle
-	return b
+  b.Toggle = toggle
+  return b
 end
 
 function Expand:New(...)
-	local b = self:Super(Expand):New(...)
-	b:SetExpanded(true, nil)
-	return b
+  local b = self:Super(Expand):New(...)
+  b:SetExpanded(true, nil)
+  return b
 end
 
 function Expand:SetExpanded(can, is)
-	local texture = is and 'MINUS' or 'PLUS'
-	self.Toggle:SetNormalTexture('Interface/Buttons/UI-' .. texture ..  'Button-Up')
-	self.Toggle:SetPushedTexture('Interface/Buttons/UI-' .. texture .. 'Button-Down')
-	self.Toggle:GetNormalTexture():SetDesaturated(not can)
-	self.Toggle:SetEnabled(can)
+  local texture = is and "MINUS" or "PLUS"
+  self.Toggle:SetNormalTexture("Interface/Buttons/UI-" .. texture .. "Button-Up")
+  self.Toggle:SetPushedTexture("Interface/Buttons/UI-" .. texture .. "Button-Down")
+  self.Toggle:GetNormalTexture():SetDesaturated(not can)
+  self.Toggle:SetEnabled(can)
 end
 
 function Expand:IsExpanded()
-	return self.Toggle:IsEnabled(),
-				 self.Toggle:GetNormalTexture():GetTexture() == GetFileIDFromPath('Interface/Buttons/UI-MinusButton-Up')
+  return self.Toggle:IsEnabled(),
+    self.Toggle:GetNormalTexture():GetTexture() == GetFileIDFromPath(
+      "Interface/Buttons/UI-MinusButton-Up"
+    )
 end
 
 function Expand:OnExpandClick()
-	local can, is = self:IsExpanded()
+  local can, is = self:IsExpanded()
 
-	PlaySound(self.Sound)
-	self:SetExpanded(can, not is)
-	self:FireCalls('OnExpand', not is)
-	self:FireCalls('OnUpdate')
+  PlaySound(self.Sound)
+  self:SetExpanded(can, not is)
+  self:FireCalls("OnExpand", not is)
+  self:FireCalls("OnUpdate")
 end
 
-
---[[ Properties ]]--
+--[[ Properties ]]
+--
 
 Expand.left = Expand:GetSuper().left + 14

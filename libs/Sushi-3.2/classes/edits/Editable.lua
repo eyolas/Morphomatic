@@ -17,77 +17,75 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Editable = LibStub('Sushi-3.2').Labeled:NewSushi('Editable', 1)
+local Editable = LibStub("Sushi-3.2").Labeled:NewSushi("Editable", 1)
 if not Editable then return end
 
-
---[[ Construct ]]--
+--[[ Construct ]]
+--
 
 function Editable:Construct()
-	local f = self:Super(Editable):Construct()
-	f.Label = f:CreateFontString(nil, nil, self.LabelFont)
-	f:SetScript('OnEscapePressed', f.OnEscapePressed)
-	f:SetScript('OnEnterPressed', f.OnEnterPressed)
-	f:SetFontObject(f.NormalFont)
-	f:SetAltArrowKeyMode(false)
-	f:SetAutoFocus(false)
-	return f
+  local f = self:Super(Editable):Construct()
+  f.Label = f:CreateFontString(nil, nil, self.LabelFont)
+  f:SetScript("OnEscapePressed", f.OnEscapePressed)
+  f:SetScript("OnEnterPressed", f.OnEnterPressed)
+  f:SetFontObject(f.NormalFont)
+  f:SetAltArrowKeyMode(false)
+  f:SetAutoFocus(false)
+  return f
 end
 
 function Editable:New(parent, label, value)
-	local f = self:Super(Editable):New(parent, label)
-	f:SetValue(value)
-	return f
+  local f = self:Super(Editable):New(parent, label)
+  f:SetValue(value)
+  return f
 end
 
 function Editable:Reset()
-	self:Super(Editable):Reset()
-	self:SetEnabled(true)
-	self:SetPassword(nil)
-	self:SetNumeric(nil)
-	self:ClearFocus()
+  self:Super(Editable):Reset()
+  self:SetEnabled(true)
+  self:SetPassword(nil)
+  self:SetNumeric(nil)
+  self:ClearFocus()
 end
 
-
---[[ Events ]]--
+--[[ Events ]]
+--
 
 function Editable:OnEnterPressed()
-	self:SetValue(self:GetText())
-	self:FireCalls('OnText', self:GetValue())
-	self:FireCalls('OnInput', self:GetValue())
-	self:FireCalls('OnUpdate')
-	self:ClearFocus()
+  self:SetValue(self:GetText())
+  self:FireCalls("OnText", self:GetValue())
+  self:FireCalls("OnInput", self:GetValue())
+  self:FireCalls("OnUpdate")
+  self:ClearFocus()
 end
 
 function Editable:OnEscapePressed()
-	self:SetText(self:GetValue())
-	self:ClearFocus()
+  self:SetText(self:GetValue())
+  self:ClearFocus()
 end
 
-
---[[ API ]]--
+--[[ API ]]
+--
 
 function Editable:SetEnabled(enabled)
-	self:Super(Editable):SetEnabled(enabled)
-	self:SetFontObject(self:IsEnabled() and self.NormalFont or self.DisabledFont)
+  self:Super(Editable):SetEnabled(enabled)
+  self:SetFontObject(self:IsEnabled() and self.NormalFont or self.DisabledFont)
 end
 
 function Editable:SetValue(value)
-	self.value = value
+  self.value = value
 
-	if not self:HasFocus() then
-		self:SetText(self:GetValue())
-		self:SetCursorPosition(0)
-	end
+  if not self:HasFocus() then
+    self:SetText(self:GetValue())
+    self:SetCursorPosition(0)
+  end
 end
 
-function Editable:GetValue()
-	return self.value
-end
+function Editable:GetValue() return self.value end
 
+--[[ Properties ]]
+--
 
---[[ Properties ]]--
-
-Editable.NormalFont = 'GameFontHighlightSmall'
-Editable.DisabledFont = 'GameFontDisableSmall'
-Editable.value = ''
+Editable.NormalFont = "GameFontHighlightSmall"
+Editable.DisabledFont = "GameFontDisableSmall"
+Editable.value = ""

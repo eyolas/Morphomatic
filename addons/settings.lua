@@ -6,10 +6,10 @@
 
 local ADDON, ns = ...
 local MM = ns.MM
-local Settings = MM:NewModule('Settings')
-MM:RegisterModule('Settings', Settings)
+local Settings = MM:NewModule("Settings")
+MM:RegisterModule("Settings", Settings)
 
-local L = LibStub('AceLocale-3.0'):GetLocale('Morphomatic')
+local L = LibStub("AceLocale-3.0"):GetLocale("Morphomatic")
 local Sushi = LibStub("Sushi-3.2") -- embedded, assumed available
 
 ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ local function bulkSelectCurrentView(selectAll)
   local list = buildListForUI()
   for _, id in ipairs(list) do
     if selectAll then
-      db.enabledToys[id] = true  -- explicitly included
+      db.enabledToys[id] = true -- explicitly included
     else
       db.enabledToys[id] = false -- explicitly excluded
     end
@@ -62,7 +62,7 @@ end
 
 function Settings:SelectAllToys()
   bulkSelectCurrentView(true)
-  MM.Helpers:dprint("Morphomatic: all favorites in the current view selected.") 
+  MM.Helpers:dprint("Morphomatic: all favorites in the current view selected.")
 end
 
 function Settings:UnselectAllToys()
@@ -185,7 +185,8 @@ local function buildCanvas()
 
   local lockBtn = Sushi.RedButton(s1)
   lockBtn:SetPoint("TOPLEFT", showBtn, "BOTTOMLEFT", 6, -8)
-  lockBtn:SetWidth(150) lockBtn:SetHeight(22)
+  lockBtn:SetWidth(150)
+  lockBtn:SetHeight(22)
   local function refreshLockText()
     lockBtn:SetText(MM.DB:Get().button.locked and L.UNLOCK_BUTTON or L.LOCK_BUTTON)
   end
@@ -209,7 +210,8 @@ local function buildCanvas()
 
   local resetBtn = Sushi.RedButton(s1)
   resetBtn:SetPoint("LEFT", scale, "RIGHT", 16, 0)
-  resetBtn:SetWidth(150) resetBtn:SetHeight(22)
+  resetBtn:SetWidth(150)
+  resetBtn:SetHeight(22)
   resetBtn:SetText(L.RESET_POSITION)
   resetBtn:SetScript("OnClick", function()
     if MM.ResetButtonAnchor then MM.ResetButtonAnchor() end
@@ -251,17 +253,17 @@ local function buildCanvas()
   auto:SetPoint("TOPLEFT", s2t, "BOTTOMLEFT", -6, -10)
   auto:SetLabel(L.AUTO_MACRO)
   auto:SetValue(MM.DB:Get().autoCreateMacro ~= false)
-  auto:SetScript("OnClick", function(self)
-    MM.DB:Get().autoCreateMacro = self:GetValue() and true or false
-  end)
+  auto:SetScript(
+    "OnClick",
+    function(self) MM.DB:Get().autoCreateMacro = self:GetValue() and true or false end
+  )
 
   local make = Sushi.RedButton(s2)
   make:SetPoint("TOPLEFT", auto, "BOTTOMLEFT", 6, -8)
-  make:SetWidth(180) make:SetHeight(22)
+  make:SetWidth(180)
+  make:SetHeight(22)
   make:SetText(L.MAKE_MACRO)
-  make:SetScript("OnClick", function()
-    MM.Macro:RecreateMacro()
-  end)
+  make:SetScript("OnClick", function() MM.Macro:RecreateMacro() end)
 
   local macroNote = s2:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
   macroNote:SetPoint("LEFT", make, "RIGHT", 12, 0)
@@ -292,9 +294,10 @@ local function buildCanvas()
   skipcd:SetPoint("TOPLEFT", s3t, "BOTTOMLEFT", -6, -10)
   skipcd:SetLabel(L.SKIP_CD)
   skipcd:SetValue(MM.DB:Get().skipOnCooldown)
-  skipcd:SetScript("OnClick", function(self)
-    MM.DB:Get().skipOnCooldown = self:GetValue() and true or false
-  end)
+  skipcd:SetScript(
+    "OnClick",
+    function(self) MM.DB:Get().skipOnCooldown = self:GetValue() and true or false end
+  )
 
   -- Row 2: list filter toggle (visual-only)
   local hidecd = Sushi.Check()
@@ -314,19 +317,22 @@ local function buildCanvas()
 
   local selectAll = Sushi.RedButton(row)
   selectAll:SetPoint("LEFT", row, "LEFT", 0, 0)
-  selectAll:SetWidth(160) selectAll:SetHeight(22)
+  selectAll:SetWidth(160)
+  selectAll:SetHeight(22)
   selectAll:SetText(L.SELECT_ALL)
   selectAll:SetScript("OnClick", function() Settings:SelectAllToys() end)
 
   local unselectAll = Sushi.RedButton(row)
   unselectAll:SetPoint("LEFT", selectAll, "RIGHT", 10, 0)
-  unselectAll:SetWidth(170) unselectAll:SetHeight(22)
+  unselectAll:SetWidth(170)
+  unselectAll:SetHeight(22)
   unselectAll:SetText(L.UNSELECT_ALL)
   unselectAll:SetScript("OnClick", function() Settings:UnselectAllToys() end)
 
   local resetSel = Sushi.RedButton(row)
   resetSel:SetPoint("LEFT", unselectAll, "RIGHT", 10, 0)
-  resetSel:SetWidth(140) resetSel:SetHeight(22)
+  resetSel:SetWidth(140)
+  resetSel:SetHeight(22)
   resetSel:SetText(L.RESET_SELECTION)
   resetSel:SetScript("OnClick", function() Settings:ResetSelection() end)
 
@@ -346,9 +352,7 @@ local function buildCanvas()
   f._listContainer = container
 
   -- Reflow on resize to keep checklist width correct
-  f:SetScript("OnSizeChanged", function()
-    Settings:OptionsRefresh()
-  end)
+  f:SetScript("OnSizeChanged", function() Settings:OptionsRefresh() end)
 
   return f
 end

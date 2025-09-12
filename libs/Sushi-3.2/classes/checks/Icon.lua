@@ -17,38 +17,34 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Icon = LibStub('Sushi-3.2').Check:NewSushi('IconCheck', 1, 'CheckButton')
+local Icon = LibStub("Sushi-3.2").Check:NewSushi("IconCheck", 1, "CheckButton")
 if not Icon then return end
 
 function Icon:Construct()
-	local b = self:Super(Icon):Construct()
-	local icon = b:CreateTexture(nil, 'BACKGROUND')
-	icon:SetPoint('LEFT', 2, 2)
-	icon:SetSize(37, 37)
+  local b = self:Super(Icon):Construct()
+  local icon = b:CreateTexture(nil, "BACKGROUND")
+  icon:SetPoint("LEFT", 2, 2)
+  icon:SetSize(37, 37)
 
-	local normal = b:GetNormalTexture()
-	normal:ClearAllPoints()
-	normal:SetPoint('BOTTOMRIGHT', icon, 10, -10)
+  local normal = b:GetNormalTexture()
+  normal:ClearAllPoints()
+  normal:SetPoint("BOTTOMRIGHT", icon, 10, -10)
 
-	b.Icon = icon
-	b:SetHeight(45)
-	b:GetFontString():SetPoint('LEFT', 52, 1)
-	return b
+  b.Icon = icon
+  b:SetHeight(45)
+  b:GetFontString():SetPoint("LEFT", 52, 1)
+  return b
 end
 
 function Icon:New(parent, icon, text)
-	local b = self:Super(Icon):New(parent, text)
-	b:SetIcon(icon)
-	return b
+  local b = self:Super(Icon):New(parent, text)
+  b:SetIcon(icon)
+  return b
 end
 
-function Icon:SetIcon(icon)
-	self.Icon:SetTexture(icon)
-end
+function Icon:SetIcon(icon) self.Icon:SetTexture(icon) end
 
-function Icon:GetIcon()
-	return self.Icon:GetTexture()
-end
+function Icon:GetIcon() return self.Icon:GetTexture() end
 
 Icon.WidthOff = 52
 Icon.bottom = 10

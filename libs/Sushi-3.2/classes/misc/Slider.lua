@@ -17,104 +17,98 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sushi = LibStub('Sushi-3.2')
-local Slider = Sushi.Labeled:NewSushi('Slider', 2, 'Slider', 'OptionsSliderTemplate', true)
+local Sushi = LibStub("Sushi-3.2")
+local Slider = Sushi.Labeled:NewSushi("Slider", 2, "Slider", "OptionsSliderTemplate", true)
 if not Slider then return end
 
-
---[[ Construct ]]--
+--[[ Construct ]]
+--
 
 function Slider:Construct()
-	local f = self:Super(Slider):Construct()
-	f:SetScript('OnValueChanged', f.OnValueChanged)
-	f:SetScript('OnMouseWheel', f.OnMouseWheel)
-	f:SetScript('OnMouseUp', f.OnMouseUp)
-	f.Text:SetFontObject(f.NormalFont)
-	f:SetObeyStepOnDrag(true)
-	f:EnableMouseWheel(true)
-	f.Label = f.Text
-	return f
+  local f = self:Super(Slider):Construct()
+  f:SetScript("OnValueChanged", f.OnValueChanged)
+  f:SetScript("OnMouseWheel", f.OnMouseWheel)
+  f:SetScript("OnMouseUp", f.OnMouseUp)
+  f.Text:SetFontObject(f.NormalFont)
+  f:SetObeyStepOnDrag(true)
+  f:EnableMouseWheel(true)
+  f.Label = f.Text
+  return f
 end
 
-function Slider:New(parent, label, value, min,max, step, pattern)
-	local f = self:Super(Slider):New(parent, label)
-	f.Edit = Sushi.DarkEdit(f, value or 1, pattern)
-	f.Edit:SetPoint('TOP', f, 'BOTTOM', 0, 7)
-	f.Edit:SetCall('OnInput', function(edit, value)
-		if tonumber(value) then
-			f:SetValue(value, true)
-		else
-			f.Edit:SetValue(f:GetValue())
-		end
-	end)
+function Slider:New(parent, label, value, min, max, step, pattern)
+  local f = self:Super(Slider):New(parent, label)
+  f.Edit = Sushi.DarkEdit(f, value or 1, pattern)
+  f.Edit:SetPoint("TOP", f, "BOTTOM", 0, 7)
+  f.Edit:SetCall("OnInput", function(edit, value)
+    if tonumber(value) then
+      f:SetValue(value, true)
+    else
+      f.Edit:SetValue(f:GetValue())
+    end
+  end)
 
-	f:SetRange(min or 1, max or 100)
-	f:SetValue(value or 1)
-	f:SetStep(step or 1)
-	return f
+  f:SetRange(min or 1, max or 100)
+  f:SetValue(value or 1)
+  f:SetStep(step or 1)
+  return f
 end
 
 function Slider:Reset()
-	self:Super(Slider):Reset()
-	self.Edit:Release()
-	self:SetWidth(144)
+  self:Super(Slider):Reset()
+  self.Edit:Release()
+  self:SetWidth(144)
 end
 
-
---[[ Events ]]--
+--[[ Events ]]
+--
 
 function Slider:OnMouseWheel(direction)
-	self:SetValue(self:GetValue() + self:GetStep() * direction, true)
-	self:FireCalls('OnUpdate')
+  self:SetValue(self:GetValue() + self:GetStep() * direction, true)
+  self:FireCalls("OnUpdate")
 end
 
 function Slider:OnValueChanged(value, manual)
-	self.Edit:SetValue(value)
+  self.Edit:SetValue(value)
 
-	if manual then
-		self:FireCalls('OnValue', value)
-		self:FireCalls('OnInput', value)
-	end
+  if manual then
+    self:FireCalls("OnValue", value)
+    self:FireCalls("OnInput", value)
+  end
 end
 
-function Slider:OnMouseUp()
-	self:FireCalls('OnUpdate')
-end
+function Slider:OnMouseUp() self:FireCalls("OnUpdate") end
 
-
---[[ API ]]--
+--[[ API ]]
+--
 
 function Slider:SetRange(min, max, minText, maxText)
-	self:SetMinMaxValues(min, max)
-	self.Low:SetText(minText or min)
-	self.High:SetText(maxText or max)
+  self:SetMinMaxValues(min, max)
+  self.Low:SetText(minText or min)
+  self.High:SetText(maxText or max)
 end
 
 function Slider:GetRange()
-	local min, max = self:GetMinMaxValues()
-	return min, max, self.Low:GetText(), self.High:GetText()
+  local min, max = self:GetMinMaxValues()
+  return min, max, self.Low:GetText(), self.High:GetText()
 end
 
 function Slider:SetEnabled(enabled)
-	self:Super(Slider):SetEnabled(enabled)
-	self.Edit:SetEnabled(enabled)
-	self.High:SetFontObject(self.Edit:GetFontObject())
-	self.Low:SetFontObject(self.Edit:GetFontObject())
+  self:Super(Slider):SetEnabled(enabled)
+  self.Edit:SetEnabled(enabled)
+  self.High:SetFontObject(self.Edit:GetFontObject())
+  self.Low:SetFontObject(self.Edit:GetFontObject())
 end
 
-function Slider:SetPattern(...)
-	self.Edit:SetPattern(...)
-end
+function Slider:SetPattern(...) self.Edit:SetPattern(...) end
 
-function Slider:GetPattern()
-	return self.Edit:GetPattern()
-end
+function Slider:GetPattern() return self.Edit:GetPattern() end
 
+--[[ Properties ]]
+--
 
---[[ Properties ]]--
-
-Slider.NormalFont = 'GameFontNormal'
-Slider.DisabledFont = 'GameFontDisable'
+Slider.NormalFont = "GameFontNormal"
+Slider.DisabledFont = "GameFontDisable"
 Slider.SetStep = Slider.SetValueStep
 Slider.GetStep = Slider.GetValueStep
 Slider.SetText = Slider.SetLabel
