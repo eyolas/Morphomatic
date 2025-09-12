@@ -5,6 +5,7 @@
 ## Version: @project-version@
 ## X-Website: https://github.com/eyolas/Morphomatic
 ## X-Curse-Project-ID: 1340910
+## X-Wago-ID: j6jznm6R
 ## SavedVariables: MorphomaticDB, MorphomaticCustom
 ## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0, CallbackHandler-1.0, Poncho-2.0, Sushi-3.2
 

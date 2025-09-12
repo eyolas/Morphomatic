@@ -1,5 +1,37 @@
 # Changelog
 
+# [1.0.7](https://github.com/eyolas/Morphomatic/compare/v1.0.6...v1.0.7) - (2025-09-09)
+
+## <!-- 30 -->📝 Other
+
+- PR [#10](https://github.com/eyolas/Morphomatic/pull/10): update CHANGELOG for v1.0.6 ([3ea8de3](https://github.com/eyolas/Morphomatic/commit/3ea8de37dc2a13f5fa06ff4d1da6d21961a3031b))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for v1.0.6 ([f910160](https://github.com/eyolas/Morphomatic/commit/f91016076330f1880eca7c760ecb677aba7f96c3))  - (eyolas)
+- Add missing Wago ID in Morphomatic.toc ([9c42245](https://github.com/eyolas/Morphomatic/commit/9c42245e5e49ccee988a94392ce888f6d06b5130))  - (eyolas)
+
+# [1.0.6](https://github.com/eyolas/Morphomatic/compare/v1.0.5...v1.0.6) - (2025-09-09)
+
+## <!-- 0 -->🚀 Features
+
+- **pkgmeta:** Add WAGO project configuration and update thumbnail asset ([c29de9c](https://github.com/eyolas/Morphomatic/commit/c29de9cc6f75eb18350ba1a2c9152c845cc039f9))  - (eyolas)
+- **database:** Split db and helpers ([3e5ecc1](https://github.com/eyolas/Morphomatic/commit/3e5ecc1a6ef52832c3eb90c310f1256497c274f0))  - (eyolas)
+- **bootstrap:** Improve event handling and command parsing ([fb3b335](https://github.com/eyolas/Morphomatic/commit/fb3b335fecc9d763971911c618d96c784b7a31e2))  - (eyolas)
+
+## <!-- 2 -->🚜 Refactor
+
+- Clean up code formatting and improve readability in multiple files ([4f086fd](https://github.com/eyolas/Morphomatic/commit/4f086fdfa851abaec3019fb8e356f98eab12e431))  - (eyolas)
+
+## <!-- 30 -->📝 Other
+
+- PR [#9](https://github.com/eyolas/Morphomatic/pull/9): update CHANGELOG for v1.0.5 ([578ce6e](https://github.com/eyolas/Morphomatic/commit/578ce6e41553c489d7b0168931eeb5adba421091))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Add luacheck directive for globals in db.lua and helpers.lua ([c2b12ce](https://github.com/eyolas/Morphomatic/commit/c2b12cea26b654db3ee9632618c870506069b072))  - (eyolas)
+- Update CHANGELOG for v1.0.5 ([9cedb58](https://github.com/eyolas/Morphomatic/commit/9cedb589cacb77741826f7bab959d71e3a069063))  - (eyolas)
+
 # [1.0.5](https://github.com/eyolas/Morphomatic/compare/v1.0.4...v1.0.5) - (2025-09-08)
 
 ## <!-- 0 -->🚀 Features
