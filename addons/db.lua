@@ -48,8 +48,14 @@ end
 
 local _defaultsApplied
 
--- ===== Module API =====
+--[[ Startup ]]--
+function DB:OnLoad()
+  self:Get() -- ensure defaults
+  self:GetCustom() -- ensure shape
+  self:migrateIfNeeded() -- handle migrations
+end
 
+-- ===== Module API =====
 function DB:Get()
   if not _defaultsApplied then
     applyDefaults(MorphomaticDB, DEFAULTS)
@@ -85,13 +91,3 @@ function DB:migrateIfNeeded()
   end
 end
 
--- Lifecycle: WildAddon will call OnLoad for modules
-function DB:OnLoad()
-  local f = CreateFrame("Frame")
-  f:RegisterEvent("PLAYER_LOGIN")
-  f:SetScript("OnEvent", function()
-    self:Get() -- ensure defaults
-    self:GetCustom() -- ensure shape
-    self:migrateIfNeeded()
-  end)
-end

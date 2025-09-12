@@ -7,35 +7,7 @@
 local ADDON, ns = ...
 local MM = ns.MM
 
-----------------------------------------------------------------------
--- Utilities (instance methods of WildAddon)
-----------------------------------------------------------------------
-
--- Open the options panel (new Settings API or legacy fallback)
-function MM:OpenOptions()
-  if Settings and Settings.OpenToCategory and self._optionsCategory then
-    Settings:OpenToCategory(self._optionsCategory.ID or self._optionsCategory)
-  elseif InterfaceOptionsFrame then
-    -- Legacy fallback requires a double call to focus the panel
-    InterfaceOptionsFrame_OpenToCategory("Morphomatic")
-    InterfaceOptionsFrame_OpenToCategory("Morphomatic")
-  end
-end
-
--- Run a function with temporary debug enabled, then restore state
-function MM:_WithTempDebug(fn)
-  local was = self.Helpers:IsDebug() or false
-  self.Helpers:SetDebug(true)
-  local ok, err = pcall(fn)
-  if not was and self.Helpers.SetDebug then self.Helpers:SetDebug(false) end
-  if not ok and err then print(err) end
-end
-
-----------------------------------------------------------------------
--- WildAddon lifecycle
--- OnEnable is called when the addon is ready
--- We use WildAddon’s event handling instead of manual frame:SetScript
-----------------------------------------------------------------------
+--[[ Startup ]]--
 
 function MM:OnLoad()
   self.Helpers:dprint("Morphomatic: OnLoad")
@@ -57,6 +29,27 @@ function MM:OnLoad()
     self:RegisterEvent("PLAYER_LOGIN", function(_, event, ...) self:OnPlayerLogin() end)
   end
 end
+
+-- Open the options panel (new Settings API or legacy fallback)
+function MM:OpenOptions()
+  if Settings and Settings.OpenToCategory and self._optionsCategory then
+    Settings:OpenToCategory(self._optionsCategory.ID or self._optionsCategory)
+  elseif InterfaceOptionsFrame then
+    -- Legacy fallback requires a double call to focus the panel
+    InterfaceOptionsFrame_OpenToCategory("Morphomatic")
+    InterfaceOptionsFrame_OpenToCategory("Morphomatic")
+  end
+end
+
+-- Run a function with temporary debug enabled, then restore state
+function MM:_WithTempDebug(fn)
+  local was = self.Helpers:IsDebug() or false
+  self.Helpers:SetDebug(true)
+  local ok, err = pcall(fn)
+  if not was and self.Helpers.SetDebug then self.Helpers:SetDebug(false) end
+  if not ok and err then print(err) end
+end
+
 
 ----------------------------------------------------------------------
 -- Event handlers
