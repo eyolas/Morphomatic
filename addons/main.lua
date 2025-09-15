@@ -27,12 +27,7 @@ end
 
 -- Open the options panel
 function MM:OpenOptions()
-  print("Morphomatic: opening options panel...", SettingsPanel and "SettingsPanel exists" or "no SettingsPanel", self.Options and "self.Options exists" or "no self.Options")
-  print(self.Options and self.Options.Main and self.Options.Main.category and "self.Options.Main.category exists" or "no self.Options.Main.category")
-  print(self.Options.Main)
-  if SettingsPanel and self.Options and self.Options.Main and self.Options.Main.category then
-    SettingsPanel:SelectCategory(self.Options.Main.category)
-  end
+  MM:SendSignal("MM_TOGGLE_OPTIONS")
 end
 
 -- Run a function with temporary debug enabled, then restore state
