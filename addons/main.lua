@@ -18,13 +18,6 @@ function MM:OnLoad()
   -- Setup /mm slash
   self:_SetupSlash()
 
-  -- Init DB and options
-  -- self.Settings:OptionsRegister()
-  -- self.Settings:OptionsRefresh()
-  self.Minimap:RegisterMinimap()
-  print("Morphomatic: registering options panel...")
-  print(self.Options:GetCategory())
-
   if IsLoggedIn() then
     self:OnPlayerLogin()
   else

@@ -20,11 +20,7 @@ local broker = LDB:NewDataObject("Morphomatic", {
   OnClick = function(_, button)
     if button == "LeftButton" then
       local S = _G.Settings
-      if S and S.OpenToCategory and MM._optionsCategory then
-        S.OpenToCategory(MM._optionsCategory.ID or MM._optionsCategory)
-      else
-        print(L.OPTIONS_NOT_AVAILABLE)
-      end
+      MM:SendSignal("MM_TOGGLE_OPTIONS")
     elseif button == "RightButton" then
       print(L.MINIMAP_RIGHTCLICK)
     end
@@ -53,4 +49,8 @@ function Minimap:ToggleMinimap(show)
   else
     LDI:Hide("Morphomatic")
   end
+end
+
+function Minimap:OnLoad()
+  self:RegisterMinimap()
 end
