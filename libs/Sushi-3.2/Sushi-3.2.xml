@@ -1,0 +1,4 @@
+<Ui>
+	<Script file="Sushi-3.2.lua"/>
+	<Include file="classes\classes.xml"/>
+</Ui>

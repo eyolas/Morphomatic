@@ -3,11 +3,16 @@ std = "lua51"
 
 -- Ignore vendor/externals created during CI
 files[".luarocks/"] = { ignore = { ".*" } }
-files["Libs/"]      = { ignore = { ".*" } }
+files["libs/"]      = { ignore = { ".*" } }
+files[".luacheckrc"] = { ignore = { ".*" } }
+
+ignore = { "ADDON" }
 
 -- This addon DEFINES and MUTATES the global table `MM` across multiple files.
 -- Declare writable fields here so "setting undefined field of global MM" goes away.
 globals = {
+  "dump",
+  "IsLoggedIn",
   -- SavedVariables (writable)
   "MorphomaticDB",
   "MorphomaticCustom",
@@ -96,7 +101,7 @@ read_globals = {
   "Settings","InterfaceOptions_AddCategory","InterfaceOptionsFrame_OpenToCategory","InterfaceOptionsFrame",
   "DevTools_Dump",
   "UnitGUID","GetServerTime","time",
-
+  "SearchBoxTemplate_OnTextChanged",
   -- Libraries (read only)
   "LibStub",
 }

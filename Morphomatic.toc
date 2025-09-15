@@ -7,21 +7,7 @@
 ## X-Curse-Project-ID: 1340910
 ## X-Wago-ID: j6jznm6R
 ## SavedVariables: MorphomaticDB, MorphomaticCustom
-## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0, CallbackHandler-1.0
+## OptionalDeps: LibStub, LibDataBroker-1.1, LibDBIcon-1.0, CallbackHandler-1.0, Poncho-2.0, Sushi-3.2
 
 # Embedded libraries
-Libs\LibStub\LibStub.lua
-Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
-Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
-Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
-
-db.lua
-locales.lua
-minimap.lua
-helpers.lua
-macro.lua
-toys_db.lua
-randomizer.lua
-floating_button.lua
-settings.lua
-bootstrap.lua
+addons\main.xml

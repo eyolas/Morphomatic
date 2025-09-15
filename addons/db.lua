@@ -1,16 +1,19 @@
--- Morphomatic — db.lua
--- Centralized SavedVariables, defaults, and accessors.
+-- SPDX-License-Identifier: MIT
+-- Copyright (c) 2025 David Touzet
 
--- luacheck: globals MM
-MM = MM or {}
+-- Morphomatic — addons/db.lua
+-- DB module (WildAddon): SavedVariables, defaults, accessors + compat shims
+
+local ADDON, ns = ...
+local MM = ns.MM
+local DB = MM:NewModule("DB") -- <- WildAddon module
 
 -- SavedVariables declared in the .toc:
 --   MorphomaticDB, MorphomaticCustom
--- Initialize if nil (first run)
 MorphomaticDB = MorphomaticDB or {}
 MorphomaticCustom = MorphomaticCustom or { extraToys = {}, skipToys = {} }
 
--- Bump when schema changes (for future migrations)
+-- Schema bump when structure changes
 local SCHEMA_VERSION = 1
 
 -- Defaults applied to MorphomaticDB
@@ -45,8 +48,16 @@ end
 
 local _defaultsApplied
 
--- Public: get DB with defaults applied (lazy)
-function MM.DB()
+--[[ Startup ]]
+--
+function DB:OnLoad()
+  self:Get() -- ensure defaults
+  self:GetCustom() -- ensure shape
+  self:migrateIfNeeded() -- handle migrations
+end
+
+-- ===== Module API =====
+function DB:Get()
   if not _defaultsApplied then
     applyDefaults(MorphomaticDB, DEFAULTS)
     _defaultsApplied = true
@@ -54,48 +65,29 @@ function MM.DB()
   return MorphomaticDB
 end
 
--- Public: get custom user lists (extra/skip toys)
-function MM.Custom()
-  -- ensure shape in case older versions didn’t create it
-  MorphomaticCustom.extraToys = MorphomaticCustom.extraToys or {}
-  MorphomaticCustom.skipToys = MorphomaticCustom.skipToys or {}
-  return MorphomaticCustom
+function DB:GetCustom()
+  -- Ensure shape (for compatibility with older versions)
+  local c = MorphomaticCustom
+  c.extraToys = c.extraToys or {}
+  c.skipToys = c.skipToys or {}
+  return c
 end
 
--- Optional: hard reset to defaults (keeps or wipes favorites depending on arg)
-function MM.ResetToDefaults(keepFavorites)
+function DB:ResetToDefaults(keepFavorites)
   local old = MorphomaticDB
   MorphomaticDB = {}
   applyDefaults(MorphomaticDB, DEFAULTS)
   if keepFavorites and old and old.enabledToys then
-    MorphomaticDB.enabledToys = old.enabledToys -- keep user’s selection
+    MorphomaticDB.enabledToys = old.enabledToys -- preserve user selection
   end
   _defaultsApplied = true
 end
 
--- Optional: schema migration hook (no-op for now)
-local function migrateIfNeeded()
-  local db = MM.DB()
+function DB:migrateIfNeeded()
+  local db = self:Get()
   local current = tonumber(db.__schema) or 0
-  if current < SCHEMA_VERSION then db.__schema = SCHEMA_VERSION end
-end
-
--- Light-touch init at PLAYER_LOGIN (safe even if called multiple times)
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function()
-  -- ensure shapes and defaults, then run migrations
-  MM.DB()
-  MM.Custom()
-  migrateIfNeeded()
-end)
-
--- Debug gate helpers (kept here so any file can call them)
-function MM.IsDebug() return MM.DB().debug == true end
-function MM.SetDebug(on)
-  MM.DB().debug = (on and true) or false
-  return MM.DB().debug
-end
-function MM.dprint(...)
-  if MM.DB().debug then print(...) end
+  if current < SCHEMA_VERSION then
+    -- put migrations here if needed
+    db.__schema = SCHEMA_VERSION
+  end
 end
