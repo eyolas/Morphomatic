@@ -175,18 +175,16 @@ function FloatButton:UpdateScale(val)
   if self.frame then self.frame:SetScale(val) end
 end
 
-function FloatButton:OnLoad()
-end
-
+function FloatButton:OnLoad() end
 
 function FloatButton:RegistersAll()
-  self:RegisterSignal('REFRESH_BUTTON_VISUAL', 'RefreshLockVisual')
-  self:RegisterSignal('UPDATE_BUTTON_SCALE', 'UpdateScale')
-  self:RegisterSignal('RESET_BUTTON_ANCHOR', 'ResetAnchor') -- legacy
+  self:RegisterSignal("REFRESH_BUTTON_VISUAL", "RefreshLockVisual")
+  self:RegisterSignal("UPDATE_BUTTON_SCALE", "UpdateScale")
+  self:RegisterSignal("RESET_BUTTON_ANCHOR", "ResetAnchor") -- legacy
 end
 
 function FloatButton:UnregistersAll()
-  self:UnregisterSignal('REFRESH_BUTTON_VISUAL')
-  self:UnregisterSignal('UPDATE_BUTTON_SCALE')
-  self:UnregisterSignal('RESET_BUTTON_ANCHOR')
+  self:UnregisterSignal("REFRESH_BUTTON_VISUAL")
+  self:UnregisterSignal("UPDATE_BUTTON_SCALE")
+  self:UnregisterSignal("RESET_BUTTON_ANCHOR")
 end

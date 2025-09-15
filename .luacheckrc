@@ -101,7 +101,7 @@ read_globals = {
   "Settings","InterfaceOptions_AddCategory","InterfaceOptionsFrame_OpenToCategory","InterfaceOptionsFrame",
   "DevTools_Dump",
   "UnitGUID","GetServerTime","time",
-
+  "SearchBoxTemplate_OnTextChanged",
   -- Libraries (read only)
   "LibStub",
 }

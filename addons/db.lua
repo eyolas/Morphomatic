@@ -48,7 +48,8 @@ end
 
 local _defaultsApplied
 
---[[ Startup ]]--
+--[[ Startup ]]
+--
 function DB:OnLoad()
   self:Get() -- ensure defaults
   self:GetCustom() -- ensure shape
@@ -90,4 +91,3 @@ function DB:migrateIfNeeded()
     db.__schema = SCHEMA_VERSION
   end
 end
-

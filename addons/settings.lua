@@ -95,7 +95,10 @@ local function refreshChecklist(container)
 
   local db = MM.DB:Get()
   local list = buildListForUI()
-  table.sort(list, function(a, b) return (C_Item.GetItemInfo(a) or "") < (C_Item.GetItemInfo(b) or "") end)
+  table.sort(
+    list,
+    function(a, b) return (C_Item.GetItemInfo(a) or "") < (C_Item.GetItemInfo(b) or "") end
+  )
 
   local width = math.max(120, container:GetWidth() - 14)
   local y = -4
@@ -372,10 +375,7 @@ local function registerSettings()
   MM._optionsCanvas = canvas
 end
 
-function Settings:OptionsRegister()
-  local S = _G.Settings
-  registerSettings()
-end
+function Settings:OptionsRegister() registerSettings() end
 
 ----------------------------------------------------------------------
 -- External refresh (called from events)

@@ -19,7 +19,6 @@ local broker = LDB:NewDataObject("Morphomatic", {
   icon = "Interface\\AddOns\\Morphomatic\\images\\button.blp",
   OnClick = function(_, button)
     if button == "LeftButton" then
-      local S = _G.Settings
       MM:SendSignal("MM_TOGGLE_OPTIONS")
     elseif button == "RightButton" then
       print(L.MINIMAP_RIGHTCLICK)
@@ -51,6 +50,4 @@ function Minimap:ToggleMinimap(show)
   end
 end
 
-function Minimap:OnLoad()
-  self:RegisterMinimap()
-end
+function Minimap:OnLoad() self:RegisterMinimap() end

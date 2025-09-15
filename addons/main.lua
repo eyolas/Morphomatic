@@ -7,7 +7,8 @@
 local ADDON, ns = ...
 local MM = ns.MM
 
---[[ Startup ]]--
+--[[ Startup ]]
+--
 
 function MM:OnLoad()
   self.Helpers:dprint("Morphomatic: OnLoad")
@@ -26,9 +27,7 @@ function MM:OnLoad()
 end
 
 -- Open the options panel
-function MM:OpenOptions()
-  MM:SendSignal("MM_TOGGLE_OPTIONS")
-end
+function MM:OpenOptions() MM:SendSignal("MM_TOGGLE_OPTIONS") end
 
 -- Run a function with temporary debug enabled, then restore state
 function MM:_WithTempDebug(fn)
@@ -38,7 +37,6 @@ function MM:_WithTempDebug(fn)
   if not was and self.Helpers.SetDebug then self.Helpers:SetDebug(false) end
   if not ok and err then print(err) end
 end
-
 
 ----------------------------------------------------------------------
 -- Event handlers
