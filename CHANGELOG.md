@@ -1,5 +1,43 @@
 # Changelog
 
+# [1.0.8](https://github.com/eyolas/Morphomatic/compare/v1.0.7...v1.0.8) - (2025-09-15)
+
+## <!-- 0 -->🚀 Features
+
+- Enhance global variable declarations and improve button event handling ([bcd1592](https://github.com/eyolas/Morphomatic/commit/bcd15926acaf9f36611c9db02e1a4c0703d40a26))  - (eyolas)
+- Add AceLocale-3.0 and WildAddon-1.1 libraries for localization support ([320820d](https://github.com/eyolas/Morphomatic/commit/320820dff69616c76d006d0730d050ee3e3f7728))  - (eyolas)
+
+## <!-- 1 -->🐛 Bug Fixes
+
+- Correct casing in libs directory and update ignore rules in .luacheckrc ([3ddbf7d](https://github.com/eyolas/Morphomatic/commit/3ddbf7db23bce1a5fa90e7801e6afa4fdbecdbc2))  - (eyolas)
+
+## <!-- 2 -->🚜 Refactor
+
+- Simplify OpenOptions function by removing debug prints and directly sending toggle signal ([49ce08b](https://github.com/eyolas/Morphomatic/commit/49ce08b62d40329666a1ac48c9ce02988eb1b5a1))  - (David Touzet)
+- Enhance favorites functionality with search filter and UI updates ([d1ff367](https://github.com/eyolas/Morphomatic/commit/d1ff3674088aa05ec811e38aba45363c1bb77e66))  - (David Touzet)
+- Improve options panel structure and enhance favorites functionality ([b436b95](https://github.com/eyolas/Morphomatic/commit/b436b9585f5a2d7495c6bde3697b6be79b11c71d))  - (David Touzet)
+- Streamline options panel initialization and update minimap button interaction ([1ce3509](https://github.com/eyolas/Morphomatic/commit/1ce35096bb5f9ac9cb2c612cc4866a0099e598b9))  - (David Touzet)
+- Enhance floating button functionality with registration methods and update options panel integration ([afd8259](https://github.com/eyolas/Morphomatic/commit/afd82591fd763718607cdcf7bec154e8a50454c7))  - (David Touzet)
+- Update localization strings for clarity in English and French ([5aec564](https://github.com/eyolas/Morphomatic/commit/5aec564b57ee78467ede65d4f42f4d43893288c9))  - (David Touzet)
+- Simplify options panel registration by removing legacy fallback ([c6ee999](https://github.com/eyolas/Morphomatic/commit/c6ee999d4450e601103f748e80ff183b17e9554f))  - (David Touzet)
+- Streamline OnLoad methods and restore utility functions in main module ([efa0337](https://github.com/eyolas/Morphomatic/commit/efa03378d232d542c9c9de9c6491ae3875ee3789))  - (David Touzet)
+- Add SPDX license and copyright notice to multiple addon files ([b847f27](https://github.com/eyolas/Morphomatic/commit/b847f2781c41d94418ffa5488c22d4d1fa5f67fe))  - (David Touzet)
+- Remove module registration from bootstrap, db, and settings files ([b79c06a](https://github.com/eyolas/Morphomatic/commit/b79c06a6d21f695c8947deaf4d3202d35322fed2))  - (David Touzet)
+- Remove module registration for floating_button, helpers, macro, minimap, randomizer, and settings ([1a79efa](https://github.com/eyolas/Morphomatic/commit/1a79efa4cb1555c94fbf2e4fed95b18911d4962e))  - (David Touzet)
+- Update item retrieval methods to use C_Item API ([a62a5f9](https://github.com/eyolas/Morphomatic/commit/a62a5f9c6881ab7caa7682ece1a72ea41b7a8f86))  - (eyolas)
+
+## <!-- 30 -->📝 Other
+
+- PR [#13](https://github.com/eyolas/Morphomatic/pull/13): regactor ([089158b](https://github.com/eyolas/Morphomatic/commit/089158be8b0410acd9d813e7c322c940ab08979f))  - (David Touzet)
+- Stylua & luacheck ([1bfc367](https://github.com/eyolas/Morphomatic/commit/1bfc36775724ce7e68aedc0ae626d7707a6aa070))  - (eyolas)
+- Stylua ([25b296f](https://github.com/eyolas/Morphomatic/commit/25b296f08658e827886c9b4cd52a447db942d1d5))  - (eyolas)
+- Merge branch 'main' into chore_libs ([f0f691f](https://github.com/eyolas/Morphomatic/commit/f0f691fe642291ab4bcdb7d8462652ce49416638))  - (eyolas)
+- PR [#11](https://github.com/eyolas/Morphomatic/pull/11): update CHANGELOG for v1.0.7 ([6ac3184](https://github.com/eyolas/Morphomatic/commit/6ac3184a49027b5d690ef651eb03e60f676575e9))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG for v1.0.7 ([b24e4a5](https://github.com/eyolas/Morphomatic/commit/b24e4a598ccad76aba741d6b4c8dfda0664d8b1a))  - (eyolas)
+
 # [1.0.7](https://github.com/eyolas/Morphomatic/compare/v1.0.6...v1.0.7) - (2025-09-09)
 
 ## <!-- 30 -->📝 Other
@@ -16,20 +54,49 @@
 ## <!-- 0 -->🚀 Features
 
 - **pkgmeta:** Add WAGO project configuration and update thumbnail asset ([c29de9c](https://github.com/eyolas/Morphomatic/commit/c29de9cc6f75eb18350ba1a2c9152c845cc039f9))  - (eyolas)
+- Feat(localization): implement localization support with AceLocale-3.0
+refactor: remove old locales and integrate localization in settings and minimap ([0bc165f](https://github.com/eyolas/Morphomatic/commit/0bc165f6ddc4c798671539a0bf23fca0b16d424f))  - (David Touzet)
+- **libs:** Add AceLocale-3.0 for localization management in addons ([a820db4](https://github.com/eyolas/Morphomatic/commit/a820db42488feb19e18dea75247309171b38e963))  - (David Touzet)
+- Add sushi ([3296533](https://github.com/eyolas/Morphomatic/commit/3296533f6cdbcad57885350a3a8a9672cb175c99))  - (eyolas)
 - **database:** Split db and helpers ([3e5ecc1](https://github.com/eyolas/Morphomatic/commit/3e5ecc1a6ef52832c3eb90c310f1256497c274f0))  - (eyolas)
 - **bootstrap:** Improve event handling and command parsing ([fb3b335](https://github.com/eyolas/Morphomatic/commit/fb3b335fecc9d763971911c618d96c784b7a31e2))  - (eyolas)
+
+## <!-- 1 -->🐛 Bug Fixes
+
+- **settings:** Adjust frame heights for improved layout in settings canvas ([bc18db9](https://github.com/eyolas/Morphomatic/commit/bc18db95698adfdffaf3a70381ef5920a8f4faab))  - (eyolas)
+- **libs:** Remove unused script references from Poncho and Sushi XML files ([58c6f1b](https://github.com/eyolas/Morphomatic/commit/58c6f1b022d20e658af3da2188c98fac1f394530))  - (eyolas)
+- **settings:** Replace Button with RedButton for consistency in button styling ([c83c1c8](https://github.com/eyolas/Morphomatic/commit/c83c1c83cd761a87f9a2d6ff3eddc587126f5a77))  - (eyolas)
+- **settings:** Replace PushButton with Button for consistency in button usage ([91cfb02](https://github.com/eyolas/Morphomatic/commit/91cfb0203e1f65ba9775887c03ef546e4bd5c40d))  - (eyolas)
+- **settings:** Replace SetState with SetValue for checkbox state management ([6b7489c](https://github.com/eyolas/Morphomatic/commit/6b7489c262c54c2cdd08bd9de43d6485ec184bcc))  - (eyolas)
+- **toc:** Update file extensions for Poncho and Sushi libraries ([dda4824](https://github.com/eyolas/Morphomatic/commit/dda4824c1051fb2cd30a8b33d21650241dfc04b9))  - (eyolas)
+- **settings:** Replace CheckButton with Check for checklist renderer consistency ([d009a50](https://github.com/eyolas/Morphomatic/commit/d009a50cc0d889acd0a7d1aaa6ed5b6465d99189))  - (eyolas)
+- **settings:** Replace CheckBox with CheckButton for consistency in checklist renderer ([3e67949](https://github.com/eyolas/Morphomatic/commit/3e67949b5c2212cbbf3be9409ecc7299cfe0fbf2))  - (eyolas)
+- **minimap:** Update library loading method for better compatibility ([f43088f](https://github.com/eyolas/Morphomatic/commit/f43088fc1d6a1138ff7abb679eab7d68b20f15f7))  - (eyolas)
 
 ## <!-- 2 -->🚜 Refactor
 
 - Clean up code formatting and improve readability in multiple files ([4f086fd](https://github.com/eyolas/Morphomatic/commit/4f086fdfa851abaec3019fb8e356f98eab12e431))  - (eyolas)
+- Refactor Morphomatic Addon Structure and Implement WildAddon Integration
+
+- Reorganized code structure to utilize WildAddon framework for better modularity.
+- Created a new main.lua file to handle the addon lifecycle and event management.
+- Updated helpers, macro, minimap, randomizer, and settings modules to align with the new structure.
+- Enhanced debug functionality and added new methods for better state management.
+- Improved the handling of cooldowns, usability checks, and toy ownership verification.
+- Updated XML files to reflect changes in the script loading order and added new dependencies.
+- Ensured all modules register correctly with the main addon instance. ([e884ff0](https://github.com/eyolas/Morphomatic/commit/e884ff0ec64969f30fd66e64b6d43dcfa36d46a5))  - (David Touzet)
+- Refactor all ([2c4e5ba](https://github.com/eyolas/Morphomatic/commit/2c4e5baf47b9105ebd27046244d798e6834e7962))  - (eyolas)
 
 ## <!-- 30 -->📝 Other
 
+- Merge branch 'chore_libs' of https://github.com/eyolas/Morphomatic into chore_libs ([766a8d7](https://github.com/eyolas/Morphomatic/commit/766a8d7f72c28b95814fbb149d62bac44c098186))  - (David Touzet)
 - PR [#9](https://github.com/eyolas/Morphomatic/pull/9): update CHANGELOG for v1.0.5 ([578ce6e](https://github.com/eyolas/Morphomatic/commit/578ce6e41553c489d7b0168931eeb5adba421091))  - (David Touzet)
 
 ## <!-- 7 -->⚙️ Miscellaneous Tasks
 
 - Add luacheck directive for globals in db.lua and helpers.lua ([c2b12ce](https://github.com/eyolas/Morphomatic/commit/c2b12cea26b654db3ee9632618c870506069b072))  - (eyolas)
+- Rename Images to images ([21b64e0](https://github.com/eyolas/Morphomatic/commit/21b64e0ad11b88ad078bcec0b38d58acce28d951))  - (eyolas)
+- Rename Libs to libs ([0a57beb](https://github.com/eyolas/Morphomatic/commit/0a57bebb04e46b7c6456390ad95e1ef2d43e2b7c))  - (eyolas)
 - Update CHANGELOG for v1.0.5 ([9cedb58](https://github.com/eyolas/Morphomatic/commit/9cedb589cacb77741826f7bab959d71e3a069063))  - (eyolas)
 
 # [1.0.5](https://github.com/eyolas/Morphomatic/compare/v1.0.4...v1.0.5) - (2025-09-08)
