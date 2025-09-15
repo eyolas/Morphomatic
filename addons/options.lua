@@ -33,18 +33,46 @@ local function buildOwnedList()
 end
 
 -- Build the list used for the UI (optionally hides toys currently on cooldown).
-local function buildListForUI()
+-- Build the list used for the UI (optionally hides cooldown AND applies a text filter).
+local function buildListForUI(filter)
   local db = MM.DB:Get()
   local owned = buildOwnedList()
-  if db.listHideCooldown ~= true then
-    return owned
+
+  -- Visual cooldown filter
+  local base = owned
+  if db.listHideCooldown == true then
+    base = {}
+    for _, id in ipairs(owned) do
+      if not MM.Helpers:IsOnCooldown(id) then base[#base+1] = id end
+    end
   end
+
+  -- Text filter (case-insensitive; matches name or numeric id)
+  if not filter or filter == '' then
+    return base
+  end
+
+  local needle = string.lower(filter)
   local out = {}
-  for _, id in ipairs(owned) do
-    if not MM.Helpers:IsOnCooldown(id) then out[#out+1] = id end
+  for _, id in ipairs(base) do
+    local name = C_Item.GetItemInfo(id) or ('Toy ' .. id)
+    local hay  = string.lower(name)
+    if string.find(hay, needle, 1, true) or string.find(tostring(id), needle, 1, true) then
+      out[#out+1] = id
+    end
   end
   return out
 end
+
+local function bulkSelectCurrentView(selectAll)
+  local db = MM.DB:Get()
+  db.enabledToys = db.enabledToys or {}
+  for _, id in ipairs(buildListForUI(Options._searchQuery)) do
+    db.enabledToys[id] = selectAll and true or false
+  end
+  Options:RefreshFavorites()
+end
+
 
 -- Render the Favorites checklist (Sushi.Check rows) inside a scroll container.
 local function renderChecklist(container)
@@ -56,7 +84,7 @@ local function renderChecklist(container)
   end
 
   local db   = MM.DB:Get()
-  local list = buildListForUI()
+  local list = buildListForUI(Options._searchQuery)  -- ← use current search
   table.sort(list, function(a, b)
     return (C_Item.GetItemInfo(a) or '') < (C_Item.GetItemInfo(b) or '')
   end)
@@ -258,9 +286,38 @@ local function buildCanvasFavorites()
   resetSel:SetText(L.RESET_SELECTION)
   resetSel:SetScript('OnClick', function() Options:ResetSelection() end)
 
+   -- Quick search (filters visible list by name or id)
+  local search = CreateFrame('EditBox', nil, f, 'SearchBoxTemplate')
+  search:SetSize(240, 20)
+  search:SetPoint('TOPLEFT', row, 'BOTTOMLEFT', -6, -10)
+  search:SetAutoFocus(false)
+  if search.Instructions then
+    search.Instructions:SetText(SEARCH or 'Search')
+  end
+
+  -- keep current text if we already have one in this session
+  if type(Options._searchQuery) == 'string' then
+    search:SetText(Options._searchQuery)
+    SearchBoxTemplate_OnTextChanged(search)
+  end
+
+  search:SetScript('OnTextChanged', function(self)
+    SearchBoxTemplate_OnTextChanged(self)
+    Options._searchQuery = (self:GetText() or ''):match('^%s*(.-)%s*$'):lower()
+    Options:RefreshFavorites()
+  end)
+  search:SetScript('OnEnterPressed', function(self) self:ClearFocus() end)
+  search:SetScript('OnEscapePressed', function(self)
+    self:SetText('')
+    SearchBoxTemplate_OnTextChanged(self)
+    Options._searchQuery = ''
+    Options:RefreshFavorites()
+    self:ClearFocus()
+  end)
+
   -- Checklist label
   local label = f:CreateFontString(nil, 'ARTWORK', 'GameFontNormal')
-  label:SetPoint('TOPLEFT', row, 'BOTTOMLEFT', 0, -14)
+  label:SetPoint('TOPLEFT', search, 'BOTTOMLEFT', 0, -14)
   label:SetText(L.FAVORITES_LABEL)
 
   -- Scrollable checklist directly on the page canvas
@@ -306,7 +363,7 @@ end
 function Options:SelectAllToys()
   local db = MM.DB:Get()
   db.enabledToys = db.enabledToys or {}
-  for _, id in ipairs(buildListForUI()) do
+  for _, id in ipairs(buildListForUI(self._searchQuery)) do
     db.enabledToys[id] = true
   end
   MM.Helpers:dprint('Morphomatic: all favorites in the current view selected.')
@@ -316,7 +373,7 @@ end
 function Options:UnselectAllToys()
   local db = MM.DB:Get()
   db.enabledToys = db.enabledToys or {}
-  for _, id in ipairs(buildListForUI()) do
+  for _, id in ipairs(buildListForUI(self._searchQuery)) do
     db.enabledToys[id] = false
   end
   MM.Helpers:dprint('Morphomatic: all favorites in the current view unselected.')
