@@ -34,3 +34,6 @@ WTF/**
 # Lua tooling caches (if you use them)
 .luacheckcache
 .stylua.toml.bak
+
+.gemini/
+gha-creds-*.json
