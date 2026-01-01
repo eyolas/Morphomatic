@@ -16,6 +16,7 @@ ignore:
   - .stylua.toml
   - stylua.toml
   - cliff.toml
+  - GEMINI.md
 
   # Assets you don't want in the zip
   - screenshots
