@@ -46,6 +46,7 @@ function MM:OnPlayerLogin()
   self.Helpers:dprint("OnPlayerLogin")
   self.Helpers:SeedRNG()
   self.Helpers:EnsureSecureButton()
+  self.Helpers:CacheAllToys()
 
   local db = self.DB:Get()
   self.Helpers:dprint(dump(db))
