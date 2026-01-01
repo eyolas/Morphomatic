@@ -1,5 +1,28 @@
 # Changelog
 
+# [1.1.1](https://github.com/eyolas/Morphomatic/compare/v1.1.0...v1.1.1) - (2026-01-01)
+
+## <!-- 0 -->🚀 Features
+
+- Add WoW Beta (12.0) support to TOC ([6461c62](https://github.com/eyolas/Morphomatic/commit/6461c62b85e00fedcb534b296c472a81df9099ef))  - (eyolas)
+
+## <!-- 30 -->📝 Other
+
+- PR [#12](https://github.com/eyolas/Morphomatic/pull/12): Update GitHub Actions to ([4dcf7ec](https://github.com/eyolas/Morphomatic/commit/4dcf7ec228848dbaa76f9518bbbff3a95961ce83))  - (David Touzet)
+- PR [#15](https://github.com/eyolas/Morphomatic/pull/15): Update GitHub Actions (major) ([14d9917](https://github.com/eyolas/Morphomatic/commit/14d9917025528f3ed7419391f904b2f3739b8661))  - (David Touzet)
+- PR [#20](https://github.com/eyolas/Morphomatic/pull/20): Add WoW Midnight Beta Support (12.0) ([244f0a6](https://github.com/eyolas/Morphomatic/commit/244f0a67ba163d5c7977069517514a57219c8a0b))  - (David Touzet)
+- PR [#19](https://github.com/eyolas/Morphomatic/pull/19): Cleanup files for Release ([1e46dad](https://github.com/eyolas/Morphomatic/commit/1e46dad253e3fe5e3baec8cba3c6091257004050))  - (David Touzet)
+-  ([efc7706](https://github.com/eyolas/Morphomatic/commit/efc770687e8d665d7dac9c993c0b1b8903cf7785))  - (eyolas)
+- PR [#18](https://github.com/eyolas/Morphomatic/pull/18): update CHANGELOG for v1.1.0 ([77bea96](https://github.com/eyolas/Morphomatic/commit/77bea96c2c8c95fbaec1898b262b16a7879fc79a))  - (David Touzet)
+-  ([6981af7](https://github.com/eyolas/Morphomatic/commit/6981af7fff7a98f010da632fdb4b5bc7292a0bf2))  - (eyolas)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- **deps:** Update GitHub Actions to ([f49889c](https://github.com/eyolas/Morphomatic/commit/f49889c981c32e34ddd26ea9ea8af16ccc69c68a))  - (renovate[bot])
+- **deps:** Update GitHub Actions ([6c14404](https://github.com/eyolas/Morphomatic/commit/6c14404c932682fc2c9686d38570fbc674ca8cd3))  - (renovate[bot])
+- Cleanup project files for release ([4946276](https://github.com/eyolas/Morphomatic/commit/4946276d140a2b475bc952962837d99c7513511a))  - (eyolas)
+- Update CHANGELOG for v1.1.0 ([9b8c9e2](https://github.com/eyolas/Morphomatic/commit/9b8c9e2bbd9551bc8567df372d94480e360a44c3))  - (eyolas)
+
 # [1.1.0](https://github.com/eyolas/Morphomatic/compare/v1.0.8...v1.1.0) - (2026-01-01)
 
 ## <!-- 0 -->🚀 Features
