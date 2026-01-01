@@ -1,5 +1,23 @@
 # Changelog
 
+# [1.1.0](https://github.com/eyolas/Morphomatic/compare/v1.0.8...v1.1.0) - (2026-01-01)
+
+## <!-- 0 -->🚀 Features
+
+- Implement async item data loading for Midnight ([15c0f7f](https://github.com/eyolas/Morphomatic/commit/15c0f7f2c1c4b9cd511e8e928a76c41fbbae977c))  - (eyolas)
+
+## <!-- 30 -->📝 Other
+
+- PR [#17](https://github.com/eyolas/Morphomatic/pull/17): Async Item Data Loading (Midnight Prep) ([92534f6](https://github.com/eyolas/Morphomatic/commit/92534f67473636c493257a8c0d153192703177d6))  - (David Touzet)
+- PR [#16](https://github.com/eyolas/Morphomatic/pull/16): Midnight (12.0) migration & Cleanup ([923e492](https://github.com/eyolas/Morphomatic/commit/923e49257e65c81c0b888ccbcf9ad216e0a53fad))  - (David Touzet)
+- PR [#14](https://github.com/eyolas/Morphomatic/pull/14): update CHANGELOG for v1.0.8 ([19541cf](https://github.com/eyolas/Morphomatic/commit/19541cf5157879953d133ad0b094dd254fb35c51))  - (David Touzet)
+
+## <!-- 7 -->⚙️ Miscellaneous Tasks
+
+- Prepare for Midnight (12.0) migration ([e20bce3](https://github.com/eyolas/Morphomatic/commit/e20bce3a0f8698b9db0f26e88c27ed9c3bc9b783))  - (eyolas)
+- Update .gitignore and add GEMINI.md for project context ([4461ca4](https://github.com/eyolas/Morphomatic/commit/4461ca42fab7a2fdafe5d6a9dba1d3f1faa9a6f3))  - (eyolas)
+- Update CHANGELOG for v1.0.8 ([ae8893f](https://github.com/eyolas/Morphomatic/commit/ae8893f1e86afe79789d2c542cf6605ae3bf14e3))  - (eyolas)
+
 # [1.0.8](https://github.com/eyolas/Morphomatic/compare/v1.0.7...v1.0.8) - (2025-09-15)
 
 ## <!-- 0 -->🚀 Features
