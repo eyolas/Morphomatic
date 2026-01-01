@@ -33,7 +33,7 @@ jobs:
 
       # Generate the "latest" changelog section (for this tag only)
       - name: Generate changelog for latest tag (scoped)
-        uses: tj-actions/git-cliff@8bfb7bf10268aed30bde8e34ecaeddb6c6149edd # v2
+        uses: tj-actions/git-cliff@679041f051a4d2ab452f7e5e7b0eed2abee21131 # v2
         with:
           args: --latest
           output: LATEST_CHANGELOG.md
@@ -45,7 +45,7 @@ jobs:
 
       # Run BigWigs packager to build the .zip and upload to CurseForge
       - name: Run BigWigs Packager (Retail)
-        uses: BigWigsMods/packager@fd8ff7f95606c6d63c9a2d4d29c06e0abf1c3a60 # v2
+        uses: BigWigsMods/packager@6d50adb6e8517eefef63f4afb16a6518166a6b28 # v2
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
@@ -56,7 +56,7 @@ jobs:
 
       # Update the GitHub release body with the latest changelog section
       - name: Update GitHub release body with generated changelog
-        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
         with:
           tag_name: ${{ github.event.release.tag_name }}
           body_path: LATEST_CHANGELOG.md
@@ -80,7 +80,7 @@ jobs:
 
       # Generate the full changelog (all tags)
       - name: Generate full changelog (all tags)
-        uses: tj-actions/git-cliff@8bfb7bf10268aed30bde8e34ecaeddb6c6149edd # v2
+        uses: tj-actions/git-cliff@679041f051a4d2ab452f7e5e7b0eed2abee21131 # v2
         with:
           output: CHANGELOG.md
 
