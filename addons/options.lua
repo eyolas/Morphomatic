@@ -459,4 +459,11 @@ function Options:OnLoad()
   self:RegisterCategory()
   -- Allow other modules (e.g., Minimap) to toggle the panel.
   self:RegisterSignal("MM_TOGGLE_OPTIONS", "Toggle")
+
+  -- Refresh when item data arrives asynchronously
+  self:RegisterEvent("GET_ITEM_INFO_RECEIVED", function()
+    if self._canvasFav and self._canvasFav:IsVisible() then
+      self:RefreshFavorites()
+    end
+  end)
 end
