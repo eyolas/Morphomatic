@@ -91,30 +91,37 @@ function Helpers:BuildPool()
   return pool
 end
 
--- Returns a reliable localized toy name suitable for "/use <name>"
-function Helpers:ResolveToyName(itemID)
-  -- Best: resolve from ToyBox link
-  if C_ToyBox and C_ToyBox.GetToyLink then
-    local link = C_ToyBox.GetToyLink(itemID)
-    if type(link) == "string" then
-      local name = C_Item.GetItemInfo(link)
-      if type(name) == "string" and name ~= "" then return name end
+-- Pre-caches item data for all toys in the pool.
+-- This mitigates the synchronous GetItemInfo returning nil.
+function Helpers:CacheAllToys()
+  local pool = self:BuildPool()
+  self:dprint("Morphomatic: pre-caching toy data...")
+  for id in pairs(pool) do
+    if C_Item and C_Item.RequestLoadItemDataByID then
+      C_Item.RequestLoadItemDataByID(id)
     end
   end
-  -- Fallback: direct item info (warm cache if needed)
+end
+
+-- Returns a reliable localized toy name suitable for "/use <name>"
+function Helpers:ResolveToyName(itemID)
+  if type(itemID) ~= "number" then return nil end
+
+  -- Try C_Item.GetItemInfo (works if cached)
   local name = C_Item.GetItemInfo(itemID)
-  if type(name) ~= "string" and C_Item and C_Item.RequestLoadItemDataByID then
-    C_Item.RequestLoadItemDataByID(itemID)
-    name = C_Item.GetItemInfo(itemID)
-  end
-  if type(name) == "string" and name ~= "" then return name end
-  -- Last resort: pick any string from GetToyInfo variants
+  if name and name ~= "" then return name end
+
+  -- Fallback: C_ToyBox.GetToyInfo
   if C_ToyBox and C_ToyBox.GetToyInfo then
-    local a, b, _, _, e = C_ToyBox.GetToyInfo(itemID)
-    if type(a) == "string" and a ~= "" then return a end
-    if type(b) == "string" and b ~= "" then return b end
-    if type(e) == "string" and e ~= "" then return e end
+    local toyName = C_ToyBox.GetToyInfo(itemID)
+    if toyName and toyName ~= "" then return toyName end
   end
+
+  -- Request load for next time
+  if C_Item and C_Item.RequestLoadItemDataByID then
+    C_Item.RequestLoadItemDataByID(itemID)
+  end
+
   return nil
 end
 
