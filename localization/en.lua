@@ -20,6 +20,13 @@ L["SELECT_ALL"] = "Select all favorites"
 L["UNSELECT_ALL"] = "Unselect all favorites"
 L["RESET_SELECTION"] = "Reset favorites"
 L["FAVORITES_LABEL"] = "Favorites (from your curated toys):"
+L["ADD_CUSTOM_TOY"] = "Add Custom Toy"
+L["ITEM_ID"] = "Item ID"
+L["ADD"] = "Add"
+L["INVALID_ID"] = "Morphomatic: Invalid item ID."
+L["ALREADY_EXISTS"] = "Morphomatic: Item ID already in list."
+L["REMOVE"] = "Remove"
+L["REMOVE_CUSTOM_TOY"] = "Remove Custom Toy"
 
 -- Tooltip-specific
 L["TIP_CLICK"] = "Click: triggers a random cosmetic toy (from your selection)."
