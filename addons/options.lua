@@ -73,6 +73,7 @@ local function renderChecklist(container)
   end
 
   local db = MM.DB:Get()
+  local custom = MM.DB:GetCustom()
   local list = buildListForUI(Options._searchQuery) -- ← use current search
   table.sort(
     list,
@@ -94,14 +95,27 @@ local function renderChecklist(container)
     cb:SetParent(row)
     cb:SetPoint("LEFT", row, "LEFT", 0, 0)
     cb:SetLabel(("|T%d:16|t %s (%d)"):format(icon or 134414, name, id))
-    cb:SetWidth(width)
+    cb:SetWidth(width - 80)
     cb:SetValue(db.enabledToys[id] ~= false)
     cb:SetScript(
       "OnClick",
       function(selfBtn) db.enabledToys[id] = (selfBtn:GetValue() and true) or false end
     )
-
     cb:Show()
+
+    if custom.extraToys[id] or custom.extraToys[tostring(id)] then
+      local del = Sushi.RedButton(row)
+      del:SetSize(70, 20)
+      del:SetPoint("RIGHT", row, "RIGHT", -4, 0)
+      del:SetText(L.REMOVE)
+      del:SetScript("OnClick", function()
+        custom.extraToys[id] = nil
+        custom.extraToys[tostring(id)] = nil
+        Options:RefreshFavorites()
+      end)
+      del:Show()
+    end
+
     row:Show()
     y = y - 24
   end
@@ -327,6 +341,40 @@ local function buildCanvasFavorites()
   local label = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
   label:SetPoint("TOPLEFT", search, "BOTTOMLEFT", 0, -14)
   label:SetText(L.FAVORITES_LABEL)
+
+  -- Add Custom Toy row
+  local addRow = CreateFrame("Frame", nil, f)
+  addRow:SetSize(1, 22)
+  addRow:SetPoint("LEFT", label, "RIGHT", 20, 0)
+
+  local addInput = CreateFrame("EditBox", nil, addRow, "InputBoxTemplate")
+  addInput:SetSize(80, 20)
+  addInput:SetPoint("LEFT", addRow, "LEFT", 0, 0)
+  addInput:SetAutoFocus(false)
+  addInput:SetNumeric(true)
+  addInput:SetMaxLetters(10)
+
+  local addBtn = Sushi.RedButton(addRow)
+  addBtn:SetSize(60, 20)
+  addBtn:SetPoint("LEFT", addInput, "RIGHT", 8, 0)
+  addBtn:SetText(L.ADD)
+  addBtn:SetScript("OnClick", function()
+    local text = addInput:GetText()
+    local id = tonumber(text)
+    if not id or id <= 0 then
+      print(L.INVALID_ID)
+      return
+    end
+    local custom = MM.DB:GetCustom()
+    if custom.extraToys[id] or MM_DB[id] then
+      print(L.ALREADY_EXISTS)
+      return
+    end
+    custom.extraToys[id] = true
+    addInput:SetText("")
+    addInput:ClearFocus()
+    Options:RefreshFavorites()
+  end)
 
   -- Scrollable checklist directly on the page canvas
   local scroll = CreateFrame("ScrollFrame", "MM_OptionsScroll", f, "UIPanelScrollFrameTemplate")

@@ -21,6 +21,13 @@ L["SELECT_ALL"] = "Tout sélectionner"
 L["UNSELECT_ALL"] = "Tout désélectionner"
 L["RESET_SELECTION"] = "Réinitialiser les favoris"
 L["FAVORITES_LABEL"] = "Favoris (parmi vos jouets disponibles) :"
+L["ADD_CUSTOM_TOY"] = "Ajouter un jouet personnalisé"
+L["ITEM_ID"] = "ID de l'objet"
+L["ADD"] = "Ajouter"
+L["INVALID_ID"] = "Morphomatic : ID d'objet invalide."
+L["ALREADY_EXISTS"] = "Morphomatic : Cet ID est déjà dans la liste."
+L["REMOVE"] = "Supprimer"
+L["REMOVE_CUSTOM_TOY"] = "Supprimer le jouet personnalisé"
 
 -- Tooltip-specific
 L["TIP_CLICK"] = "Clic : déclenche un jouet cosmétique aléatoire (parmi vos Favoris)."
